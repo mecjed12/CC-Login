@@ -10,10 +10,5 @@ namespace RegistrationData
 {
     public class PersonEntities : DbContext
     {
-        [Column("created@")]
-        public DateTime CreatedAt{ get; set; }
-
-        [Column("modify@")]
-        public DateTime ModifiedAt { get; set; }
     }
 }
