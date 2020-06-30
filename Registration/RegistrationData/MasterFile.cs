@@ -12,10 +12,13 @@ namespace RegistrationData
     {
         [Column("id")]
         public int Id { get; set; }
+
         [Column("firstname")]
         public string Firstname { get; set; }
+
         [Column("lastname")]
         public string Lastname { get; set; }
+
         [Column("title")]
         public string Title { get; set; }
 
@@ -37,7 +40,19 @@ namespace RegistrationData
         [Column("picture")]
         public string Picture { get; set; }
 
+        [Column("function")]
         public string Function { get; set; }
+
+        [Column("aktiv")]
+        public bool Active { get; set; }
+
+        [Column("deleted_naktiv")]
+        public bool DeletedInactive { get; set; }
+
+        [Column("newsletter_flag")]
+        public bool NewsletterFlag { get; set; }
+
+        public Address Address { get; set; }
 
     }
 }

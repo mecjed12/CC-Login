@@ -10,5 +10,17 @@ namespace RegistrationData
 {
     public class PersonEntities : DbContext
     {
+        public DbSet<MasterFile> Masters { get; set; }
+        public DbSet<Address> Addresses { get; set; }
+
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+
+            modelBuilder.Entity<Address>().HasOne(a => a.Master).WithOne(m => m.Address);
+
+        }
+
     }
 }
