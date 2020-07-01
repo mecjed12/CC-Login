@@ -18,11 +18,12 @@ export default class Filepicker extends React.Component {
         });
         
     }
+    
 
     onClickHandler = () => {
         const data = new FormData()
         data.append('file', this.state.selectFile)
-        axios.post("http://localhost:3000", data,{
+        axios.post("http://localhost:8000/upload", data, {
             
         })
         .then(res => {
@@ -34,14 +35,12 @@ export default class Filepicker extends React.Component {
     render() {
         return(
             <div className="file-container">
-                <label>Upload your file !</label>
                 <div className="upload-container">
+                <label>Upload your file !</label>
                 <input  className="upload" type="file" name="file" onChange={this.onChangeHandler}/>
                 </div>
-                <div className="button-container">
-                <button type="button" className="button-click" onClick={this.onClickHandler}>Upload</button>
-                </div>
-
+                <div type="button" className="button-click" onClick={this.onClickHandler}>Upload</div>
+                
             </div>
             
             
