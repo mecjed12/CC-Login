@@ -42,6 +42,7 @@ handleChange2 = selectedOption2 => {
                     <tr>
                         <td>ID</td>
                         <td> <Select
+                        name= "idInput"
                       value= {selectedOption}
                       onChange={this.handleChange}
                       options={options}

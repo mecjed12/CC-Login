@@ -23,8 +23,10 @@ export default class Filepicker extends React.Component {
 
     onClickHandler = () => {
         const data = new FormData()
-        data.append('file', this.state.selectFile)
-        axios.post("https://localhost:44375/api/Registration", data, {
+        data.append('file', this.state.selectFile);
+       
+        
+        axios.post("http://localhost:8000/upload", data, {
             
         })
         .then(res => {
