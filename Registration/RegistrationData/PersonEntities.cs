@@ -10,7 +10,7 @@ namespace RegistrationData
 {
     public class PersonEntities : DbContext
     {
-        public DbSet<MasterFile> Masters { get; set; }
+        public DbSet<Person> People { get; set; }
         public DbSet<Address> Addresses { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -20,16 +20,11 @@ namespace RegistrationData
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            base.OnModelCreating(modelBuilder);
-
-            modelBuilder.Entity<MasterFile>(e => e.HasKey(x => x.Id));
-
-
+            modelBuilder.Entity<Person>(e => e.HasKey(x => x.Id));
             modelBuilder.Entity<Address>(e => e.HasKey(x => x.Id));
 
-
-
-            modelBuilder.Entity<Address>().HasOne(a => a.Master).WithOne(m => m.Address);
+            modelBuilder.Entity<PersonAddress>().HasOne(pa => pa.Person).WithOne(p => p.PAddress).HasForeignKey<PersonAddress>(pa => pa.PersonId);
+            modelBuilder.Entity<PersonAddress>().HasOne(pa => pa.Address).WithOne(a => a.PAddress).HasForeignKey<PersonAddress>(pa => pa.AddressId);
 
         }
 

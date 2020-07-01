@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
@@ -10,22 +11,26 @@ namespace RegistrationAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    
     public class RegistrationController : ControllerBase
     {
 
         [HttpGet]
-        public List<MasterFile> get()
+        public Person Get()
         {
             using var entities = new PersonEntities();
-            return entities.Masters.ToList();
+            return entities.People.First();
         }
 
 
 
+        [HttpPost]
+        public void Post(IFormFile file)
+        {
+            
+            Debug.WriteLine(file.FileName);
 
-
-
-
+        }
 
     }
 }

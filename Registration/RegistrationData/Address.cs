@@ -11,23 +11,24 @@ namespace RegistrationData
         [Column("id")]
         public int Id { get; set; }
 
+        [Column("street")]
         public string Street { get; set; }
         
+        [Column("place")]
         public string Place { get; set; }
 
+        [Column("zip")]
         public int? ZipCode { get; set; }
 
+        [Column("country")]
         public string Country { get; set; }
 
+        [Column("contact_type")]
         public string ContactType { get; set; }
 
+        [Column("billing_address")]
         public byte? BillingAdress { get; set; }
 
-
-
-        [Column("master_file_id")]
-        public int MasterId { get; set; }
-        public MasterFile Master { get; set; }
-
+        public PersonAddress PAddress { get; set; }
     }
 }

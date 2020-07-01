@@ -10,10 +10,10 @@ namespace RegistrationData
     public class CreatedModify
     {
         [Column("created@")]
-        public DateTime CreatedAt { get; set; }
+        public DateTime? CreatedAt { get; set; }
 
         [Column("modify@")]
-        public DateTime ModifiedAt { get; set; }
+        public DateTime? ModifiedAt { get; set; }
 
     }
 }
