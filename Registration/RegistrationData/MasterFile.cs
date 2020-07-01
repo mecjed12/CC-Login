@@ -46,7 +46,7 @@ namespace RegistrationData
         [Column("aktiv")]
         public bool Active { get; set; }
 
-        [Column("deleted_naktiv")]
+        [Column("deleted _naktiv")]
         public bool DeletedInactive { get; set; }
 
         [Column("newsletter_flag")]

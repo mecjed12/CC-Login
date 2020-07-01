@@ -13,10 +13,21 @@ namespace RegistrationData
         public DbSet<MasterFile> Masters { get; set; }
         public DbSet<Address> Addresses { get; set; }
 
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            optionsBuilder.UseMySQL("server=localhost;database=personadmin;user=root");
+        }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+
+            modelBuilder.Entity<MasterFile>(e => e.HasKey(x => x.Id));
+
+
+            modelBuilder.Entity<Address>(e => e.HasKey(x => x.Id));
+
+
 
             modelBuilder.Entity<Address>().HasOne(a => a.Master).WithOne(m => m.Address);
 
