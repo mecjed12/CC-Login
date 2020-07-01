@@ -1,6 +1,7 @@
 import React from 'react';
 import './Filepicker.css';
 import axios from 'axios';
+import Fileinput from '../input/Fileinput';
 
 export default class Filepicker extends React.Component {
     constructor(props) {
@@ -40,7 +41,7 @@ export default class Filepicker extends React.Component {
                 <input  className="upload" type="file" name="file" onChange={this.onChangeHandler}/>
                 </div>
                 <div type="button" className="button-click" onClick={this.onClickHandler}>Upload</div>
-                
+                <Fileinput/>
             </div>
             
             

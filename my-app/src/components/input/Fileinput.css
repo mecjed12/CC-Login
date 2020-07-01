@@ -1,0 +1,14 @@
+.text1 {
+    border: 1px solid;
+    width: 70px;
+}
+.dropdown {
+    display: flex;
+}
+table {
+    border-collapse: collapse;
+    width: 70%;
+}
+td,th {
+    padding: 8px;
+}
