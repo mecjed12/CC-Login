@@ -3,11 +3,11 @@ import logo from './logo.svg';
 import './App.css';
 import Head from './components/header/Head';
 import Filepicker from './components/Filepickeer/Filepicker';
-import axios from 'axios';
+
 
 
 class App extends React.Component {
-  
+ 
   render() {
     return (
 
