@@ -29,6 +29,6 @@ namespace RegistrationData
         [Column("billing_address")]
         public byte? BillingAdress { get; set; }
 
-        public PersonAddress PAddress { get; set; }
+        public List<PersonAddress> PAddress { get; set; }
     }
 }

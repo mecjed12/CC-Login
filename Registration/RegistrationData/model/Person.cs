@@ -42,7 +42,7 @@ namespace RegistrationData
         public bool NewsletterFlag { get; set; }
 
 
-        public PersonAddress PAddress { get; set; }
+        public List<PersonAddress> PAddress { get; set; }
 
     }
 }

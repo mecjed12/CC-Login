@@ -7,7 +7,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RegistrationData", "Registr
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RegistrationAPI", "RegistrationAPI\RegistrationAPI.csproj", "{FADFA769-9C59-41E3-A512-568D83A74016}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RegistrationLogic", "RegistrationLogic\RegistrationLogic.csproj", "{C14194A7-716A-4271-BC53-5B1B837B47EB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RegistrationLogic", "RegistrationLogic\RegistrationLogic.csproj", "{C14194A7-716A-4271-BC53-5B1B837B47EB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

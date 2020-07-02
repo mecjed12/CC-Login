@@ -5,13 +5,13 @@ using System.Text;
 
 namespace RegistrationData
 {
-    [Table("adressperson")]
+    [Table("addressperson")]
     public class PersonAddress
     {
         [Column("id")]
         public int Id { get; set; }
 
-        [Column("adressId")]
+        [Column("addressId")]
         public int AddressId { get; set; }
         public Address Address { get; set; }
 
