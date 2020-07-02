@@ -22,10 +22,10 @@ export default class Filepicker extends React.Component {
     
 
     onClickHandler = () => {
-        const data = new FormData()
-        data.append('file', this.state.selectFile);
-       
         
+        const data = new FormData()
+        
+        data.append('file', this.state.selectFile);
         axios.post("http://localhost:8000/upload", data, {
             
         })
@@ -33,6 +33,10 @@ export default class Filepicker extends React.Component {
             console.log(res.statusText)
         })
         
+    }
+    callbackFunction = (Fileinput) => {
+        this.state( {message : Fileinput})
+        console.log(this.callbackFunction)
     }
 
     render() {
@@ -42,8 +46,8 @@ export default class Filepicker extends React.Component {
                 <label>Upload your file !</label>
                 <input  className="upload" type="file" name="file" onChange={this.onChangeHandler}/>
                 </div>
+                <Fileinput  />
                 <div type="button" className="button-click" onClick={this.onClickHandler}>Upload</div>
-                <Fileinput/>
             </div>
             
             
