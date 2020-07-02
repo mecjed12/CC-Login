@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using RegistrationData;
+using RegistrationData.model;
+using RegistrationData.repo;
 
 namespace RegistrationAPI.Controllers
 {
@@ -16,21 +18,24 @@ namespace RegistrationAPI.Controllers
     {
 
         [HttpGet]
-        public Person Get()
+        public List<Person> Get()
         {
-            using var entities = new PersonEntities();
-            return entities.People.First();
+            return Program.controller.GetPeople();
+        }
+        
+        [HttpGet("{id}")]
+        public Person GetWithID(int id)
+        {
+            return Program.controller.GetPersonById(id);
         }
 
-
-
-        [HttpPost]
-        public void Post(IFormFile file)
+        [HttpPost("person")]
+        public void Post(PersonRegistrationFile file)
         {
             
-            Debug.WriteLine(file.FileName);
+            Debug.WriteLine(file.File.FileName);
+            Debug.WriteLine(file.Order);
 
         }
-
     }
 }

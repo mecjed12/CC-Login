@@ -27,6 +27,7 @@ namespace RegistrationAPI
         {
             services.AddControllers();
             services.AddCors(o => o.AddPolicy("PolicyAll", builder => builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader()));
+            services.AddControllersWithViews().AddNewtonsoftJson(o => o.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
