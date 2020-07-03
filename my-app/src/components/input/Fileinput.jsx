@@ -27,8 +27,8 @@ export default class Fileinput extends React.Component {
         this.state = {
 
         Keinedaten: null,
-        Name1: null,
-        Name2: null,
+        name1: null,
+        name2: null,
         title: null,
         SVNumber: null,
         date: null,
