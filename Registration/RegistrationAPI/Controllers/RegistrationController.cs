@@ -37,7 +37,7 @@ namespace RegistrationAPI.Controllers
         public void Post(PersonRegistrationFile file)
         {
             Debug.WriteLine(file.File.FileName);
-            Debug.WriteLine(file.Order);
+            //Debug.WriteLine(file.Order);
 
             using (var reader = new StreamReader(file.File.OpenReadStream()))
             {

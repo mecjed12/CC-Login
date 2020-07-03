@@ -14,7 +14,7 @@ namespace RegistrationData.repo
 
         public void InitRepository()
         {
-            Entities.People.Include(x => x.PAddress).ToList();
+            Entities.People.Include(x => x.PAddress).AsNoTracking().ToList();
         }
 
     }
