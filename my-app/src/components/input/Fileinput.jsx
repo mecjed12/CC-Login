@@ -62,10 +62,10 @@ export default class Fileinput extends React.Component {
                    <tbody>
                     
                     <tr>
-                        <td>Firstname:</td>
+                        <td>FirstName:</td>
                         <td> <Select
                             value={selectcolumn}
-                            onChange={(newValue) => this.handleChange('firstName', newValue)}
+                            onChange={(newValue) => this.handleChange('name1', newValue)}
                             options={options}
                         /></td>
                     </tr>
@@ -73,7 +73,7 @@ export default class Fileinput extends React.Component {
                         <td>Lastname:</td>
                         <td> <Select
                             value={selectcolumn}
-                            onChange={(newValue) => this.handleChange('lastName', newValue)}
+                            onChange={(newValue) => this.handleChange('name2', newValue)}
                             options={options}
                         /></td>
                     </tr>
