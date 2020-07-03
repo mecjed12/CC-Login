@@ -11,4 +11,8 @@ table {
 }
 td,th {
     padding: 8px;
+    
+}
+th {
+    background-color: aqua;
 }

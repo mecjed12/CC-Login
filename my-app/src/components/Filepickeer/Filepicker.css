@@ -5,15 +5,19 @@
     
 }
 .upload-container input{
-    border: 1px solid black;
+    border: 2px solid #6cfecb;
     padding: 50px;
+    margin-top: 10px;
+    border-radius: 8px;
+    
 }
 .upload-container label {
     margin-right: 50px;
 }
 .button-click {
     width: 200px;
-    margin-top: 100px;
+    margin-top: 70px;
+    margin-left: 120px;
     text-align: center;
     font-size: 16px;
     font-weight: 600;
@@ -23,7 +27,11 @@
     border-radius: 35px;
     padding: 15px 20px;
     cursor: pointer;
+    transition: all 0.3s ;
 }
 .button-click:hover {
     background-color: #6cfecb;
+}
+.input-container {
+    padding-top: 20px;
 }

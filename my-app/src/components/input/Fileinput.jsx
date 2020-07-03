@@ -27,11 +27,11 @@ export default class Fileinput extends React.Component {
         this.state = {
 
         Keinedaten: null,
-        firstName: null,
-        lastName: null,
+        Name1: null,
+        Name2: null,
         title: null,
-        SV_Number: null,
-        Geb_Date: null,
+        SVNumber: null,
+        date: null,
         Gender: null,
         busy: null,
         busy_by: null,
@@ -53,21 +53,16 @@ export default class Fileinput extends React.Component {
     }
 
     render() {
-        
         const { selectcolumn } = this.state;
-        
-
-
         console.log(this.state)
-
         return (
             <div className="input-container">
-                <div type="button" className="button-click" onClick={() => this.props.upload(this.state)}>Upload-List</div>
+                
                 <table>
-                   
+                   <tbody>
                     
                     <tr>
-                        <td>Firstname</td>
+                        <td>Firstname:</td>
                         <td> <Select
                             value={selectcolumn}
                             onChange={(newValue) => this.handleChange('firstName', newValue)}
@@ -75,7 +70,7 @@ export default class Fileinput extends React.Component {
                         /></td>
                     </tr>
                     <tr>
-                        <td>Lastname</td>
+                        <td>Lastname:</td>
                         <td> <Select
                             value={selectcolumn}
                             onChange={(newValue) => this.handleChange('lastName', newValue)}
@@ -83,101 +78,112 @@ export default class Fileinput extends React.Component {
                         /></td>
                     </tr>
                     <tr>
-                        <td>Title</td>
+                        <td>Title:</td>
                         <td> <Select
                             value={selectcolumn}
                             onChange={(newValue) => this.handleChange('title', newValue)}
                             options={options}
                         /></td>
-                    </tr>  <tr>
-                        <td>SV-Number</td>
+                    </tr>  
+                    <tr>
+                        <td>SV-Number:</td>
                         <td> <Select
                             value={selectcolumn}
                             onChange={(newValue) => this.handleChange('SV_Number', newValue)}
                             options={options}
                         /></td>
-                    </tr>  <tr>
-                        <td>Geb-Date</td>
+                    </tr> 
+                     <tr>
+                        <td>Geb-Date:</td>
                         <td> <Select
                             value={selectcolumn}
                             onChange={(newValue) => this.handleChange('Geb_Date', newValue)}
                             options={options}
                         /></td>
-                    </tr>  <tr>
-                        <td>Gender</td>
+                    </tr>  
+                    <tr>
+                        <td>Gender:</td>
                         <td> <Select
                             value={selectcolumn}
                             onChange={(newValue) => this.handleChange('Gender', newValue)}
                             options={options}
                         /></td>
-                    </tr>  <tr>
-                        <td>Busy</td>
+                    </tr>  
+                    <tr>
+                        <td>Busy:</td>
                         <td> <Select
                             value={selectcolumn}
                             onChange={(newValue) => this.handleChange('busy', newValue)}
                             options={options}
                         /></td>
-                    </tr>  <tr>
-                        <td>Busy-by</td>
+                    </tr>  
+                    <tr>
+                        <td>Busy-by:</td>
                         <td> <Select
                             value={selectcolumn}
                             onChange={(newValue) => this.handleChange('busy_by', newValue)}
                             options={options}
                         /></td>
-                    </tr>  <tr>
-                        <td>Picture</td>
+                    </tr>  
+                    <tr>
+                        <td>Picture:</td>
                         <td> <Select
                             value={selectcolumn}
                             onChange={(newValue) => this.handleChange('picture', newValue)}
                             options={options}
                         /></td>
-                    </tr>  <tr>
-                        <td>Function</td>
+                    </tr>  
+                    <tr>
+                        <td>Function:</td>
                         <td> <Select
                             value={selectcolumn}
                             onChange={(newValue) => this.handleChange('function', newValue)}
                             options={options}
                         /></td>
-                    </tr>  <tr>
-                        <td>Aktiv</td>
+                    </tr>  
+                    <tr>
+                        <td>Aktiv:</td>
                         <td> <Select
                             value={selectcolumn}
                             onChange={(newValue) => this.handleChange('aktiv', newValue)}
                             options={options}
                         /></td>
-                    </tr>  <tr>
-                        <td>Deletet-inaktiv</td>
+                    </tr>  
+                    <tr>
+                        <td>Deletet-inaktiv:</td>
                         <td> <Select
                             value={selectcolumn}
                             onChange={(newValue) => this.handleChange('deleted_inaktiv', newValue)}
                             options={options}
                         /></td>
-                    </tr>  <tr>
-                        <td>Newsletter-flag</td>
+                    </tr>  
+                    <tr>
+                        <td>Newsletter-flag:</td>
                         <td> <Select
                             value={selectcolumn}
                             onChange={(newValue) => this.handleChange('newsletter_flag', newValue)}
                             options={options}
                         /></td>
-                    </tr>  <tr>
-                        <td>Created-date</td>
+                    </tr>  
+                    <tr>
+                        <td>Created-date:</td>
                         <td> <Select
                             value={selectcolumn}
                             onChange={(newValue) => this.handleChange('created', newValue)}
                             options={options}
                         /></td>
-                    </tr>  <tr>
-                        <td>Modify-date</td>
+                    </tr>  
+                    <tr>
+                        <td>Modify-date:</td>
                         <td> <Select
                             value={selectcolumn}
                             onChange={(newValue) => this.handleChange('modify', newValue)}
                             options={options}
                         /></td>
                     </tr>
+                    </tbody>
                 </table>
-
-
-
+                <div type="button" className="button-click" onClick={() => this.props.upload(this.state)}>Upload</div>
             </div>
         )
     }
