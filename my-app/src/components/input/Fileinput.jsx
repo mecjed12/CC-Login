@@ -3,22 +3,22 @@ import './Fileinput.css';
 import Select from 'react-select';
 
 const options = [
-    { value: '0', label: 'Keine Daten' },
-    { value: '1', label: 'Spalte 1' },
-    { value: '2', label: 'Spalte 2' },
-    { value: '3', label: 'Spalte 3' },
-    { value: '4', label: 'Spalte 4' },
-    { value: '5', label: 'Spalte 5' },
-    { value: '6', label: 'Spalte 6' },
-    { value: '7', label: 'Spalte 7' },
-    { value: '8', label: 'Spalte 8' },
-    { value: '9', label: 'Spalte 9' },
-    { value: '10', label: 'Spalte 10' },
-    { value: '11', label: 'Spalte 11' },
-    { value: '12', label: 'Spalte 12' },
-    { value: '13', label: 'Spalte 13' },
-    { value: '14', label: 'Spalte 14' },
-    { value: '15', label: 'Spalte 15' },
+    { value: null, label: 'Keine Daten' },
+    { value: '0', label: 'Spalte 1' },
+    { value: '1', label: 'Spalte 2' },
+    { value: '2', label: 'Spalte 3' },
+    { value: '3', label: 'Spalte 4' },
+    { value: '4', label: 'Spalte 5' },
+    { value: '5', label: 'Spalte 6' },
+    { value: '6', label: 'Spalte 7' },
+    { value: '7', label: 'Spalte 8' },
+    { value: '8', label: 'Spalte 9' },
+    { value: '9', label: 'Spalte 10' },
+    { value: '10', label: 'Spalte 11' },
+    { value: '11', label: 'Spalte 12' },
+    { value: '12', label: 'Spalte 13' },
+    { value: '13', label: 'Spalte 14' },
+    { value: '14', label: 'Spalte 15' },
 ];
 
 export default class Fileinput extends React.Component {
