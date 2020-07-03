@@ -19,8 +19,6 @@ const options = [
     { value: '13', label: 'Spalte 13' },
     { value: '14', label: 'Spalte 14' },
     { value: '15', label: 'Spalte 15' },
-
-
 ];
 
 export default class Fileinput extends React.Component {
@@ -56,34 +54,22 @@ export default class Fileinput extends React.Component {
 
     render() {
         
-        const { selectedOption1 } = this.state;
-        const { selectedOption2 } = this.state;
-        const { selectedOption3 } = this.state;
-        const { selectedOption4 } = this.state;
-        const { selectedOption5 } = this.state;
-        const { selectedOption6 } = this.state;
-        const { selectedOption7 } = this.state;
-        const { selectedOption8 } = this.state;
-        const { selectedOption9 } = this.state;
-        const { selectedOption10 } = this.state;
-        const { selectedOption11 } = this.state;
-        const { selectedOption12 } = this.state;
-        const { selectedOption13 } = this.state;
-        const { selectedOption14 } = this.state;
-        const { selectedOption15 } = this.state;
+        const { selectcolumn } = this.state;
+        
 
 
         console.log(this.state)
 
         return (
             <div className="input-container">
+                <div type="button" className="button-click" onClick={() => this.props.upload(this.state)}>Upload</div>
                 <table>
                    
                     
                     <tr>
                         <td>Firstname</td>
                         <td> <Select
-                            value={selectedOption1}
+                            value={selectcolumn}
                             onChange={(newValue) => this.handleChange('firstName', newValue)}
                             options={options}
                         /></td>
@@ -91,7 +77,7 @@ export default class Fileinput extends React.Component {
                     <tr>
                         <td>Lastname</td>
                         <td> <Select
-                            value={selectedOption2}
+                            value={selectcolumn}
                             onChange={(newValue) => this.handleChange('lastName', newValue)}
                             options={options}
                         /></td>
@@ -99,91 +85,91 @@ export default class Fileinput extends React.Component {
                     <tr>
                         <td>Title</td>
                         <td> <Select
-                            value={selectedOption3}
+                            value={selectcolumn}
                             onChange={(newValue) => this.handleChange('title', newValue)}
                             options={options}
                         /></td>
                     </tr>  <tr>
                         <td>SV-Number</td>
                         <td> <Select
-                            value={selectedOption4}
+                            value={selectcolumn}
                             onChange={(newValue) => this.handleChange('SV_Number', newValue)}
                             options={options}
                         /></td>
                     </tr>  <tr>
                         <td>Geb-Date</td>
                         <td> <Select
-                            value={selectedOption5}
+                            value={selectcolumn}
                             onChange={(newValue) => this.handleChange('Geb_Date', newValue)}
                             options={options}
                         /></td>
                     </tr>  <tr>
                         <td>Gender</td>
                         <td> <Select
-                            value={selectedOption6}
+                            value={selectcolumn}
                             onChange={(newValue) => this.handleChange('Gender', newValue)}
                             options={options}
                         /></td>
                     </tr>  <tr>
                         <td>Busy</td>
                         <td> <Select
-                            value={selectedOption7}
+                            value={selectcolumn}
                             onChange={(newValue) => this.handleChange('busy', newValue)}
                             options={options}
                         /></td>
                     </tr>  <tr>
                         <td>Busy-by</td>
                         <td> <Select
-                            value={selectedOption8}
+                            value={selectcolumn}
                             onChange={(newValue) => this.handleChange('busy_by', newValue)}
                             options={options}
                         /></td>
                     </tr>  <tr>
                         <td>Picture</td>
                         <td> <Select
-                            value={selectedOption9}
+                            value={selectcolumn}
                             onChange={(newValue) => this.handleChange('picture', newValue)}
                             options={options}
                         /></td>
                     </tr>  <tr>
                         <td>Function</td>
                         <td> <Select
-                            value={selectedOption10}
+                            value={selectcolumn}
                             onChange={(newValue) => this.handleChange('function', newValue)}
                             options={options}
                         /></td>
                     </tr>  <tr>
                         <td>Aktiv</td>
                         <td> <Select
-                            value={selectedOption11}
+                            value={selectcolumn}
                             onChange={(newValue) => this.handleChange('aktiv', newValue)}
                             options={options}
                         /></td>
                     </tr>  <tr>
                         <td>Deletet-inaktiv</td>
                         <td> <Select
-                            value={selectedOption12}
+                            value={selectcolumn}
                             onChange={(newValue) => this.handleChange('deleted_inaktiv', newValue)}
                             options={options}
                         /></td>
                     </tr>  <tr>
                         <td>Newsletter-flag</td>
                         <td> <Select
-                            value={selectedOption13}
+                            value={selectcolumn}
                             onChange={(newValue) => this.handleChange('newsletter_flag', newValue)}
                             options={options}
                         /></td>
                     </tr>  <tr>
                         <td>Created-date</td>
                         <td> <Select
-                            value={selectedOption14}
+                            value={selectcolumn}
                             onChange={(newValue) => this.handleChange('created', newValue)}
                             options={options}
                         /></td>
                     </tr>  <tr>
                         <td>Modify-date</td>
                         <td> <Select
-                            value={selectedOption15}
+                            value={selectcolumn}
                             onChange={(newValue) => this.handleChange('modify', newValue)}
                             options={options}
                         /></td>
