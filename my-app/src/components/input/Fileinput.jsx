@@ -62,7 +62,7 @@ export default class Fileinput extends React.Component {
 
         return (
             <div className="input-container">
-                <div type="button" className="button-click" onClick={() => this.props.upload(this.state)}>Upload</div>
+                <div type="button" className="button-click" onClick={() => this.props.upload(this.state)}>Upload-List</div>
                 <table>
                    
                     
