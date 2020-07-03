@@ -47,6 +47,7 @@ export default class Filepicker extends React.Component {
                     <input className="upload" type="file" name="file" onChange={this.onChangeHandler} />
                 </div>
                 <Fileinput upload={this.onClickHandler}/>
+                <div type="button" className="button-click" onClick={() => this.onClickHandler}>Upload</div>
             </div>
         )
     }
