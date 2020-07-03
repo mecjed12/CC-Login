@@ -1,11 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Text;
 
 namespace RegistrationData.model
 {
-    
+    [Table("course")]
     public class Course // : CreatedModify
     {
         public int Id { get; set; }
