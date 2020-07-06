@@ -26,20 +26,20 @@ export default class Fileinput extends React.Component {
         super(props);
         this.state = {
 
-            Keinedaten: null,
+            
             name1: null,
             name2: null,
             title: null,
             svNumber: null,
             date: null,
-            gender: null,
+            Gender: null,
             busy: null,
             busy_by: null,
             picture: null,
             function: null,
-            aktiv: null,
-            deleted_inaktiv: null,
-            newsletter_flag: null,
+            aktive: null,
+            deletedInaktive: null,
+            newsletterFlag: null,
             created: null,
             modify: null,
            
@@ -51,10 +51,11 @@ export default class Fileinput extends React.Component {
         this.setState({
             [key]: value.value
         })
-        if (this.state === options.label) {
-            alert("gleicher wert")
-
+        if(Object.values(this.state) === value.value){
+            alert("gleiche wert")
         }
+            
+        
     }
 
     render() {
@@ -108,7 +109,7 @@ export default class Fileinput extends React.Component {
                             <td>Gender:</td>
                             <td> <Select
                                 value={selectcolumn}
-                                onChange={(newValue) => this.handleChange('gender', newValue)}
+                                onChange={(newValue) => this.handleChange('Gender', newValue)}
                                 options={options}
                             /></td>
                         </tr>
@@ -148,7 +149,7 @@ export default class Fileinput extends React.Component {
                             <td>Aktiv:</td>
                             <td> <Select
                                 value={selectcolumn}
-                                onChange={(newValue) => this.handleChange('aktiv', newValue)}
+                                onChange={(newValue) => this.handleChange('aktive', newValue)}
                                 options={options}
                             /></td>
                         </tr>
@@ -156,7 +157,7 @@ export default class Fileinput extends React.Component {
                             <td>Deletet-inaktiv:</td>
                             <td> <Select
                                 value={selectcolumn}
-                                onChange={(newValue) => this.handleChange('deleted_inaktiv', newValue)}
+                                onChange={(newValue) => this.handleChange('deletedInaktive', newValue)}
                                 options={options}
                             /></td>
                         </tr>
@@ -164,7 +165,7 @@ export default class Fileinput extends React.Component {
                             <td>Newsletter-flag:</td>
                             <td> <Select
                                 value={selectcolumn}
-                                onChange={(newValue) => this.handleChange('newsletter_flag', newValue)}
+                                onChange={(newValue) => this.handleChange('newsletterFlag', newValue)}
                                 options={options}
                             /></td>
                         </tr>
