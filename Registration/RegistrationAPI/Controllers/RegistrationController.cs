@@ -23,8 +23,6 @@ namespace RegistrationAPI.Controllers
         public int Test()
         {
             return 0;
-                //Program.controller.AddCourse(new Course() { Title = "Test Course", Category = "test", CreatedAt = DateTime.Today , ClassroomId = 3 });
-                //Program.controller.AddPerson(new Person() { Name1= "Test", Name2= "Guy", Function = "", Active = true, DeletedInactive = false, NewsletterFlag = false, CreatedAt = DateTime.Today});
         }
         
         [HttpGet("{id}")]
@@ -34,17 +32,14 @@ namespace RegistrationAPI.Controllers
         }
 
         [HttpPost("person")]
-        public void Post(PersonRegistrationFile file)
+        public void Post([FromForm] PersonRegistrationFile file)
         {
-            Debug.WriteLine(file.File.FileName);
-            //Debug.WriteLine(file.Order);
+            Debug.WriteLine(file.GetConfig());
 
-            using (var reader = new StreamReader(file.File.OpenReadStream()))
+            using (var stream = file.File.OpenReadStream())
             {
-                var content = reader.ReadToEnd();
-                Debug.WriteLine(content);
+                Program.controller.AddPeopleFromCSV(stream, file.GetConfig());
             }
-
         }
     }
 }

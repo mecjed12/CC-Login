@@ -3,6 +3,7 @@ using RegistrationData;
 using RegistrationData.model;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 
 namespace RegistrationLogic
@@ -20,16 +21,6 @@ namespace RegistrationLogic
         public List<Person> GetPeople()
         {
             return Entities.People.ToList();
-        }
-
-        public List<Person> GetPeople(Func<Person, bool> predicate)
-        {
-            return Entities.People.Where(predicate).ToList();
-        }
-        
-        public List<Person> GetPeople(Func<Person, int, bool> predicate)
-        {
-            return Entities.People.Where(predicate).ToList();
         }
 
         public Person GetPersonById(int id)
@@ -80,9 +71,9 @@ namespace RegistrationLogic
         public int AddPerson(Person person)
         {
             //TODO ask for anouther not nullable value
-            var p = GetPeople(x => x.Name1.Equals(person.Name1) && x.Name2.Equals(person.Name2)).FirstOrDefault();
+            var p = Entities.People.FirstOrDefault(x => x.Name1.Equals(person.Name1) && x.Name2.Equals(person.Name2));
 
-            if(p != null)
+            if (p != null)
             {
                 return p.Id;
             }
@@ -103,7 +94,7 @@ namespace RegistrationLogic
         {
             var c = GetCourses(x => x.Title == course.Title && x.Category == x.Category).FirstOrDefault();
 
-            if(c != null)
+            if (c != null)
             {
                 return 1;
             }
@@ -114,6 +105,50 @@ namespace RegistrationLogic
             return 0;
         }
 
+        public void AddPeopleFromCSV(Stream fileStream, PersonConfig config)
+        {
+            using (var reader = new StreamReader(fileStream))
+            {
+                while (reader.Peek() != -1)
+                {
+                    var line = reader.ReadLine();
+                    var pArgs = line.Split(';');
 
+                    var Title = config.Title != null ? pArgs[(int)config.Title] : null;
+                    Title = string.IsNullOrWhiteSpace(Title) ? null : Title;
+
+                    var Gender = config.Gender != null ? pArgs[(int)config.Gender] : null;
+                    Gender = string.IsNullOrWhiteSpace(Gender) ? null : Gender;
+
+
+
+                    //Todo
+                    //var tmp = pArgs[(int)config.SvNumber];
+                    //var SvNumber = config.SvNumber != null ? int.Parse(tmp) : null;
+                    
+
+                    var person = new Person()
+                    {
+                        Name1 = pArgs[config.Name1],
+                        Name2 = pArgs[config.Name2],
+                        Title = Title,
+                        Gender = Gender,
+                        //SVNumber = SvNumber,
+                        Function = "3"
+                    };
+
+                    var p = Entities.People.FirstOrDefault(x => x.Name1.Equals(person.Name1) && x.Name2.Equals(person.Name2));
+
+                    if(p != null)
+                    {
+                        continue;
+                    }
+
+                    Entities.People.Add(person);
+
+                }
+            }
+            Entities.SaveChanges();
+        }
     }
 }
