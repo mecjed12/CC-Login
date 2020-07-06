@@ -26,16 +26,16 @@ export default class Fileinput extends React.Component {
     this.state = {
 
       title: null,
-      course_number: null,
+      courseNumber: null,
       discription: null,
       category: null,
       start: null,
       end: null,
       unit: null,
       price: null,
-      classroom_id: null,
-      participant_max: null,
-      participant_min: null,
+      classroomId: null,
+      participantsMax: null,
+      participantsMin: null,
       created: null,
       modified: null
     }

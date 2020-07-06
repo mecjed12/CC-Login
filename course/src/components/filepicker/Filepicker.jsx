@@ -25,7 +25,7 @@ export default class Filepicker extends React.Component {
     onClickHandler = (config) => {
         const data = new FormData() 
         data.append('file', this.state.selectedFile)
-        data.append('config', config)
+        data.append('config', JSON.stringify(config))
 
        // if (config  kurstitel od kursinhalt oder erstellt am = leer => alert)
 
