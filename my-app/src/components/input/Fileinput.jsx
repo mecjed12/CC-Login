@@ -26,30 +26,35 @@ export default class Fileinput extends React.Component {
         super(props);
         this.state = {
 
-        Keinedaten: null,
-        name1: null,
-        name2: null,
-        title: null,
-        SVNumber: null,
-        date: null,
-        Gender: null,
-        busy: null,
-        busy_by: null,
-        picture: null,
-        function: null,
-        aktiv: null,
-        deleted_inaktiv: null,
-        newsletter_flag: null,
-        created: null,
-        modify: null,
+            Keinedaten: null,
+            name1: null,
+            name2: null,
+            title: null,
+            svNumber: null,
+            date: null,
+            gender: null,
+            busy: null,
+            busy_by: null,
+            picture: null,
+            function: null,
+            aktiv: null,
+            deleted_inaktiv: null,
+            newsletter_flag: null,
+            created: null,
+            modify: null,
+           
         }
     }
-      
+
     handleChange = (key, value) => {
         console.log(value)
         this.setState({
             [key]: value.value
         })
+        if (this.state === options.label) {
+            alert("gleicher wert")
+
+        }
     }
 
     render() {
@@ -57,130 +62,128 @@ export default class Fileinput extends React.Component {
         console.log(this.state)
         return (
             <div className="input-container">
-                
                 <table>
-                   <tbody>
-                    
-                    <tr>
-                        <td>FirstName:</td>
-                        <td> <Select
-                            value={selectcolumn}
-                            onChange={(newValue) => this.handleChange('name1', newValue)}
-                            options={options}
-                        /></td>
-                    </tr>
-                    <tr>
-                        <td>Lastname:</td>
-                        <td> <Select
-                            value={selectcolumn}
-                            onChange={(newValue) => this.handleChange('name2', newValue)}
-                            options={options}
-                        /></td>
-                    </tr>
-                    <tr>
-                        <td>Title:</td>
-                        <td> <Select
-                            value={selectcolumn}
-                            onChange={(newValue) => this.handleChange('title', newValue)}
-                            options={options}
-                        /></td>
-                    </tr>  
-                    <tr>
-                        <td>SV-Number:</td>
-                        <td> <Select
-                            value={selectcolumn}
-                            onChange={(newValue) => this.handleChange('SV_Number', newValue)}
-                            options={options}
-                        /></td>
-                    </tr> 
-                     <tr>
-                        <td>Geb-Date:</td>
-                        <td> <Select
-                            value={selectcolumn}
-                            onChange={(newValue) => this.handleChange('Geb_Date', newValue)}
-                            options={options}
-                        /></td>
-                    </tr>  
-                    <tr>
-                        <td>Gender:</td>
-                        <td> <Select
-                            value={selectcolumn}
-                            onChange={(newValue) => this.handleChange('Gender', newValue)}
-                            options={options}
-                        /></td>
-                    </tr>  
-                    <tr>
-                        <td>Busy:</td>
-                        <td> <Select
-                            value={selectcolumn}
-                            onChange={(newValue) => this.handleChange('busy', newValue)}
-                            options={options}
-                        /></td>
-                    </tr>  
-                    <tr>
-                        <td>Busy-by:</td>
-                        <td> <Select
-                            value={selectcolumn}
-                            onChange={(newValue) => this.handleChange('busy_by', newValue)}
-                            options={options}
-                        /></td>
-                    </tr>  
-                    <tr>
-                        <td>Picture:</td>
-                        <td> <Select
-                            value={selectcolumn}
-                            onChange={(newValue) => this.handleChange('picture', newValue)}
-                            options={options}
-                        /></td>
-                    </tr>  
-                    <tr>
-                        <td>Function:</td>
-                        <td> <Select
-                            value={selectcolumn}
-                            onChange={(newValue) => this.handleChange('function', newValue)}
-                            options={options}
-                        /></td>
-                    </tr>  
-                    <tr>
-                        <td>Aktiv:</td>
-                        <td> <Select
-                            value={selectcolumn}
-                            onChange={(newValue) => this.handleChange('aktiv', newValue)}
-                            options={options}
-                        /></td>
-                    </tr>  
-                    <tr>
-                        <td>Deletet-inaktiv:</td>
-                        <td> <Select
-                            value={selectcolumn}
-                            onChange={(newValue) => this.handleChange('deleted_inaktiv', newValue)}
-                            options={options}
-                        /></td>
-                    </tr>  
-                    <tr>
-                        <td>Newsletter-flag:</td>
-                        <td> <Select
-                            value={selectcolumn}
-                            onChange={(newValue) => this.handleChange('newsletter_flag', newValue)}
-                            options={options}
-                        /></td>
-                    </tr>  
-                    <tr>
-                        <td>Created-date:</td>
-                        <td> <Select
-                            value={selectcolumn}
-                            onChange={(newValue) => this.handleChange('created', newValue)}
-                            options={options}
-                        /></td>
-                    </tr>  
-                    <tr>
-                        <td>Modify-date:</td>
-                        <td> <Select
-                            value={selectcolumn}
-                            onChange={(newValue) => this.handleChange('modify', newValue)}
-                            options={options}
-                        /></td>
-                    </tr>
+                    <tbody>
+                        <tr>
+                            <td>FirstName:</td>
+                            <td> <Select
+                                value={selectcolumn}
+                                onChange={(newValue) => this.handleChange('name1', newValue)}
+                                options={options}
+                            /></td>
+                        </tr>
+                        <tr>
+                            <td>Lastname:</td>
+                            <td> <Select
+                                value={selectcolumn}
+                                onChange={(newValue) => this.handleChange('name2', newValue)}
+                                options={options}
+                            /></td>
+                        </tr>
+                        <tr>
+                            <td>Title:</td>
+                            <td> <Select
+                                value={selectcolumn}
+                                onChange={(newValue) => this.handleChange('title', newValue)}
+                                options={options}
+                            /></td>
+                        </tr>
+                        <tr>
+                            <td>SV-Number:</td>
+                            <td> <Select
+                                value={selectcolumn}
+                                onChange={(newValue) => this.handleChange('svNumber', newValue)}
+                                options={options}
+                            /></td>
+                        </tr>
+                        <tr>
+                            <td>Geb-Date:</td>
+                            <td> <Select
+                                value={selectcolumn}
+                                onChange={(newValue) => this.handleChange('date', newValue)}
+                                options={options}
+                            /></td>
+                        </tr>
+                        <tr>
+                            <td>Gender:</td>
+                            <td> <Select
+                                value={selectcolumn}
+                                onChange={(newValue) => this.handleChange('gender', newValue)}
+                                options={options}
+                            /></td>
+                        </tr>
+                        <tr>
+                            <td>Busy:</td>
+                            <td> <Select
+                                value={selectcolumn}
+                                onChange={(newValue) => this.handleChange('busy', newValue)}
+                                options={options}
+                            /></td>
+                        </tr>
+                        <tr>
+                            <td>Busy-by:</td>
+                            <td> <Select
+                                value={selectcolumn}
+                                onChange={(newValue) => this.handleChange('busy_by', newValue)}
+                                options={options}
+                            /></td>
+                        </tr>
+                        <tr>
+                            <td>Picture:</td>
+                            <td> <Select
+                                value={selectcolumn}
+                                onChange={(newValue) => this.handleChange('picture', newValue)}
+                                options={options}
+                            /></td>
+                        </tr>
+                        <tr>
+                            <td>Function:</td>
+                            <td> <Select
+                                value={selectcolumn}
+                                onChange={(newValue) => this.handleChange('function', newValue)}
+                                options={options}
+                            /></td>
+                        </tr>
+                        <tr>
+                            <td>Aktiv:</td>
+                            <td> <Select
+                                value={selectcolumn}
+                                onChange={(newValue) => this.handleChange('aktiv', newValue)}
+                                options={options}
+                            /></td>
+                        </tr>
+                        <tr>
+                            <td>Deletet-inaktiv:</td>
+                            <td> <Select
+                                value={selectcolumn}
+                                onChange={(newValue) => this.handleChange('deleted_inaktiv', newValue)}
+                                options={options}
+                            /></td>
+                        </tr>
+                        <tr>
+                            <td>Newsletter-flag:</td>
+                            <td> <Select
+                                value={selectcolumn}
+                                onChange={(newValue) => this.handleChange('newsletter_flag', newValue)}
+                                options={options}
+                            /></td>
+                        </tr>
+                        <tr>
+                            <td>Created-date:</td>
+                            <td> <Select
+                                value={selectcolumn}
+                                onChange={(newValue) => this.handleChange('created', newValue)}
+                                options={options}
+                            /></td>
+                        </tr>
+                        <tr>
+                            <td>Modify-date:</td>
+                            <td> <Select
+                                value={selectcolumn}
+                                onChange={(newValue) => this.handleChange('modify', newValue)}
+                                options={options}
+                            /></td>
+                        </tr>
                     </tbody>
                 </table>
                 <div type="button" className="button-click" onClick={() => this.props.upload(this.state)}>Upload</div>
