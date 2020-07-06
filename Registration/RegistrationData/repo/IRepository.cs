@@ -2,7 +2,6 @@
 {
     interface IRepository<T>
     {
-
         void InitRepository();
     }
 }
