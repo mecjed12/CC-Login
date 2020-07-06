@@ -37,8 +37,8 @@ export default class Fileinput extends React.Component {
             busy_by: null,
             picture: null,
             function: null,
-            aktive: null,
-            deletedInaktive: null,
+            active: null,
+            deletedInactive: null,
             newsletterFlag: null,
             created: null,
             modify: null,
@@ -71,6 +71,7 @@ export default class Fileinput extends React.Component {
                                 value={selectcolumn}
                                 onChange={(newValue) => this.handleChange('name1', newValue)}
                                 options={options}
+                                hideSelectedOptions={options}
                             /></td>
                         </tr>
                         <tr>
@@ -79,6 +80,7 @@ export default class Fileinput extends React.Component {
                                 value={selectcolumn}
                                 onChange={(newValue) => this.handleChange('name2', newValue)}
                                 options={options}
+                                hideSelectedOptions={options}
                             /></td>
                         </tr>
                         <tr>
@@ -149,7 +151,7 @@ export default class Fileinput extends React.Component {
                             <td>Aktiv:</td>
                             <td> <Select
                                 value={selectcolumn}
-                                onChange={(newValue) => this.handleChange('aktive', newValue)}
+                                onChange={(newValue) => this.handleChange('active', newValue)}
                                 options={options}
                             /></td>
                         </tr>
@@ -157,7 +159,7 @@ export default class Fileinput extends React.Component {
                             <td>Deletet-inaktiv:</td>
                             <td> <Select
                                 value={selectcolumn}
-                                onChange={(newValue) => this.handleChange('deletedInaktive', newValue)}
+                                onChange={(newValue) => this.handleChange('deletedInactive', newValue)}
                                 options={options}
                             /></td>
                         </tr>
