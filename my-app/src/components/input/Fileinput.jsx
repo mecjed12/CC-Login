@@ -44,8 +44,8 @@ export default class Fileinput extends React.Component {
     }
 
     handleChange = (key, value) => {
+        //checkt die Spalten ab ob nicht die gleichen genommen wurde
         const selectedValues = Object.values(this.state)
-
         var isDuplicate = false;
         selectedValues.forEach(selectedValue => {
             if (selectedValue && selectedValue.value === value.value) {
@@ -95,7 +95,6 @@ export default class Fileinput extends React.Component {
                                 value={this.state.name1}
                                 onChange={(newValue) => this.handleChange('name1', newValue)}
                                 options={options}
-                                hideSelectedOptions={options}
                             /></td>
                         </tr>
                         <tr>
@@ -103,8 +102,7 @@ export default class Fileinput extends React.Component {
                             <td> <Select
                                 value={this.state.name2}
                                 onChange={(newValue) => this.handleChange('name2', newValue)}
-                                options={options}
-                                hideSelectedOptions={options}
+                                options={options} 
                             /></td>
                         </tr>
                         <tr>
@@ -118,6 +116,7 @@ export default class Fileinput extends React.Component {
                         <tr>
                             <td>SV-Number:</td>
                             <td> <Select
+                                value={this.state.svNumber}
                                 onChange={(newValue) => this.handleChange('svNumber', newValue)}
                                 options={options}
                             /></td>
@@ -125,6 +124,7 @@ export default class Fileinput extends React.Component {
                         <tr>
                             <td>Geb-Date:</td>
                             <td> <Select
+                                value={this.state.date}
                                 onChange={(newValue) => this.handleChange('date', newValue)}
                                 options={options}
                             /></td>
@@ -132,6 +132,7 @@ export default class Fileinput extends React.Component {
                         <tr>
                             <td>Gender:</td>
                             <td> <Select
+                                value={this.state.Gender}
                                 onChange={(newValue) => this.handleChange('Gender', newValue)}
                                 options={options}
                             /></td>
@@ -139,6 +140,7 @@ export default class Fileinput extends React.Component {
                         <tr>
                             <td>Busy:</td>
                             <td> <Select
+                                value={this.state.busy}
                                 onChange={(newValue) => this.handleChange('busy', newValue)}
                                 options={options}
                             /></td>
@@ -146,6 +148,7 @@ export default class Fileinput extends React.Component {
                         <tr>
                             <td>Busy-by:</td>
                             <td> <Select
+                                value={this.state.busy_by}
                                 onChange={(newValue) => this.handleChange('busy_by', newValue)}
                                 options={options}
                             /></td>
@@ -153,6 +156,7 @@ export default class Fileinput extends React.Component {
                         <tr>
                             <td>Picture:</td>
                             <td> <Select
+                                value={this.state.picture}
                                 onChange={(newValue) => this.handleChange('picture', newValue)}
                                 options={options}
                             /></td>
@@ -160,6 +164,7 @@ export default class Fileinput extends React.Component {
                         <tr>
                             <td>Function:</td>
                             <td> <Select
+                                value={this.state.function}
                                 onChange={(newValue) => this.handleChange('function', newValue)}
                                 options={options}
                             /></td>
@@ -167,6 +172,7 @@ export default class Fileinput extends React.Component {
                         <tr>
                             <td>Aktiv:</td>
                             <td> <Select
+                                value={this.state.active}
                                 onChange={(newValue) => this.handleChange('active', newValue)}
                                 options={options}
                             /></td>
@@ -174,6 +180,7 @@ export default class Fileinput extends React.Component {
                         <tr>
                             <td>Deletet-inaktiv:</td>
                             <td> <Select
+                                value={this.state.deletedInactive}
                                 onChange={(newValue) => this.handleChange('deletedInactive', newValue)}
                                 options={options}
                             /></td>
@@ -181,6 +188,7 @@ export default class Fileinput extends React.Component {
                         <tr>
                             <td>Newsletter-flag:</td>
                             <td> <Select
+                                value={this.state.newsletterFlag}
                                 onChange={(newValue) => this.handleChange('newsletterFlag', newValue)}
                                 options={options}
                             /></td>
@@ -188,6 +196,7 @@ export default class Fileinput extends React.Component {
                         <tr>
                             <td>Created-date:</td>
                             <td> <Select
+                                value={this.state.created}
                                 onChange={(newValue) => this.handleChange('created', newValue)}
                                 options={options}
                             /></td>
@@ -195,13 +204,14 @@ export default class Fileinput extends React.Component {
                         <tr>
                             <td>Modify-date:</td>
                             <td> <Select
+                                value={this.state.modify}
                                 onChange={(newValue) => this.handleChange('modify', newValue)}
                                 options={options}
                             /></td>
                         </tr>
                     </tbody>
                 </table>
-                <div type="button" className="button-click" onClick={() => this.props.upload(this.state)}>Upload</div>
+                <div type="button" className="button-click" onClick={() => this.props.upload(this.state),() => this.onUpload()}>Upload</div>
             </div>
         )
     }
