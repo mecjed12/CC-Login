@@ -10,9 +10,13 @@ table {
     width: 30%;
 }
 td,th {
-    padding: 7px;
+    padding: 6px;
+    
     
 }
 th {
     background-color: aqua;
+}
+td {
+    width: 150px;
 }
