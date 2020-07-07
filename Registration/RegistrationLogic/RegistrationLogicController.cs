@@ -99,12 +99,12 @@ namespace RegistrationLogic
 
         public void AddPeopleFromCSV(Stream fileStream, PersonConfig config)
         {
-            using(var reader = new StreamReader(fileStream, Encoding.UTF8, true))
+            //Encoding.GetEncoding(1250)
+            using(var reader = new StreamReader(fileStream))
             {
                 while(reader.Peek() != -1)
                 {
                     var line = reader.ReadLine();
-                    Debug.WriteLine(line);
                     var args = line.Split(';');
 
                     var person = new Person()
@@ -132,8 +132,8 @@ namespace RegistrationLogic
                     Entities.People.Add(person);
 
                 }
+                Entities.SaveChanges();
             }
-            Entities.SaveChanges();
         }
 
         //https://localhost:44375/registration/person

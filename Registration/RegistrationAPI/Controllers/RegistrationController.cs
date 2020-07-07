@@ -33,20 +33,27 @@ namespace RegistrationAPI.Controllers
         [HttpPost("Person")]
         public void AddPeopleFromFile([FromForm] PersonRegistrationFile file)
         {
-            
-
-			using var stream = file.File.OpenReadStream();
-			Program.controller.AddPeopleFromCSV(stream, file.GetConfig());
-		}
+            if(file.File != null)
+            {
+                using var stream = file.File.OpenReadStream();
+                Program.controller.AddPeopleFromCSV(stream, file.GetConfig());
+            }else
+			{
+                Response.StatusCode = 400;
+			}
+        }
 
         [HttpPost("Course")]
         public void AddCoursesFromFile([FromForm] CourseRegistrationFile file)
         {
-			using var stream = file.File.OpenReadStream();
-			Program.controller.AddCoursesFromCSV(stream, file.GetConfig());
-		}
-
-
-
+            if(file.File != null)
+            {
+                using var stream = file.File.OpenReadStream();
+                Program.controller.AddCoursesFromCSV(stream, file.GetConfig());
+            }else
+			{
+                Response.StatusCode = 400;
+			}
+        }
     }
 }
