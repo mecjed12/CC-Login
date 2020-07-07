@@ -17,12 +17,10 @@ namespace RegistrationAPI
         public IFormFile File { get; set; }
 
         public PersonConfig GetConfig()
-        {
-            if(!string.IsNullOrWhiteSpace(Config))
-            {
-                return JsonConvert.DeserializeObject<PersonConfig>(Config);
-            }
-            return null;
-        }
-    }
+		{
+			if(string.IsNullOrWhiteSpace(Config)) return null;
+			
+			return JsonConvert.DeserializeObject<PersonConfig>(Config);
+		}
+	}
 }

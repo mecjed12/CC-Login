@@ -7,9 +7,8 @@ using RegistrationData.model;
 
 namespace RegistrationAPI.Controllers
 {
-    [Route("[controller]")]
+    [Route("registration")]
     [ApiController]
-    
     public class RegistrationController : ControllerBase
     {
 
@@ -31,15 +30,23 @@ namespace RegistrationAPI.Controllers
             return Program.controller.GetPersonById(id);
         }
 
-        [HttpPost("person")]
-        public void Post([FromForm] PersonRegistrationFile file)
+        [HttpPost("Person")]
+        public void AddPeopleFromFile([FromForm] PersonRegistrationFile file)
         {
-            Debug.WriteLine(file.GetConfig());
+            
 
-            using (var stream = file.File.OpenReadStream())
-            {
-                Program.controller.AddPeopleFromCSV(stream, file.GetConfig());
-            }
-        }
+			using var stream = file.File.OpenReadStream();
+			Program.controller.AddPeopleFromCSV(stream, file.GetConfig());
+		}
+
+        [HttpPost("Course")]
+        public void AddCoursesFromFile([FromForm] CourseRegistrationFile file)
+        {
+			using var stream = file.File.OpenReadStream();
+			Program.controller.AddCoursesFromCSV(stream, file.GetConfig());
+		}
+
+
+
     }
 }

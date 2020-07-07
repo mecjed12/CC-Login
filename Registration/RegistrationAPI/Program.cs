@@ -10,11 +10,13 @@ namespace RegistrationAPI
     {
         private static DcvEntities Entities = new DcvEntities();
         public static RegistrationLogicController controller = new RegistrationLogicController(Entities);
-        public static PersonRepository repo = new PersonRepository(Entities);
+        public static PersonRepository PersonRepo = new PersonRepository(Entities);
+        public static CourseRepository CourseRepo = new CourseRepository();
 
         public static void Main(string[] args)
         {
-            repo.InitRepository();
+            PersonRepo.InitRepository();
+            CourseRepo.InitRepository();
 
             CreateHostBuilder(args).Build().Run();
         }
