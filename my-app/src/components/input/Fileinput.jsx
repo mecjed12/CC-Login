@@ -17,8 +17,6 @@ const options = [
     { value: '10', label: 'Spalte 11' },
     { value: '11', label: 'Spalte 12' },
     { value: '12', label: 'Spalte 13' },
-    { value: '13', label: 'Spalte 14' },
-    { value: '14', label: 'Spalte 15' },
 ];
 
 export default class Fileinput extends React.Component {
@@ -38,8 +36,6 @@ export default class Fileinput extends React.Component {
             active: null,
             deletedInactive: null,
             newsletterFlag: null,
-            created: null,
-            modify: null,
         }
     }
 
@@ -64,7 +60,7 @@ export default class Fileinput extends React.Component {
 
     onUpload = () => {
         // check for required fields
-        if (!this.state.name2 || !this.state.active || !this.state.deletedInactive || !this.state.newsletterFlag || !this.state.created) {
+        if (!this.state.name2 || !this.state.active || !this.state.deletedInactive || !this.state.newsletterFlag ) {
             alert("Bitte Feld auführen")
             return
         }
@@ -85,10 +81,6 @@ export default class Fileinput extends React.Component {
             active: this.state.active,
             deletedInactive: this.state.deletedInactive,
             newsletterFlag: this.state.newsletterFlag,
-            created: this.state.created,
-            modify: this.state.modify,
-
-           
         }
       
 
@@ -204,22 +196,7 @@ export default class Fileinput extends React.Component {
                                 options={options}
                             /></td>
                         </tr>
-                        <tr>
-                            <td>Erstelungsdatum *</td>
-                            <td> <Select
-                                value={options.find(option => option.value === this.state.created)}
-                                onChange={(newValue) => this.handleChange('created', newValue)}
-                                options={options}
-                            /></td>
-                        </tr>
-                        <tr>
-                            <td>Abänderungsdatum </td>
-                            <td> <Select
-                                value={options.find(option => option.value === this.state.modify)}
-                                onChange={(newValue) => this.handleChange('modify', newValue)}
-                                options={options}
-                            /></td>
-                        </tr>
+                       
                     </tbody>
                 </table>
                 <div type="button" className="button-click" onClick={() => this.onUpload()}>Upload</div>
