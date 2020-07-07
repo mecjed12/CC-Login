@@ -37,7 +37,7 @@ export default class Filepicker extends React.Component {
         return(
             <div className="file-container">
                 <div className="upload-container">
-                <label>Upload your file !</label>
+                <label>Bitte geben sie Ihre Datei ein!</label>
                 <input  className="upload" type="file" name="file" onChange={this.onChangeHandler}/>
                 </div>
                 <Fileinput upload={this.onClickHandler} />
