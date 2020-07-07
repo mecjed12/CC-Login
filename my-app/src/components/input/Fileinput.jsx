@@ -63,7 +63,7 @@ export default class Fileinput extends React.Component {
 
     onUpload = () => {
         // check for required fields
-        if (!this.state.firstName) {
+        if (!this.state.name1) {
             alert("Bitte Feld auführen")
             return
         }
@@ -71,8 +71,21 @@ export default class Fileinput extends React.Component {
         // ... all fields are filled
 
         const stateToSend = {
-            name1: this.state.name1,
-            name2: this.state.name2,
+            name1: this.state.name1.value,
+            name2: this.state.name2.value,
+            title: this.state.title.value,
+            svNumber: this.state.svNumber.value,
+            date: this.state.date.value,
+            Gender: this.state.Gender.value,
+            busy: this.state.busy.value,
+            busy_by: this.state.busy_by.value,
+            picture: this.state.picture.value,
+            function: this.state.function.value,
+            active: this.state.active.value,
+            deletedInactive: this.state.deletedInactive.value,
+            newsletterFlag: this.state.newsletterFlag.value,
+            created: this.state.created.value,
+            modify: this.state.modify.value,
         }
 
         this.props.upload(stateToSend)
