@@ -70,15 +70,9 @@ export default class Fileinput extends React.Component {
 
         // ... all fields are filled
 
-        //
-        const state2 = {
-            firstName: {value: "1", label: "Spalte 2"},
-            lastName: {value: "2", label: "Spalte 3"}
-        }
-
         const stateToSend = {
-            firstName: 1,
-            lastName: 2
+            name1: this.state.name1,
+            name2: this.state.name2,
         }
 
         this.props.upload(stateToSend)
