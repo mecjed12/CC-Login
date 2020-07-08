@@ -12,14 +12,12 @@ export default class Filepicker extends React.Component {
             selectedFile: null
           }
       }
-    
 
     onChangeHandler=event=>{
         this.setState({
             selectedFile: event.target.files[0],
             loaded: 0,
           })
-        console.log(event.target.files[0])
     }
 
     onClickHandler = (config) => {
@@ -27,12 +25,10 @@ export default class Filepicker extends React.Component {
         data.append('file', this.state.selectedFile)
         data.append('config', JSON.stringify(config))
 
-       // if (config  kurstitel od kursinhalt oder erstellt am = leer => alert)
-
         axios.post("http://localhost:3000/upload", data, { 
         })
         .then(res => {   // then print response status
-            console.log(res.statusnumber)
+            console.log(res.statusText)
          })
     }
 
