@@ -8,24 +8,18 @@ export default class Filepicker extends React.Component {
         this.state = {
             selectFile: null,
         }
-
     }
     onChangeHandler = event => {
-       
-
         this.setState({
             selectFile: event.target.files[0],
             loaded: 0,
 
         }
-
         );
 
     }
-
-
     onClickHandler = (config) => {
-        if(!this.state.selectFile) {
+        if (!this.state.selectFile) {
             alert(" bitte geben die die file ein")
             return
         }
@@ -35,12 +29,8 @@ export default class Filepicker extends React.Component {
         axios.post("http://localhost:8000/upload", data, {
         })
             .then(res => {
-                console.log(res.statusText)
             })
-           
     }
-
-
     render() {
         return (
             <div className="file-container">

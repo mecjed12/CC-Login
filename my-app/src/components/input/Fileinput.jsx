@@ -23,7 +23,6 @@ export default class Fileinput extends React.Component {
     constructor(props) {
         super(props);
         this.state = { 
-            nodata: null,
             name1: null,
             name2: null,
             title: null,
@@ -47,12 +46,8 @@ export default class Fileinput extends React.Component {
             if (value.value !== null && selectedValue === value.value) {
                 alert("Spalte bereits ausgewählt!")
                 isDuplicate = true;
-            }
-
-            
-            
+            } 
         })
-
         if (!isDuplicate) {
             console.log(value)
             this.setState({
@@ -68,11 +63,8 @@ export default class Fileinput extends React.Component {
             alert("Bitte Feld ausfüllen")
             return
         }
-
         // ... all fields are filled
-
         const stateToSend = {
-            nodata: this.state.nodata,
             name1: this.state.name1,
             name2: this.state.name2,
             title: this.state.title,
