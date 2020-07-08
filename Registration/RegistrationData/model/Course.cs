@@ -26,10 +26,10 @@ namespace RegistrationData.model
         public double? Price { get; set; }
 
         [Column("participant_max")]
-        public int ParticipantMax { get; set; }
+        public int MaxParticipants { get; set; }
         
         [Column("participant_min")]
-        public int ParticipantMin { get; set; }
+        public int MinParticipants { get; set; }
 
         [Column("classroom_id")]
         public int ClassroomId { get; set; }

@@ -348,3 +348,23 @@ MigrationBackup/
 
 # Ionide (cross platform F# VS Code tools) working folder
 .ionide/
+my-evaluation/my-evaluation/src/setupTests.js
+my-evaluation/my-evaluation/package-lock.json
+my-evaluation/my-evaluation/src/serviceWorker.js
+my-evaluation/my-evaluation/src/logo.svg
+my-evaluation/my-evaluation/src/index.js
+my-evaluation/my-evaluation/src/index.css
+my-evaluation/my-evaluation/src/App.test.js
+my-evaluation/my-evaluation/src/App.js
+my-evaluation/my-evaluation/src/App.css
+my-evaluation/my-evaluation/public/robots.txt
+my-evaluation/my-evaluation/public/manifest.json
+my-evaluation/my-evaluation/public/logo512.png
+my-evaluation/my-evaluation/public/logo192.png
+my-evaluation/my-evaluation/public/index.html
+my-evaluation/my-evaluation/public/favicon.ico
+my-evaluation/my-evaluation/README.md
+my-evaluation/my-evaluation/package.json
+.gitignore
+.gitignore
+.gitignore

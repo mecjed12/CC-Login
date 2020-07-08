@@ -6,20 +6,16 @@ namespace RegistrationLogic
 {
     public class PersonConfig
     {
-
         public int Name1 { get; set; }
-
         public int Name2 { get; set; }
-
         public int? Title { get; set; }
-
-        public int? SvNumber { get; set; }
-
+        public int? SVNumber { get; set; }
         public int? Date { get; set; }
-
         public int? Gender { get; set; }
+        public int? Active { get; set; }
+		public int? DeletedInactive { get; set; }
+		public int? NewsletterFlag { get; set; }
 
-        //{ "name1": "1", "name2": 2}
-
-    }
+		//TODO add more if needed
+	}
 }

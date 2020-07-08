@@ -10,7 +10,7 @@ namespace RegistrationData
         public string Title { get; set; }
 
         [Column("sv_nr")]
-        public int? SVNumber { get; set; }
+        public decimal? SVNumber { get; set; }
 
         [Column("gender")]
         public string Gender { get; set; }
