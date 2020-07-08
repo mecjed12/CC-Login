@@ -16,6 +16,10 @@ const options = [
     { value: '9', label: 'Spalte 10' },
     { value: '10', label: 'Spalte 11' },
     { value: '11', label: 'Spalte 12' },
+    { value: '12', label: 'Spalte 13' },
+    { value: '13', label: 'Spalte 14' },
+    { value: '14', label: 'Spalte 15' },
+    { value: '15', label: 'Spalte 16' },
    
 ];
 
@@ -34,7 +38,11 @@ export default class Fileinput extends React.Component {
             picture: null,
             function: null,
             email: null,
-            phoneNumber: null
+            phoneNumber: null,
+            street: null,
+            place: null,
+            country: null,
+            zipCode: null
         }
     }
 
@@ -76,7 +84,12 @@ export default class Fileinput extends React.Component {
             picture: this.state.picture,
             function: this.state.function,
             email: this.state.email,
-            phoneNumber: this.state.phoneNumber
+            phoneNumber: this.state.phoneNumber,
+            street: this.state.street,
+            place: this.state.place,
+            country: this.state.country,
+            zipCode: this.state.zipCode
+
         }
       
 
@@ -185,6 +198,39 @@ export default class Fileinput extends React.Component {
                                 options={options}
                             /></td>
                         </tr>
+                        <tr>
+                            <td>Straße</td>
+                            <td> <Select
+                                value={options.find(option => option.value === this.state.street)}
+                                onChange={(newValue) => this.handleChange('street', newValue)}
+                                options={options}
+                            /></td>
+                        </tr>
+                        <tr>
+                            <td>Ort</td>
+                            <td> <Select
+                                value={options.find(option => option.value === this.state.place)}
+                                onChange={(newValue) => this.handleChange('place', newValue)}
+                                options={options}
+                            /></td>
+                        </tr>
+                        <tr>
+                            <td>ZipCode</td>
+                            <td> <Select
+                                value={options.find(option => option.value === this.state.zipCode)}
+                                onChange={(newValue) => this.handleChange('zipCode', newValue)}
+                                options={options}
+                            /></td>
+                        </tr>
+                        <tr>
+                            <td>Bundesland</td>
+                            <td> <Select
+                                value={options.find(option => option.value === this.state.country)}
+                                onChange={(newValue) => this.handleChange('country', newValue)}
+                                options={options}
+                            /></td>
+                        </tr>
+                       
                        
                     </tbody>
                 </table>
