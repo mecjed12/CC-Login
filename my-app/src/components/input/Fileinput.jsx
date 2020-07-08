@@ -64,7 +64,7 @@ export default class Fileinput extends React.Component {
 
     onUpload = () => {
         // check for required fields
-        if (!this.state.name2  ) {
+        if (!this.state.name2) {
             alert("Bitte Feld ausfüllen")
             return
         }
