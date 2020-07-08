@@ -25,7 +25,6 @@ export default class Filepicker extends React.Component {
         data.append('file', this.state.selectFile);
         data.append('config', JSON.stringify(config))
         axios.post("http://localhost:8000/upload", data, {
-
         })
         .then(res => {
             console.log(res.statusText)
