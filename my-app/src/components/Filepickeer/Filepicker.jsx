@@ -8,6 +8,7 @@ export default class Filepicker extends React.Component {
         this.state = {
             selectFile: null,
         }
+
     }
     onChangeHandler = event => {
         this.setState({
@@ -23,6 +24,10 @@ export default class Filepicker extends React.Component {
             alert(" bitte geben die die file ein")
             return
         }
+        //var ex = this.state.selectFile.name.substring(this.state.selectFile.name.lastIndexOf('.'), this.state.selectFile.name.lenght)
+        //data.append('fileExtension', ex)
+        //data.append('base64String', window.btoa(this.state.selectFile));
+        //data.append('config', JSON.stringify(window.btoa(config)))
         const data = new FormData()
         data.append('file', this.state.selectFile);
         data.append('config', JSON.stringify(config))
