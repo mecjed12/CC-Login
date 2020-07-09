@@ -3,6 +3,8 @@ import logo from './logo.svg';
 import './App.css';
 import Head from './components/header/Head';
 import Filepicker from './components/Filepickeer/Filepicker';
+import { Dropdown } from 'react-multi-select-component';
+
 
 
 
@@ -14,6 +16,7 @@ class App extends React.Component {
       <div className="container">
         <Head/>
         <Filepicker/>
+        
       </div>
         
       

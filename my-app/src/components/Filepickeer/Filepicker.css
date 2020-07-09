@@ -1,6 +1,6 @@
 
 .file-container {
-    margin-top: 100px;
+    margin-top: 70px;
     margin-left: 50px;
     
 }
@@ -12,7 +12,8 @@
     
 }
 .upload-container label {
-    margin-right: 50px;
+    margin-right: 40px;
+    
 }
 .button-click {
     width: 200px;

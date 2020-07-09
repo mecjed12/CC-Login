@@ -2,14 +2,41 @@ import React from 'react';
 import './Filepicker.css';
 import axios from 'axios';
 import Fileinput from '../input/Fileinput';
+import Dropdown from '../Dropdown/Dropdown';
+
+
 export default class Filepicker extends React.Component {
     constructor(props) {
         super(props);
+        this.getPerson()
+        this.getCursor()
         this.state = {
             selectFile: null,
         }
 
     }
+    person = [];
+    getPerson() {
+        var xhttp = new XMLHttpRequest();
+        axios.get("http://192.168.0.94:8017/application/attributes/person").then(res => {
+            this.person = res.data
+            this.person.forEach(option => {
+                console.log(option)
+            })
+
+        }).catch(err => console.log(err))
+    }
+    curosr = [];
+    getCursor() {
+        var xhttp = new XMLHttpRequest();
+        axios.get("http://192.168.0.94:8017/application/attributes/cOurSe").then(res => {
+            this.curosr = res.data
+            this.curosr.forEach(option => {
+                console.log(option)
+            })
+        }).catch(err => console.log(err))
+    }
+
     onChangeHandler = event => {
         this.setState({
             selectFile: event.target.files[0],
@@ -43,6 +70,7 @@ export default class Filepicker extends React.Component {
                     <label>Bitte geben sie Ihre Datei ein!</label>
                     <input className="upload" type="file" name="file" onChange={this.onChangeHandler} />
                 </div>
+                <Dropdown />
                 <Fileinput upload={this.onClickHandler} />
             </div>
         )
