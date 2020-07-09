@@ -17,6 +17,10 @@ const options = [
     { value: '10', label: 'Spalte 11' },
     { value: '11', label: 'Spalte 12' },
     { value: '12', label: 'Spalte 13' },
+    { value: '13', label: 'Spalte 14' },
+    { value: '14', label: 'Spalte 15' },
+    { value: '15', label: 'Spalte 16' },
+   
 ];
 
 export default class Fileinput extends React.Component {
@@ -33,9 +37,12 @@ export default class Fileinput extends React.Component {
             busy_by: null,
             picture: null,
             function: null,
-            active: null,
-            deletedInactive: null,
-            newsletterFlag: null,
+            email: null,
+            phoneNumber: null,
+            street: null,
+            place: null,
+            country: null,
+            zipCode: null
         }
     }
 
@@ -44,29 +51,27 @@ export default class Fileinput extends React.Component {
         const selectedValues = Object.values(this.state)
         var isDuplicate = false;
         selectedValues.forEach(selectedValue => {
-            if (selectedValue === value.value) {
+            if (value.value !== null && selectedValue === value.value) {
                 alert("Spalte bereits ausgewählt!")
                 isDuplicate = true;
-            }
+            } 
         })
-
         if (!isDuplicate) {
             console.log(value)
             this.setState({
                 [key]: value.value
+                
             })
         }
     }
 
     onUpload = () => {
         // check for required fields
-        if (!this.state.name2 || !this.state.active || !this.state.deletedInactive || !this.state.newsletterFlag ) {
-            alert("Bitte Feld auführen")
+        if (!this.state.name2) {
+            alert("Bitte Feld ausfüllen")
             return
         }
-
         // ... all fields are filled
-
         const stateToSend = {
             name1: this.state.name1,
             name2: this.state.name2,
@@ -78,9 +83,13 @@ export default class Fileinput extends React.Component {
             busy_by: this.state.busy_by,
             picture: this.state.picture,
             function: this.state.function,
-            active: this.state.active,
-            deletedInactive: this.state.deletedInactive,
-            newsletterFlag: this.state.newsletterFlag,
+            email: this.state.email,
+            phoneNumber: this.state.phoneNumber,
+            street: this.state.street,
+            place: this.state.place,
+            country: this.state.country,
+            zipCode: this.state.zipCode
+
         }
       
 
@@ -92,6 +101,7 @@ export default class Fileinput extends React.Component {
             <div className="input-container">
                 <table>
                     <tbody>
+                   
                         <tr>
                             <td>Vorname</td>
                             <td> <Select
@@ -173,29 +183,54 @@ export default class Fileinput extends React.Component {
                             /></td>
                         </tr>
                         <tr>
-                            <td>Aktiv *</td>
+                            <td>E-Mail</td>
                             <td> <Select
-                                value={options.find(option => option.value === this.state.active)}
-                                onChange={(newValue) => this.handleChange('active', newValue)}
+                                value={options.find(option => option.value === this.state.email)}
+                                onChange={(newValue) => this.handleChange('email', newValue)}
                                 options={options}
                             /></td>
                         </tr>
                         <tr>
-                            <td>Löschen-Inaktiv *</td>
+                            <td>Telefonnummer</td>
                             <td> <Select
-                                value={options.find(option => option.value === this.state.deletedInactive)}
-                                onChange={(newValue) => this.handleChange('deletedInactive', newValue)}
+                                value={options.find(option => option.value === this.state.phoneNumber)}
+                                onChange={(newValue) => this.handleChange('phoneNumber', newValue)}
                                 options={options}
                             /></td>
                         </tr>
                         <tr>
-                            <td>Newsletter-flagge *</td>
+                            <td>Straße</td>
                             <td> <Select
-                                value={options.find(option => option.value === this.state.newsletterFlag)}
-                                onChange={(newValue) => this.handleChange('newsletterFlag', newValue)}
+                                value={options.find(option => option.value === this.state.street)}
+                                onChange={(newValue) => this.handleChange('street', newValue)}
                                 options={options}
                             /></td>
                         </tr>
+                        <tr>
+                            <td>Ort</td>
+                            <td> <Select
+                                value={options.find(option => option.value === this.state.place)}
+                                onChange={(newValue) => this.handleChange('place', newValue)}
+                                options={options}
+                            /></td>
+                        </tr>
+                        <tr>
+                            <td>ZipCode</td>
+                            <td> <Select
+                                value={options.find(option => option.value === this.state.zipCode)}
+                                onChange={(newValue) => this.handleChange('zipCode', newValue)}
+                                options={options}
+                            /></td>
+                        </tr>
+                        <tr>
+                            <td>Bundesland</td>
+                            <td> <Select
+                                value={options.find(option => option.value === this.state.country)}
+                                onChange={(newValue) => this.handleChange('country', newValue)}
+                                options={options}
+                            /></td>
+                        </tr>
+                       
                        
                     </tbody>
                 </table>
