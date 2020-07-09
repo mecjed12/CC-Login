@@ -1,0 +1,221 @@
+[33mcommit d928f12108d04a35add62d18a2507c42c7e292b2[m[33m ([m[1;36mHEAD -> [m[1;32mmaster[m[33m)[m
+Author: Dietmar Thaler <th.dietmar@hotmail.com>
+Date:   Wed Jul 8 09:01:20 2020 +0200
+
+    updated
+
+[33mcommit 536791bba9c70cd6bd04b9554ffda04b8f3bc4b7[m[33m ([m[1;31morigin/master[m[33m, [m[1;31morigin/HEAD[m[33m)[m
+Author: Dietmar Thaler <th.dietmar@hotmail.com>
+Date:   Mon Jul 6 11:14:17 2020 +0200
+
+    renamed state values
+
+[33mcommit d91e2b354dc6e37b9d835756bbb4b1c156fdff04[m
+Author: Dietmar Thaler <th.dietmar@hotmail.com>
+Date:   Mon Jul 6 11:02:03 2020 +0200
+
+    added course
+
+[33mcommit 683da063c6fa31d4012f1b7bd57c25d829aa0e25[m
+Author: CorruptedLink01 <marcel.mathiss@gmail.com>
+Date:   Fri Jul 3 12:28:36 2020 +0200
+
+    Added AddPeopleFromCSV
+
+[33mcommit 497cc58858f7ddb9e327b3f8a2c16cfa53e1e59f[m
+Author: mecjed12 <exopas@outlook.de>
+Date:   Fri Jul 3 11:49:05 2020 +0200
+
+    new
+
+[33mcommit 67003e94fdf0a805c3b2e4d9e738e60afa4c3048[m
+Author: mecjed12 <exopas@outlook.de>
+Date:   Fri Jul 3 11:32:53 2020 +0200
+
+    new
+
+[33mcommit 5bc7a6e3eefba5afcda878a698c0ee72aed8e4a8[m
+Author: mecjed12 <exopas@outlook.de>
+Date:   Fri Jul 3 11:30:50 2020 +0200
+
+    adsfgs
+
+[33mcommit 56b72f5ec45e97e844a332542d4dccb0943aec28[m
+Merge: bb35155 3791e5d
+Author: mecjed12 <exopas@outlook.de>
+Date:   Fri Jul 3 11:24:53 2020 +0200
+
+    Merge branch 'master' of https://github.com/mecjed12/CC-Login
+
+[33mcommit bb351558617daee5f97f666d40efad7736529618[m
+Author: mecjed12 <exopas@outlook.de>
+Date:   Fri Jul 3 11:24:12 2020 +0200
+
+    new
+
+[33mcommit 3791e5d1783c6a2c3421502c75d58010d601f859[m
+Merge: 35c9728 3ac9535
+Author: CorruptedLink01 <marcel.mathiss@gmail.com>
+Date:   Fri Jul 3 09:45:42 2020 +0200
+
+    Merge branch 'master' of https://github.com/mecjed12/CC-Login
+
+[33mcommit 35c9728f1371f8cf9909784765543c2a588162c6[m
+Author: CorruptedLink01 <marcel.mathiss@gmail.com>
+Date:   Fri Jul 3 09:45:00 2020 +0200
+
+    e5
+
+[33mcommit 3ac953561f727dc469c290d6d7e7a24663e6706d[m
+Author: mecjed12 <exopas@outlook.de>
+Date:   Fri Jul 3 09:20:52 2020 +0200
+
+    newnew_commit
+
+[33mcommit aac0fbe57b461f3a02f2f57a053d547f002cb5af[m
+Author: mecjed12 <exopas@outlook.de>
+Date:   Fri Jul 3 09:17:33 2020 +0200
+
+    new commit
+
+[33mcommit 34af55723fb33f4df04220d88c624599a5de102e[m
+Merge: d9f6624 f8ba8d3
+Author: mecjed12 <exopas@outlook.de>
+Date:   Fri Jul 3 09:15:47 2020 +0200
+
+    Merge branches 'master' and 'master' of https://github.com/mecjed12/CC-Login
+
+[33mcommit d9f662488d1e8852b938115dbad37f379836eb38[m
+Author: mecjed12 <exopas@outlook.de>
+Date:   Fri Jul 3 09:15:44 2020 +0200
+
+    new version 0.004
+
+[33mcommit f8ba8d34dda70f7b4d3bd95fff9e9e44c0e8f9b3[m
+Author: CorruptedLink01 <marcel.mathiss@gmail.com>
+Date:   Fri Jul 3 09:15:05 2020 +0200
+
+    Removed unused usings
+
+[33mcommit fc23fa927001d26cba1905f04567360491ece990[m
+Author: mecjed12 <exopas@outlook.de>
+Date:   Fri Jul 3 09:05:31 2020 +0200
+
+    new_update
+
+[33mcommit 0c2a34ef114b228bd03426a0f2dc7563ed2a548e[m
+Merge: 62585a7 17b3451
+Author: mecjed12 <exopas@outlook.de>
+Date:   Thu Jul 2 15:25:19 2020 +0200
+
+    Merge branch 'master' of https://github.com/mecjed12/CC-Login
+
+[33mcommit 62585a789e93bf9d2cd6b0eb6c4d4312ffea150e[m
+Author: mecjed12 <exopas@outlook.de>
+Date:   Thu Jul 2 15:25:15 2020 +0200
+
+    new_commit
+
+[33mcommit 17b345170dc33ec2bc856fa5a1bc1908f4767c64[m
+Merge: 41edb39 54ac911
+Author: CorruptedLink01 <marcel.mathiss@gmail.com>
+Date:   Thu Jul 2 13:23:21 2020 +0200
+
+    Merge branch 'master' of https://github.com/mecjed12/CC-Login
+
+[33mcommit 41edb3934928d4b26bed5feeccea7710aaafb72f[m
+Author: CorruptedLink01 <marcel.mathiss@gmail.com>
+Date:   Thu Jul 2 13:23:00 2020 +0200
+
+    Refactored data and started logic
+
+[33mcommit 54ac911e1123111eb22b81462197b203130d0574[m
+Author: mecjed12 <exopas@outlook.de>
+Date:   Thu Jul 2 11:02:29 2020 +0200
+
+    new_commit
+
+[33mcommit 74d3b344176ae38b918e504ab11b78a939b05255[m
+Author: mecjed12 <exopas@outlook.de>
+Date:   Wed Jul 1 15:16:36 2020 +0200
+
+    commit new
+
+[33mcommit d25cb8811e3d2bc0280b3b1e7140d2b9198f04d5[m
+Merge: 83ed079 ed7a7ee
+Author: mecjed12 <exopas@outlook.de>
+Date:   Wed Jul 1 14:29:57 2020 +0200
+
+    Merge branch 'master' of https://github.com/mecjed12/CC-Login
+
+[33mcommit 83ed0795b4c0a0880a4e88b013ab508e4a03db94[m
+Author: mecjed12 <exopas@outlook.de>
+Date:   Wed Jul 1 14:29:51 2020 +0200
+
+    new_progress
+
+[33mcommit ed7a7eedd20779a9d14ccf528542eec779a570d0[m
+Author: CorruptedLink01 <marcel.mathiss@gmail.com>
+Date:   Wed Jul 1 12:47:40 2020 +0200
+
+    Updated Data and started post
+
+[33mcommit a20a9ea7f4912c59693c7e39861fb5269f9a1c6c[m
+Author: CorruptedLink01 <marcel.mathiss@gmail.com>
+Date:   Wed Jul 1 12:47:04 2020 +0200
+
+    Added REST api address
+
+[33mcommit 99093d4c52412067eed6a0f6a2db6e72973fbb66[m
+Author: mecjed12 <exopas@outlook.de>
+Date:   Wed Jul 1 11:51:40 2020 +0200
+
+    change-in
+
+[33mcommit 14f7e445cf042ca1b899b5e86ceecc1dadc0e26a[m
+Author: mecjed12 <exopas@outlook.de>
+Date:   Wed Jul 1 10:19:53 2020 +0200
+
+    added my-app
+
+[33mcommit 4180ec57232069dd6d2ffd2642bc55bccb74eb4e[m
+Author: CorruptedLink01 <marcel.mathiss@gmail.com>
+Date:   Wed Jul 1 09:10:47 2020 +0200
+
+    Started with Logic and removed api examples
+
+[33mcommit a9fd92fd99cb082f436bfa7728ed6e6a7c9bff7b[m
+Author: mecjed12 <exopas@outlook.de>
+Date:   Wed Jul 1 08:59:15 2020 +0200
+
+    added my-app
+
+[33mcommit 9a57df6f35f4d6b6398cd5d817d1a060852c40c6[m
+Author: mecjed12 <exopas@outlook.de>
+Date:   Wed Jul 1 08:44:59 2020 +0200
+
+    add frontend
+
+[33mcommit 03eb1167fd77f2a0e4f40b495896dc8d907b2249[m
+Author: CorruptedLink01 <marcel.mathiss@gmail.com>
+Date:   Tue Jun 30 13:05:50 2020 +0200
+
+    Updated Data and started REST api
+
+[33mcommit 62b4be8adee77a66cd02c4f040f27adf887ac8db[m
+Author: CorruptedLink01 <marcel.mathiss@gmail.com>
+Date:   Tue Jun 30 11:25:15 2020 +0200
+
+    Updated RegistrationData
+
+[33mcommit caccd7c641e9ad776b44e0c609cd07cd83d9f33d[m
+Author: CorruptedLink01 <marcel.mathiss@gmail.com>
+Date:   Tue Jun 30 10:57:02 2020 +0200
+
+    Started RegistrationData
+
+[33mcommit 873122ea2dd5c18411c6904eacdeadc38a804048[m
+Author: mecjed12 <60920469+mecjed12@users.noreply.github.com>
+Date:   Mon Jun 29 13:14:48 2020 +0200
+
+    Initial commit
