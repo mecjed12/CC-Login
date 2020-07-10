@@ -13,6 +13,8 @@ export default class Filepicker extends React.Component {
         this.state = {
             selectFile: null,
             isVisible: true,
+            persons: [],
+            course: [],
         }
 
     }
@@ -22,22 +24,29 @@ export default class Filepicker extends React.Component {
         axios.get("http://192.168.0.94:8017/application/properties/person").then(res => {
             this.person = res.data
             this.person.forEach(option => {
-                console.log(option)
-            })
+               
 
+            })
+            this.setState({
+                persons: this.person
+            })
+            console.log(this.person)
         }).catch(err => console.log(err))
     }
     curosr = [];
     getCursor() {
         var xhttp = new XMLHttpRequest();
-        axios.get("http://192.168.0.94:8017/application/properties/cOurSe").then(res => {
+        axios.get("http://192.168.0.94:8017/application/properties/course").then(res => {
             this.curosr = res.data
             this.curosr.forEach(option => {
-                console.log(option)
+               
             })
+           this.setState({
+                course: this.curosr
+           })
+            console.log(this.curosr)
         }).catch(err => console.log(err))
     }
-
 
     onChangeHandler = event => {
         this.setState({
@@ -53,10 +62,6 @@ export default class Filepicker extends React.Component {
             alert(" bitte geben die die file ein")
             return
         }
-        //var ex = this.state.selectFile.name.substring(this.state.selectFile.name.lastIndexOf('.'), this.state.selectFile.name.lenght)
-        //data.append('fileExtension', ex)
-        //data.append('base64String', window.btoa(this.state.selectFile));
-        //data.append('config', JSON.stringify(window.btoa(config)))
         const data = new FormData()
         data.append('file', this.state.selectFile);
         data.append('config', JSON.stringify(config))
