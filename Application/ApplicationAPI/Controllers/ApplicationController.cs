@@ -10,6 +10,7 @@ namespace ApplicationAPI.Controllers
     [ApiController]
     public class ApplicationController : ControllerBase
     {
+        //
         [HttpGet]
         public List<string> GetApplicationTypes()
 		{
