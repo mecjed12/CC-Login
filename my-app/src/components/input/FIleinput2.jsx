@@ -86,7 +86,7 @@ export default class Fileinput extends React.Component {
   render() {
 
     return (
-      <div className="file-container">
+      <div className="input-container">
         <table className="table">
           <tr>
             <td>Kurstitel *</td>
@@ -206,7 +206,7 @@ export default class Fileinput extends React.Component {
             /></td>
           </tr>
         </table>
-        <div type="button" className="button" onClick={() => this.onUpload()}>Upload</div>
+        <div type="button" className="button-click" onClick={() => this.onUpload()}>Upload</div>
       </div>
     )
   }
