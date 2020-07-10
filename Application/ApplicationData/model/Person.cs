@@ -11,14 +11,14 @@ namespace ApplicationData.model
 	[Table("person")]
 	public class Person : BasePerson, IApplicationClass
 	{
-		[ApplicationProperty]
+		[ApplicationProperty("Titel")]
 		public string Title { get; set; }
 
-		[ApplicationProperty]
+		[ApplicationProperty("Sozialversicherungsnummer")]
 		[Column("sv_nr")]
-		public double? SVNumber { get; set; }
+		public long? SVNumber { get; set; }
 
-		[ApplicationProperty]
+		[ApplicationProperty("Geschlecht")]
 		public string Gender { get; set; }
 
 		public string Busy { get; set; }
@@ -48,7 +48,6 @@ namespace ApplicationData.model
 
 		public List<PropertyInfo> GetProperties()
 		{
-			//TODO find out how to make it only add CreatedAt ones
 			var PersonProps = GetType().GetProperties().Where(p => p.IsDefined(typeof(ApplicationProperty), true)).ToList();
 			PersonProps.AddRange(new Address().GetProperties());
 			PersonProps.AddRange(new Contact().GetProperties());

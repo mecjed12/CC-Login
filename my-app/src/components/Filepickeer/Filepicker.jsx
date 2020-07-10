@@ -5,12 +5,9 @@ import Fileinput from '../input/Fileinput';
 import Dropdown from '../Dropdown/Dropdown';
 import Fileinput2 from '../input/FIleinput2';
 
-
 export default class Filepicker extends React.Component {
     constructor(props) {
         super(props);
-        this.getPerson()
-        this.getCursor()
         this.state = {
             selectFile: null,
             isVisible: true,
@@ -38,6 +35,7 @@ export default class Filepicker extends React.Component {
             })
         }).catch(err => console.log(err))
     }
+
 
     onChangeHandler = event => {
         this.setState({

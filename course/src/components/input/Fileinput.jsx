@@ -45,7 +45,7 @@ export default class Fileinput extends React.Component {
     const selectedValues = Object.values(this.state)
     var isDuplicate = false;
     selectedValues.forEach(selectedValue => {
-      if (selectedValue === value.value && value.value !== null) {
+      if (selectedValue === value.value) {
         alert("Spalte bereits ausgewählt!")
         isDuplicate = true;
       }
@@ -86,7 +86,7 @@ export default class Fileinput extends React.Component {
   render() {
 
     return (
-      <div>
+      <div className="file-container">
         <table className="table">
           <tr>
             <td>Kurstitel *</td>

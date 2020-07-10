@@ -1,5 +1,4 @@
-﻿using ApplicationData;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
@@ -11,41 +10,40 @@ namespace ApplicationData.model
     {
         public int Id { get; set; }
 
-        [ApplicationProperty]
+        [ApplicationProperty("Titel")]
         public string Title { get; set; }
 
         [Column("course_number")]
         public string CourseNumber { get; set; }
 
-        [ApplicationProperty]
+        [ApplicationProperty("Beschreibung")]
         public string Description { get; set; }
 
-        [ApplicationProperty]
+        [ApplicationProperty("Kategorie")]
         public string Category { get; set; }
 
-        [ApplicationProperty]
+        [ApplicationProperty("Started am")]
         public DateTime? Start { get; set; }
 
-        [ApplicationProperty]
+        [ApplicationProperty("Endet am")]
         public DateTime? End { get; set; }
 
         public int? Unit { get; set; }
 
         public double? Price { get; set; }
 
-        [ApplicationProperty]
-        [Column("participant_max")]
-        public int? MaxParticipants { get; set; }
-
-        [ApplicationProperty]
+        [ApplicationProperty("Minimale Teilnehmer")]
         [Column("participant_min")]
         public int? MinParticipants { get; set; }
+
+        [ApplicationProperty("Maximale Teilnehmer")]
+        [Column("participant_max")]
+        public int? MaxParticipants { get; set; }
 
         [Column("classroom_id")]
         public int? ClassroomId { get; set; }
 
         //Delete ones database updates
-        [ApplicationProperty]
         [Column("created@")]
         public DateTime? CreatedAt { get; set; }
 

@@ -20,13 +20,13 @@ const options = [
     { value: '13', label: 'Spalte 14' },
     { value: '14', label: 'Spalte 15' },
     { value: '15', label: 'Spalte 16' },
-
+   
 ];
 
 export default class Fileinput extends React.Component {
     constructor(props) {
         super(props);
-        this.state = {
+        this.state = { 
             name1: null,
             name2: null,
             title: null,
@@ -54,13 +54,13 @@ export default class Fileinput extends React.Component {
             if (value.value !== null && selectedValue === value.value) {
                 alert("Spalte bereits ausgewählt!")
                 isDuplicate = true;
-            }
+            } 
         })
         if (!isDuplicate) {
             console.log(value)
             this.setState({
                 [key]: value.value
-
+                
             })
         }
     }
@@ -91,7 +91,7 @@ export default class Fileinput extends React.Component {
             zipCode: this.state.zipCode
 
         }
-
+      
 
         this.props.upload(stateToSend)
     }
@@ -101,7 +101,7 @@ export default class Fileinput extends React.Component {
             <div className="input-container">
                 <table>
                     <tbody>
-
+                   
                         <tr>
                             <td>Vorname</td>
                             <td> <Select
@@ -115,7 +115,7 @@ export default class Fileinput extends React.Component {
                             <td> <Select
                                 value={options.find(option => option.value === this.state.name2)}
                                 onChange={(newValue) => this.handleChange('name2', newValue)}
-                                options={options}
+                                options={options} 
                             /></td>
                         </tr>
                         <tr>
@@ -230,8 +230,8 @@ export default class Fileinput extends React.Component {
                                 options={options}
                             /></td>
                         </tr>
-
-
+                       
+                       
                     </tbody>
                 </table>
                 <div type="button" className="button-click" onClick={() => this.onUpload()}>Upload</div>

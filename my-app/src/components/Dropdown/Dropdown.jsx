@@ -16,6 +16,7 @@ export default class Dropdown extends React.Component {
             selectionOption: null,
         }
     }
+    
     handelchange = selectionOption => {
         this.setState(
             { selectionOption },

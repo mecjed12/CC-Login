@@ -1,5 +1,10 @@
-﻿namespace ApplicationLogic
+﻿using System;
+
+namespace ApplicationLogic
 {
+
+	//TODO Delete
+	[Obsolete]
 	public class PersonConfig
 	{
 		public int? Name1 { get; set; }
