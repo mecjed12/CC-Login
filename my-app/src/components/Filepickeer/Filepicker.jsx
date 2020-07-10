@@ -3,6 +3,7 @@ import './Filepicker.css';
 import axios from 'axios';
 import Fileinput from '../input/Fileinput';
 import Dropdown from '../Dropdown/Dropdown';
+import Fileinput2 from '../input/FIleinput2';
 
 
 export default class Filepicker extends React.Component {
@@ -12,13 +13,14 @@ export default class Filepicker extends React.Component {
         this.getCursor()
         this.state = {
             selectFile: null,
+            isVisible: true,
         }
 
     }
     person = [];
     getPerson() {
         var xhttp = new XMLHttpRequest();
-        axios.get("http://192.168.0.94:8017/application/attributes/person").then(res => {
+        axios.get("http://192.168.0.94:8017/application/properties/person").then(res => {
             this.person = res.data
             this.person.forEach(option => {
                 console.log(option)
@@ -29,7 +31,7 @@ export default class Filepicker extends React.Component {
     curosr = [];
     getCursor() {
         var xhttp = new XMLHttpRequest();
-        axios.get("http://192.168.0.94:8017/application/attributes/cOurSe").then(res => {
+        axios.get("http://192.168.0.94:8017/application/properties/cOurSe").then(res => {
             this.curosr = res.data
             this.curosr.forEach(option => {
                 console.log(option)
@@ -63,6 +65,21 @@ export default class Filepicker extends React.Component {
             .then(res => {
             })
     }
+    switchsite() {
+        if (!this.state.isVisible) {
+            return <Fileinput />
+        } else {
+            return <Fileinput2 />
+        }
+    }
+
+    toggleClass = () => {
+        this.setState({
+            isVisible: !this.state.isVisible
+        })
+    }
+
+
     render() {
         return (
             <div className="file-container">
@@ -70,8 +87,11 @@ export default class Filepicker extends React.Component {
                     <label>Bitte geben sie Ihre Datei ein!</label>
                     <input className="upload" type="file" name="file" onChange={this.onChangeHandler} />
                 </div>
-                <Dropdown />
-                <Fileinput upload={this.onClickHandler} />
+                <Dropdown toggleClass={this.toggleClass} />
+                <div className="input-switch">
+                    {this.switchsite()}
+                    {/* <Fileinput upload={this.onClickHandler} /> */}
+                </div>
             </div>
         )
     }

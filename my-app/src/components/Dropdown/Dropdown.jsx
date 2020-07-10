@@ -1,6 +1,8 @@
 import React from 'react';
 import '../Dropdown/Dropdown.css';
 import Select from 'react-select';
+import Fileinput from '../input/Fileinput';
+import Fileinput2 from '../input/FIleinput2';
 
 const options = [
     { value: 'Person', label: 'Person' },
@@ -19,17 +21,18 @@ export default class Dropdown extends React.Component {
             { selectionOption },
             () => console.log('Option selected:', this.state.selectionOption)
         );
+        this.props.toggleClass()
     };
+   
     render() {
-        const { selectionOption } = this.state;
         return (
             <div className="input-container">
                 <table>
                     <tbody>
                         <tr>
                             <td><Select
-                                value={options.find(option => option.value === this.state.name1)}
-                                onChange={(newValue) => this.handleChange('name1', newValue)}
+                                value={this.state.selectionOption}
+                                onChange={ this.handelchange}
                                 options={options}
                             /></td>
                         </tr>

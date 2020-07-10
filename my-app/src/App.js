@@ -16,7 +16,6 @@ class App extends React.Component {
       <div className="container">
         <Head/>
         <Filepicker/>
-        
       </div>
         
       
