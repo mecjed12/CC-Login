@@ -5,7 +5,6 @@ namespace ApplicationData
 {
     public class CreatedModify
     {
-        [ApplicationProperty]
         [Column("created@")]
         public DateTime CreatedAt { get; set; }
 

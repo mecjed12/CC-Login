@@ -1,15 +1,13 @@
 ﻿using ApplicationLogic;
 using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace ApplicationAPI
 {
 	public class CourseRegistrationFile
 	{
+		//TODO update this
+
 		/// <summary>
 		/// Use GetConfig() not Config
 		/// </summary>

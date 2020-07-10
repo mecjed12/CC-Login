@@ -17,14 +17,5 @@ namespace ApplicationData.repo
         {
             return Entities.Set<T>().ToList();
         }
-
-        public T GetById(int id)
-        {
-            //TODO
-            //return Entities.Set<T>().FirstOrDefault(x => x.id = id);
-            return null;
-        }
-
-
     }
 }
