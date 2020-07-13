@@ -5,8 +5,8 @@ import Fileinput from '../input/Fileinput';
 import Fileinput2 from '../input/FIleinput2';
 
 const options = [
-    { value: 'Person', label: 'Person' },
-    { value: 'Course', label: 'Course' },
+    { value: 'Course', label: 'Kurse' },
+    { value: 'Person', label: 'Personen' },
 ];
 
 export default class Dropdown extends React.Component {

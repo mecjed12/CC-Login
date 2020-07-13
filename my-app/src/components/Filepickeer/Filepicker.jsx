@@ -72,9 +72,9 @@ export default class Filepicker extends React.Component {
     }
     switchsite() {
         if (!this.state.isVisible) {
-            return <Fileinput />
-        } else {
             return <Fileinput2 />
+        } else {
+            return <Fileinput />
         }
     }
 
