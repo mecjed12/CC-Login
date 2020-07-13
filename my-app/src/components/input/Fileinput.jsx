@@ -20,49 +20,51 @@ const options = [
     { value: '13', label: 'Spalte 14' },
     { value: '14', label: 'Spalte 15' },
     { value: '15', label: 'Spalte 16' },
-   
+
 ];
 
 export default class Fileinput extends React.Component {
     constructor(props) {
-        super(props);
-        this.state = { 
-            name1: null,
-            name2: null,
-            title: null,
-            svNumber: null,
-            date: null,
-            Gender: null,
-            busy: null,
-            busy_by: null,
-            picture: null,
-            function: null,
-            email: null,
-            phoneNumber: null,
-            street: null,
-            place: null,
-            country: null,
-            zipCode: null
+        super(props)
+        this.state = {
+            properties: props.personFields
         }
+        // this.state = { 
+        //     name1: null,
+        //     name2: null,
+        //     title: null,
+        //     svNumber: null,
+        //     date: null,
+        //     Gender: null,
+        //     busy: null,
+        //     busy_by: null,
+        //     picture: null,
+        //     function: null,
+        //     email: null,
+        //     phoneNumber: null,
+        //     street: null,
+        //     place: null,
+        //     country: null,
+        //     zipCode: null
+        // }
     }
 
     handleChange = (key, value) => {
         //checkt die Spalten ab ob nicht die gleichen genommen wurde
-        const selectedValues = Object.values(this.state)
-        var isDuplicate = false;
-        selectedValues.forEach(selectedValue => {
-            if (value.value !== null && selectedValue === value.value) {
-                alert("Spalte bereits ausgewählt!")
-                isDuplicate = true;
-            } 
+        // const selectedValues = Object.values(this.state)
+        // var isDuplicate = false;
+        // selectedValues.forEach(selectedValue => {
+        //     if (value.value !== null && selectedValue === value.value) {
+        //         alert("Spalte bereits ausgewählt!")
+        //         isDuplicate = true;
+        //     } 
+        // })
+        // if (!isDuplicate) {
+        console.log(value)
+        this.setState(prev => {
+            prev.properties.map(x => (x.propName === key ? Object.assign(x, { columnValue: value.value }) : x))
         })
-        if (!isDuplicate) {
-            console.log(value)
-            this.setState({
-                [key]: value.value
-                
-            })
-        }
+        // }
     }
 
     onUpload = () => {
@@ -89,23 +91,33 @@ export default class Fileinput extends React.Component {
             place: this.state.place,
             country: this.state.country,
             zipCode: this.state.zipCode
-
         }
-      
-
         this.props.upload(stateToSend)
     }
-
     render() {
+        console.log(this.state)
         return (
             <div className="input-container">
                 <table>
                     <tbody>
-                   
+                        {this.state.properties.map((newState) =>
+                            <tr>
+                                <td>{newState.displayName}</td>
+                                <td> <Select
+                                    value={options.find(option => option.value === this.state[newState.propName])}
+                                    onChange={(newValue) => this.handleChange(newState.propName, newValue)}
+                                    options={options}
+                                /></td>
+                            </tr>
+                        )}
+
+
+
+                        {/*
                         <tr>
                             <td>Vorname</td>
                             <td> <Select
-                                value={options.find(option => option.value === this.state.name1)}
+                                value={options.find(option => option.value === this.state.name1)} // this.state[person.propName]
                                 onChange={(newValue) => this.handleChange('name1', newValue)}
                                 options={options}
                             /></td>
@@ -230,8 +242,8 @@ export default class Fileinput extends React.Component {
                                 options={options}
                             /></td>
                         </tr>
-                       
-                       
+                       */}
+
                     </tbody>
                 </table>
                 <div type="button" className="button-click" onClick={() => this.onUpload()}>Upload</div>

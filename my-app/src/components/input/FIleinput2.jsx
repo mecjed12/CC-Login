@@ -88,6 +88,7 @@ export default class Fileinput extends React.Component {
     return (
       <div className="input-container">
         <table className="table">
+         
           <tbody>
           <tr>
             <td>Kurstitel *</td>

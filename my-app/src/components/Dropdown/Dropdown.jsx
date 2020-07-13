@@ -5,8 +5,8 @@ import Fileinput from '../input/Fileinput';
 import Fileinput2 from '../input/FIleinput2';
 
 const options = [
-    { value: 'Course', label: 'Kurse' },
-    { value: 'Person', label: 'Personen' },
+    { value: true, label: 'Kurse' },
+    { value: false, label: 'Personen' },
 ];
 
 export default class Dropdown extends React.Component {
@@ -21,8 +21,9 @@ export default class Dropdown extends React.Component {
         this.setState(
             { selectionOption },
             () => console.log('Option selected:', this.state.selectionOption)
+           
         );
-        this.props.toggleClass()
+        this.props.toggleClass(selectionOption.value)
     };
    
     render() {

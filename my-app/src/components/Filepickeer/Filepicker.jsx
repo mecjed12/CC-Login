@@ -15,6 +15,7 @@ export default class Filepicker extends React.Component {
             isVisible: true,
             persons: [],
             course: [],
+            
         }
 
     }
@@ -74,14 +75,19 @@ export default class Filepicker extends React.Component {
         if (!this.state.isVisible) {
             return <Fileinput2 />
         } else {
-            return <Fileinput />
+            if (this.state.persons.length > 0) {
+                return <Fileinput personFields={this.state.persons} />
+            } else {
+                return null
+            }
         }
     }
 
-    toggleClass = () => {
+    toggleClass = (selection) => {
         this.setState({
-            isVisible: !this.state.isVisible
+            isVisible: selection
         })
+        
     }
 
 
