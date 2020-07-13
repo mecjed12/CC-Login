@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ApplicationData.attribute;
+using System;
 
 namespace ApplicationData.model
 {
@@ -6,13 +7,13 @@ namespace ApplicationData.model
 	{
 		public int Id { get; set; }
 
-		[ApplicationProperty("Vorname")]
+		[ApplicationProperty(DisplayName = "Vorname")]
 		public string Name1 { get; set; }
-
-		[ApplicationProperty("Zuname")]
+		
+		[ApplicationProperty(DisplayName = "Zuname")]
 		public string Name2 { get; set; }
 
-		[ApplicationProperty("Geburtsdatum")]
+		[ApplicationProperty(DisplayName = "Geburtsdatum")]
 		public DateTime? Date { get; set; }
 
 	}

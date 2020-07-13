@@ -1,4 +1,4 @@
-﻿using ApplicationData;
+﻿using ApplicationData.attribute;
 using ApplicationData.enums;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -11,30 +11,25 @@ namespace ApplicationData.model
 	{
 		public int Id { get; set; }
 
-		[ApplicationProperty("Strasse")]
+		[ApplicationProperty(DisplayName = "Strasse")]
 		public string Street { get; set; }
 
-		[ApplicationProperty("Ort")]
+		[ApplicationProperty(DisplayName = "Ort")]
 		public string Place { get; set; }
 
-		[ApplicationProperty("Postleitzahl")]
+		[ApplicationProperty(DisplayName = "Postleitzahl")]
 		[Column("zip")]
 		public int? ZipCode { get; set; }
 
-		[ApplicationProperty("Land")]
+		[ApplicationProperty(DisplayName = "Land")]
 		public string Country { get; set; }
 
-		[Column("contact_type")]
-		public EContactType? ContactType { get; set; }
-
-		[Column("billing_address")]
-		public bool? BillingAdress { get; set; }
-
+		[Relation]
 		public List<RelPersonAddress> PAddress { get; set; }
 
 		public List<PropertyInfo> GetProperties()
 		{
-			return GetType().GetProperties().Where(x => x.IsDefined(typeof(ApplicationProperty), false)).ToList();
+			return GetType().GetProperties().Where(x => x.IsDefined(typeof(ApplicationPropertyAttribute), false)).ToList();
 		}
 	}
 }

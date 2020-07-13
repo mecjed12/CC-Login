@@ -9,6 +9,6 @@ namespace ApplicationData
 		//public string ClassDescription { get; set; }
 		public string PropName { get; set; }
 		public string DisplayName { get; set; }
-		public int ColumnValue { get; set; }
+		public int? ColumnValue { get; set; }
 	}
 }

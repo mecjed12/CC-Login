@@ -1,7 +1,9 @@
 ﻿using ApplicationData;
+using ApplicationData.attribute;
 using ApplicationData.model;
 using ApplicationData.repo;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -18,7 +20,6 @@ namespace ApplicationLogic
 
 		public PersonRepository PersonRepo;
 		public CourseRepository CourseRepo;
-
 
 		public ApplicationLogicController(DcvEntities entities)
 		{
@@ -49,10 +50,14 @@ namespace ApplicationLogic
 
 		public List<MappableProperties> GetProperties(string className)
 		{
-			var props = new List<MappableProperties>();
+			var type = GetApplicationTypes().FirstOrDefault(x => x.Name.Equals(className, StringComparison.InvariantCultureIgnoreCase));
 
-			var types = GetApplicationTypes();
-			var type = types.FirstOrDefault(x => x.Name.Equals(className, StringComparison.InvariantCultureIgnoreCase));
+			return GetProperties(type);
+		}
+
+		public List<MappableProperties> GetProperties(Type type)
+		{
+			var props = new List<MappableProperties>();
 
 			if(type != null)
 			{
@@ -71,18 +76,12 @@ namespace ApplicationLogic
 			return AppDomain.CurrentDomain.GetAssemblies().SelectMany(x => x.GetTypes()).Where(x => type.IsAssignableFrom(x) && x != type).ToList();
 		}
 
-		//TODO
-		public List<string> GetTypeNames()
-		{
-			return GetApplicationTypes().Select(x => x.Name).ToList();
-		}
-
 		public MappableProperties CreateMappable(PropertyInfo info)
 		{
 			return new MappableProperties()
 			{
 				PropName = info.Name,
-				DisplayName = info.GetCustomAttribute<ApplicationProperty>()?.DisplayName == null ? info.Name : info.GetCustomAttribute<ApplicationProperty>().DisplayName
+				DisplayName = info.GetCustomAttribute<ApplicationPropertyAttribute>()?.DisplayName == null ? info.Name : info.GetCustomAttribute<ApplicationPropertyAttribute>().DisplayName
 			};
 		}
 
@@ -129,118 +128,96 @@ namespace ApplicationLogic
 			return 0;
 		}
 
-		public void AddPeopleFromCSV(Stream stream, List<MappableProperties> config)
+		public void AddObjectsFromCSV(Stream stream, List<MappableProperties> properties, string className)
 		{
-			var x = config;
-			//TODO
-			//Debug.WriteLine(base64File);
-			//byte[] data = Convert.FromBase64String(base64File);
-			//string s = Encoding.UTF8.GetString(data);
+			var type = GetApplicationTypes().FirstOrDefault(x => x.Name.Equals(className, StringComparison.InvariantCultureIgnoreCase));
 
-			//Encoding.GetEncoding(1250)
-			//using(var reader = new StreamReader(stream))
-			//{
-			//	while(reader.Peek() != -1)
-			//	{
-			//		var created = DateTime.Now;
+			if(type == null)
+				throw new InvalidTypeException();
 
-			//		var line = reader.ReadLine();
-			//		var args = line.Split(';');
+			using(var reader = new StreamReader(stream))
+			{
+				while(reader.Peek() != -1)
+				{
+					var created = DateTime.Now;
 
-			//		var person = new Person()
-			//		{
-			//			Name1 = GetValue(args, config.Name1),
-			//			Name2 = GetValue(args, config.Name2),
-			//			Title = GetValue(args, config.Title),
-			//			Gender = GetValue(args, config.Gender),
-			//			SVNumber = GetValueDouble(args, config.SVNumber),
-			//			Date = GetValueDate(args, config.Date),
-			//			Active = true,
-			//			DeletedInactive = false,
-			//			NewsletterFlag = false,
-			//			Function = null,
-			//			CreatedAt = created
-			//		};
+					var line = reader.ReadLine();
+					var args = line.Split(';');
 
-			//		var p = Entities.People.FirstOrDefault(x => x.Name1.Equals(person.Name1) && x.Name2.Equals(person.Name2));
+					if(Activator.CreateInstance(type) is IApplicationClass appClass)
+					{
+						var subClasses = appClass.GetSubclasses();
 
-			//		if(p != null)
-			//		{
-			//			continue;
-			//		}
+						foreach(var prop in properties)
+						{
+							var p = type.GetProperty(prop.PropName);
+							if(p == null)
+								continue;
+							p.SetValue(appClass, GetValue(p.PropertyType, args, prop.ColumnValue));
+						}
 
-			//		Entities.People.Add(person);
-			//		Entities.SaveChanges();
+						Entities.Add(appClass);
+						Entities.SaveChanges();
 
-			//		if(config.Email != null)
-			//		{
-			//			var email = GetValue(args, config.Email);
-			//			if(email != null)
-			//			{
+						//TODO make this look better
+						foreach(var sub in subClasses)
+						{
+							var subType = sub.GetType();
+							if(Activator.CreateInstance(subType) is IApplicationSubclass subClass)
+							{
+								bool changed = false;
+								foreach(var prop in properties)
+								{
+									var p = subType.GetProperty(prop.PropName);
+									if(p == null)
+										continue;
+									p.SetValue(subClass, GetValue(p.PropertyType, args, prop.ColumnValue));
+									changed = true;
+								}
 
-			//				var contact = new Contact()
-			//				{
-			//					ArtOfCommunication = EKindOfCommunication.Email,
-			//					ContactValue = email,
-			//					ContactType = EContactType.Privat,
-			//					PersonId = person.Id,
-			//					CreatedAt = created
-			//				};
+								if(changed)
+								{
+									var keys = subType.GetProperties().Where(x => x.IsDefined(typeof(RelationAttribute))).ToList();
+									foreach(var key in keys)
+									{
+										if(key.GetCustomAttribute<RelationAttribute>()?.Relation == appClass.GetType())
+										{
+											key.SetValue(subClass, type.GetProperty("Id").GetValue(appClass));
+										}
 
-			//				Entities.Add(contact);
-			//			}
-			//		}
+										Entities.Add(subClass);
+										Entities.SaveChanges();
 
-			//		if(config.PhoneNumber != null)
-			//		{
-			//			var number = GetValue(args, config.PhoneNumber);
-			//			if(number != null)
-			//			{
-			//				var contact = new Contact()
-			//				{
-			//					ArtOfCommunication = EKindOfCommunication.Telefon,
-			//					ContactValue = number,
-			//					ContactType = EContactType.Privat,
-			//					PersonId = person.Id,
-			//					CreatedAt = created
-			//				};
+										if(typeof(IList).IsAssignableFrom(key.PropertyType))
+										{
+											if(Activator.CreateInstance(key.PropertyType.GenericTypeArguments[0]) is object subSubClass)
+											{
+												var subKeys = subSubClass.GetType().GetProperties().Where(x => x.IsDefined(typeof(RelationAttribute))).ToList();
 
-			//				Entities.Add(contact);
-			//			}
-			//		}
-
-			//		if(config.Country != null || config.Place != null || config.Street != null || config.ZipCode != null)
-			//		{
-			//			var country = GetValue(args, config.Country);
-			//			var place = GetValue(args, config.Place);
-			//			var street = GetValue(args, config.Street);
-			//			var zipCode = GetValueInt(args, config.ZipCode);
-
-			//			if(country != null || place != null || street != null || zipCode != null)
-			//			{
-			//				var address = new Address()
-			//				{
-			//					Country = country,
-			//					Street = street,
-			//					Place = place,
-			//					ZipCode = zipCode,
-			//					CreatedAt = created
-			//				};
-
-			//				Entities.Add(address);
-			//				Entities.SaveChanges();
-
-			//				var pAddress = new RelPersonAddress()
-			//				{
-			//					AddressId = address.Id,
-			//					PersonId = person.Id
-			//				};
-			//				Entities.Add(pAddress);
-			//			}
-			//		}
-			//	}
-			//	Entities.SaveChanges();
-			//}
+												foreach(var subKey in subKeys)
+												{
+													//TODO make this better and better to look at
+													if(subKey.GetCustomAttribute<RelationAttribute>()?.Relation == appClass.GetType())
+													{
+														subKey.SetValue(subSubClass, type.GetProperty("Id").GetValue(appClass));
+													}
+													else if(subKey.GetCustomAttribute<RelationAttribute>()?.Relation == subClass.GetType())
+													{
+														subKey.SetValue(subSubClass, subType.GetProperty("Id").GetValue(subClass));
+													}
+												}
+												Entities.Add(subSubClass);
+												Entities.SaveChanges();
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+			Entities.SaveChanges();
 		}
 
 		//https://localhost:44375/registration/person
@@ -279,61 +256,41 @@ namespace ApplicationLogic
 			//Entities.SaveChanges();
 		}
 
-		private string GetValue(string[] args, int? position)
+		/// <summary>
+		/// Gets the value from the array 
+		/// </summary>
+		/// <param name="type"></param>
+		/// <param name="args"></param>
+		/// <param name="position"></param>
+		/// <returns>Value as right type</returns>
+		private object GetValue(Type type, string[] args, int? position)
 		{
-			if(position == null)
+			var codes = (TypeCode[]) Enum.GetValues(typeof(TypeCode));
+
+			//Get the base type when type is nullable
+			type = Nullable.GetUnderlyingType(type) ?? type;
+
+			if(position == null || position >= args.Length)
 				return null;
 
-			string x = args[(int) position];
+			var value = args[(int) position];
 
-			if(string.IsNullOrWhiteSpace(x))
+			if(string.IsNullOrWhiteSpace(value))
 				return null;
 
-			return x;
-		}
+			if(type == typeof(string))
+			{
+				return value;
+			}
 
-		private int? GetValueInt(string[] args, int? position)
-		{
-			var x = GetValue(args, position);
-
-			if(x == null)
-				return null;
-
-			return int.Parse(x);
-		}
-
-		private long? GetValueLong(string[] args, int? position)
-		{
-			var x = GetValue(args, position);
-
-			if(x == null)
-				return null;
-
-			return long.Parse(x);
-		}
-
-		//TODO
-		[Obsolete]
-		private bool GetValueBool(string[] args, int? position)
-		{
-			var x = GetValue(args, position);
-
-			if(x == null)
-				return false;
-
-			return bool.Parse(x);
-		}
-
-		private DateTime? GetValueDate(string[] args, int? position)
-		{
-			var x = GetValue(args, position);
-
-			if(x == null)
-				return null;
-
-			var date = DateTime.Parse(x);
-
-			return date;
+			foreach(var code in codes)
+			{
+				if(Type.GetTypeCode(type) == code && code != TypeCode.Object)
+				{
+					return Convert.ChangeType(value, type);
+				}
+			}
+			return null;
 		}
 	}
 }
