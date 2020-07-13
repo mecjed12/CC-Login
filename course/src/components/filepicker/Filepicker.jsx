@@ -1,35 +1,59 @@
 import React from 'react';
 import '../filepicker/Filepicker.css';
 import axios from 'axios';
-import Fileinput from '../input/Fileinput'
+import Coursetable from '../table/Coursetable';
+import Persontable from '../table/Persontable';
+import Dropdown from '../filepicker/Dropdown';
 
 
 export default class Filepicker extends React.Component {
 
     constructor(props) {
         super(props);
-        this.getOptions()
+        this.getPerson()
+        this.getCourse()
         this.state = {
-            selectedFile: null
+            selectedFile: null,
+            isVisible: true,
+            persons: [],
+            courses: []
         }
     }
 
-    options = [];
-    
-    getOptions() {
-        
+    persons = [];
+    getPerson() {
+
         var xhttp = new XMLHttpRequest();
 
-        axios.get("http://192.168.0.94:8017/BewerbungenApi").then(res => {
-            this.options = res.data
-            this.options.forEach(option => {
-                console.log(option)
+        axios.get("http://192.168.0.94:8017/application/properties/person").then(res => {
+            this.person = res.data
+            this.person.forEach(option => {
             })
-    
-        }).catch(err => console.log(err))
 
-       
+            this.setState({
+                persons: this.person
+            })
+            console.log(this.person)
+        }).catch(err => console.log(err))
     }
+
+    courses = [];
+    getCourse() {
+
+        var xhttp = new XMLHttpRequest();
+
+        axios.get("http://192.168.0.94:8017/application/properties/course").then(res => {
+            this.course = res.data
+            this.course.forEach(option => {
+            })
+
+            this.setState({
+                courses: this.course
+            })
+            console.log(this.course)
+        }).catch(err => console.log(err))
+    }
+
 
     onChangeHandler = event => {
         this.setState({
@@ -54,28 +78,35 @@ export default class Filepicker extends React.Component {
         }
     }
 
+    switchSite() {
+        if (!this.state.isVisible) {
+            return <Persontable />
+        } else {
+            return <Coursetable />
+        }
+    }
+
+    toggleClass = () => {
+        this.setState({
+            isVisible: !this.state.isVisible
+        })
+    }
+
     render() {
         return (
             <div>
                 <div className="container">
-                    <div className="dropdown">
-                        <button className="dropbtn">Bitte auswählen...<i className="fa fa-caret-down"></i></button>
-                        <div className="dropdown-content">
-                            <a href="#">Personen</a>
-                            <a href="#">Kurse</a>
-                        </div>
-                    </div>
-                    {/* <select>
-                        <option>Personen</option>
-                        <option>Kurse</option>
-                    </select> */}
-                   
+                <Dropdown toggleClass={this.toggleClass} />
+
                     <div className="body-filepicker">
-                        <label></label>
                         <input type="file" name="file" onChange={this.onChangeHandler} />
                     </div>
                 </div>
-                <Fileinput upload={this.onClickHandler} />
+                <div>
+                    {this.switchSite()}
+                </div>
+                <Coursetable upload={this.onClickHandler} />
+                <Persontable upload={this.onClickHandler} />
             </div>
         )
     }
