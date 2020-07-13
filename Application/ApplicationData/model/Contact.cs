@@ -1,4 +1,4 @@
-﻿using ApplicationData;
+﻿using ApplicationData.attribute;
 using ApplicationData.enums;
 using System;
 using System.Collections.Generic;
@@ -14,6 +14,7 @@ namespace ApplicationData.model
 	{
 		public int Id { get; set; }
 
+		[Relation(Relation = typeof(Person))]
 		[Column("person_id")]
 		public int PersonId { get; set; }
 
@@ -35,7 +36,7 @@ namespace ApplicationData.model
 
 		public List<PropertyInfo> GetProperties()
 		{
-			return GetType().GetProperties().Where(x => x.IsDefined(typeof(ApplicationProperty), false)).ToList();
+			return GetType().GetProperties().Where(x => x.IsDefined(typeof(ApplicationPropertyAttribute), false)).ToList();
 		}
 	}
 }

@@ -1,12 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Reflection;
 using System.Text;
 
 namespace ApplicationData
 {
 	public interface IApplicationClass
 	{
-		List<System.Reflection.PropertyInfo> GetProperties();
+		List<PropertyInfo> GetProperties();
+
+		List<IApplicationSubclass> GetSubclasses();
+
+		List<PropertyInfo> GetSubclassProperties();
+
 	}
 
 }
