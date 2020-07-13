@@ -4,7 +4,19 @@
 }
 
 .table {
+<<<<<<< HEAD:course/src/components/table/Table.css
+   margin: 50px auto;
+   margin-bottom: 20px;
+=======
     margin-left: -50px;
+>>>>>>> 28869ad7a5fb057cfd2f09f0c32e94025d48ce02:course/src/components/input/Fileinput.css
+}
+
+.tableHead {
+    margin-top: 100px;
+    margin-bottom: 30px;
+    text-align: center;
+    font-size: 22px;
 }
 
 td  {
