@@ -2,14 +2,52 @@ import React from 'react';
 import './Filepicker.css';
 import axios from 'axios';
 import Fileinput from '../input/Fileinput';
+import Dropdown from '../Dropdown/Dropdown';
+import Fileinput2 from '../input/FIleinput2';
+
 export default class Filepicker extends React.Component {
     constructor(props) {
         super(props);
+        this.getPerson()
+        this.getCursor()
         this.state = {
             selectFile: null,
+            isVisible: true,
+            persons: [],
+            course: [],
         }
 
     }
+    person = [];
+    getPerson() {
+        var xhttp = new XMLHttpRequest();
+        axios.get("http://192.168.0.94:8017/application/properties/person").then(res => {
+            this.person = res.data
+            this.person.forEach(option => {
+               
+
+            })
+            this.setState({
+                persons: this.person
+            })
+            console.log(this.person)
+        }).catch(err => console.log(err))
+    }
+    curosr = [];
+    getCursor() {
+        var xhttp = new XMLHttpRequest();
+        axios.get("http://192.168.0.94:8017/application/properties/course").then(res => {
+            this.curosr = res.data
+            this.curosr.forEach(option => {
+               
+            })
+           this.setState({
+                course: this.curosr
+           })
+            console.log(this.curosr)
+        }).catch(err => console.log(err))
+    }
+
     onChangeHandler = event => {
         this.setState({
             selectFile: event.target.files[0],
@@ -24,10 +62,6 @@ export default class Filepicker extends React.Component {
             alert(" bitte geben die die file ein")
             return
         }
-        //var ex = this.state.selectFile.name.substring(this.state.selectFile.name.lastIndexOf('.'), this.state.selectFile.name.lenght)
-        //data.append('fileExtension', ex)
-        //data.append('base64String', window.btoa(this.state.selectFile));
-        //data.append('config', JSON.stringify(window.btoa(config)))
         const data = new FormData()
         data.append('file', this.state.selectFile);
         data.append('config', JSON.stringify(config))
@@ -36,6 +70,21 @@ export default class Filepicker extends React.Component {
             .then(res => {
             })
     }
+    switchsite() {
+        if (!this.state.isVisible) {
+            return <Fileinput2 />
+        } else {
+            return <Fileinput />
+        }
+    }
+
+    toggleClass = () => {
+        this.setState({
+            isVisible: !this.state.isVisible
+        })
+    }
+
+
     render() {
         return (
             <div className="file-container">
@@ -43,7 +92,11 @@ export default class Filepicker extends React.Component {
                     <label>Bitte geben sie Ihre Datei ein!</label>
                     <input className="upload" type="file" name="file" onChange={this.onChangeHandler} />
                 </div>
-                <Fileinput upload={this.onClickHandler} />
+                <Dropdown toggleClass={this.toggleClass} />
+                <div className="input-switch">
+                    {this.switchsite()}
+                    {/* <Fileinput upload={this.onClickHandler} /> */}
+                </div>
             </div>
         )
     }

@@ -2,6 +2,7 @@
 using ApplicationData;
 using Microsoft.AspNetCore.Mvc;
 using ApplicationData.model;
+using System;
 
 namespace ApplicationAPI.Controllers
 {
@@ -9,16 +10,17 @@ namespace ApplicationAPI.Controllers
     [ApiController]
     public class ApplicationController : ControllerBase
     {
-        [HttpGet("attributes/{className}")]
-        public List<MappableProperties> GetAttributes(string className)
+        //
+        [HttpGet]
+        public List<string> GetApplicationTypes()
+		{
+            return Program.controller.GetTypeNames();
+		}
+
+        [HttpGet("props/{className}")]
+        public List<MappableProperties> GetProperties(string className)
         {
             return Program.controller.GetProperties(className);
-        }
-
-        [HttpGet("{id}")]
-        public Person GetWithID(int id)
-        {
-            return Program.controller.GetPersonById(id);
         }
 
         [HttpPost("person")]
@@ -26,9 +28,10 @@ namespace ApplicationAPI.Controllers
         {
             if(file.File != null && file.GetProperties() != null)
             {
-                using(var stream = file.File.OpenReadStream())
-                Program.controller.AddPeopleFromCSV(stream, file.GetProperties());
-            }else
+				using var stream = file.File.OpenReadStream();
+				Program.controller.AddPeopleFromCSV(stream, file.GetProperties());
+			}
+			else
 			{
                 Response.StatusCode = 204;
 			}

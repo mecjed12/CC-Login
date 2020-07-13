@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 .container {
     display: flex;
     justify-content: space-evenly;
@@ -7,12 +8,23 @@
 .body-filepicker input {
   border: 2px solid #00B0A6;
   padding: 50px;
+=======
+.file-container {
+    margin-left: 50px;
+}
+
+.body-filepicker input {
+    border: 2px solid #6cfecb;
+    padding: 50px;
+    margin-right: 100px;
+>>>>>>> 28869ad7a5fb057cfd2f09f0c32e94025d48ce02
 }
 
 .body-filepicker label {
   margin-right: 50px;
 }
 
+<<<<<<< HEAD
 .dropdown {
   font-size: 15px;
   width: 280px;
@@ -20,6 +32,8 @@
 
  
 
+=======
+>>>>>>> 28869ad7a5fb057cfd2f09f0c32e94025d48ce02
 
 
 

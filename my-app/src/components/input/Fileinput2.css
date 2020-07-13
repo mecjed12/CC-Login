@@ -1,0 +1,22 @@
+.text1 {
+    border: 1px solid;
+    width: 70px;
+}
+.dropdown {
+    display: flex;
+}
+table {
+    border-collapse: collapse;
+    width: 30%;
+}
+td,th {
+    padding: 6px;
+    
+    
+}
+th {
+    background-color: aqua;
+}
+td {
+    width: 150px;
+}

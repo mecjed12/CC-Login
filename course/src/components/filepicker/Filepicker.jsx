@@ -10,6 +10,7 @@ export default class Filepicker extends React.Component {
 
     constructor(props) {
         super(props);
+<<<<<<< HEAD
         this.getPerson()
         this.getCourse()
         this.state = {
@@ -56,26 +57,30 @@ export default class Filepicker extends React.Component {
 
 
     onChangeHandler = event => {
+=======
+          this.state = {
+            selectedFile: null
+          }
+      }
+
+    onChangeHandler=event=>{
+>>>>>>> 28869ad7a5fb057cfd2f09f0c32e94025d48ce02
         this.setState({
             selectedFile: event.target.files[0],
             loaded: 0,
-        })
+          })
     }
 
     onClickHandler = (config) => {
-        const data = new FormData()
+        const data = new FormData() 
         data.append('file', this.state.selectedFile)
         data.append('config', JSON.stringify(config))
 
-        axios.post("http://localhost:3000/upload", data)
-            .then(res => {   // then print response status
-                console.log(res.statusText)
-            })
-
-        if (!this.state.selectedFile) {
-            alert("Bitte Datei auswählen!")
-            return;
-        }
+        axios.post("http://localhost:3000/upload", data, { 
+        })
+        .then(res => {   // then print response status
+            console.log(res.statusText)
+         })
     }
 
     switchSite() {
@@ -94,6 +99,7 @@ export default class Filepicker extends React.Component {
 
     render() {
         return (
+<<<<<<< HEAD
             <div>
                 <div className="container">
                 <Dropdown toggleClass={this.toggleClass} />
@@ -107,6 +113,14 @@ export default class Filepicker extends React.Component {
                 </div>
                 <Coursetable upload={this.onClickHandler} />
                 <Persontable upload={this.onClickHandler} />
+=======
+            <div className="file-container">
+                <div className="body-filepicker">
+                    <label>Kurs-Datei auswählen!</label>
+                    <input type="file" name="file" onChange={this.onChangeHandler}/> 
+                </div>
+                <Fileinput upload={this.onClickHandler}/>
+>>>>>>> 28869ad7a5fb057cfd2f09f0c32e94025d48ce02
             </div>
         )
     }

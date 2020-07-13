@@ -9,20 +9,19 @@ namespace ApplicationData.model
 {
 	public class Address : CreatedModify, IApplicationSubclass
 	{
-		[ApplicationProperty]
 		public int Id { get; set; }
 
-		[ApplicationProperty]
+		[ApplicationProperty("Strasse")]
 		public string Street { get; set; }
 
-		[ApplicationProperty]
+		[ApplicationProperty("Ort")]
 		public string Place { get; set; }
 
-		[ApplicationProperty]
+		[ApplicationProperty("Postleitzahl")]
 		[Column("zip")]
 		public int? ZipCode { get; set; }
 
-		[ApplicationProperty]
+		[ApplicationProperty("Land")]
 		public string Country { get; set; }
 
 		[Column("contact_type")]

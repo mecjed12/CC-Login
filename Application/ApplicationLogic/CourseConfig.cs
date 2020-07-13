@@ -1,9 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace ApplicationLogic
 {
+	//TODO Delete
+	[Obsolete]
 	public class CourseConfig
 	{
 		public int Title { get; set; }
