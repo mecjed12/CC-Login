@@ -20,18 +20,16 @@ const options = [
     { value: '13', label: 'Spalte 14' },
     { value: '14', label: 'Spalte 15' },
     { value: '15', label: 'Spalte 16' },
-
 ];
-
 export default class Fileinput extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
             properties: props.personFields
         }
+        //this.onUpload = this.onUpload.bind(this);
       
     }
-
     handleChange = (key, value) => {
         //checkt die Spalten ab ob nicht die gleichen genommen wurde
         const selectedValues = Object.values(this.state.properties)
@@ -42,7 +40,6 @@ export default class Fileinput extends React.Component {
                 isDuplicate = true;
             }
         })
-
         if (!isDuplicate) {
             const currentState = this.state.properties;
             const fieldToUpdate = currentState.find(field => field.propName === key)
@@ -53,33 +50,33 @@ export default class Fileinput extends React.Component {
             })
         }
     }
-
     onUpload = () => {
         // check for required fields
-        if (!this.state.name2) {
-            alert("Bitte Feld ausfüllen")
-            return
-        }
+        // if (!this.state.name2) {
+        //     alert("Bitte Feld ausfüllen")
+        //     return  
+        // }
         // ... all fields are filled
-        const stateToSend = {
-            name1: this.state.name1,
-            name2: this.state.name2,
-            title: this.state.title,
-            svNumber: this.state.svNumber,
-            date: this.state.date,
-            Gender: this.state.Gender,
-            busy: this.state.busy,
-            busy_by: this.state.busy_by,
-            picture: this.state.picture,
-            function: this.state.function,
-            email: this.state.email,
-            phoneNumber: this.state.phoneNumber,
-            street: this.state.street,
-            place: this.state.place,
-            country: this.state.country,
-            zipCode: this.state.zipCode
-        }
-        this.props.upload(stateToSend)
+        // const stateToSend = {
+        //     //finishdata = newState.propName,
+        //     // name1: this.state.name1,
+        //     // name2: this.state.name2,
+        //     // title: this.state.title,
+        //     // svNumber: this.state.svNumber,
+        //     // date: this.state.date,
+        //     // Gender: this.state.Gender,
+        //     // busy: this.state.busy,
+        //     // busy_by: this.state.busy_by,
+        //     // picture: this.state.picture,
+        //     // function: this.state.function,
+        //     // email: this.state.email,
+        //     // phoneNumber: this.state.phoneNumber,
+        //     // street: this.state.street,
+        //     // place: this.state.place,
+        //     // country: this.state.country,
+        //     // zipCode: this.state.zipCode
+        // }
+        this.props.upload(this.state.properties)
     }
     render() {
         console.log(this.state)
@@ -89,9 +86,7 @@ export default class Fileinput extends React.Component {
                     <tbody>
                         {this.state.properties.map((newState) => {
                             var value = options.find(option => option.value === newState.columnValue)
-
                             var x = newState.required ? " *" : "";
-
                             return (
                                 <tr>
                                     <td>{newState.displayName + x}</td>
@@ -104,9 +99,6 @@ export default class Fileinput extends React.Component {
                             )
                         }
                         )}
-
-                      
-
                     </tbody>
                 </table>
                 <div type="button" className="button-click" onClick={() => this.onUpload()}>Upload</div>

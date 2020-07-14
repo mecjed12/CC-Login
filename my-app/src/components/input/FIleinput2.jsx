@@ -4,7 +4,7 @@ import Select from 'react-select';
 
 
 const options = [
-  { value: null, label: 'Spalte auswählen...'},
+  { value: null, label: 'Spalte auswählen...' },
   { value: '0', label: 'Spalte 1' },
   { value: '1', label: 'Spalte 2' },
   { value: '2', label: 'Spalte 3' },
@@ -24,45 +24,35 @@ export default class Fileinput extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      title: null,
-      courseNumber: null,
-      discription: null,
-      category: null,
-      start: null,
-      end: null,
-      unit: null,
-      price: null,
-      classroomId: null,
-      participantsMax: null,
-      participantsMin: null,
-      created: null,
-      modified: null
+      properties2: props.courseFields
     }
   };
 
 
   handleChange = (key, value) => {
-    const selectedValues = Object.values(this.state)
+    const selectedValues = Object.values(this.state.properties2)
     var isDuplicate = false;
     selectedValues.forEach(selectedValue => {
-      if (selectedValue === value.value) {
+      if (value.value !== null && selectedValue.columnValue === value.value) {
         alert("Spalte bereits ausgewählt!")
         isDuplicate = true;
       }
     })
 
     if (!isDuplicate) {
+      const currenState = this.state.properties2;
+      const fieldToUpdate = currenState.find(field => field.propName === key)
+      fieldToUpdate.columnValue = value.value
+
       this.setState({
-        [key]: value.value
+        properties2: currenState
       })
+
     }
   }
 
   onUpload = () => {
-    if (!this.state.title || !this.state.category || !this.state.created) {
-      alert("Die mit * gekennzeichneten Felder sind Pflichtfelder!")
-      return;
-    }
+    
 
     const stateToSend = {
       title: this.state.title,
@@ -84,22 +74,28 @@ export default class Fileinput extends React.Component {
   }
 
   render() {
-
+    console.log(this.state)
     return (
       <div className="input-container">
         <table className="table">
-         
+
           <tbody>
-          <tr>
-            <td>Kurstitel *</td>
-            <td><Select
-              name="title"
-              value={options.find(option => option.value === this.state.title)}
-              onChange={(newValue) => this.handleChange('title', newValue)}
-              options={options}
-            /></td>
-          </tr>
-          <tr>
+            {this.state.properties2.map((newState) => {
+              var value = options.find(option => option.value === newState.columnValue)
+              var x = newState.required ? "*" : "";
+              return (
+                <tr>
+                  <td>{newState.displayName + x}</td>
+                  <td><Select
+                    value={value}
+                    onChange={(newValue) => this.handleChange(newState.propName, newValue)}
+                    options={options}
+                  /></td>
+                </tr>
+              )
+            })}
+
+            {/* <tr>
             <td>Kursnummer</td>
             <td><Select
               name="courseNumber"
@@ -206,7 +202,7 @@ export default class Fileinput extends React.Component {
               onChange={(newValue) => this.handleChange('modified', newValue)}
               options={options}
             /></td>
-          </tr>
+          </tr> */}
           </tbody>
         </table>
         <div type="button" className="button-click" onClick={() => this.onUpload()}>Upload</div>

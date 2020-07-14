@@ -1,8 +1,7 @@
 import React from 'react';
 import '../Dropdown/Dropdown.css';
 import Select from 'react-select';
-import Fileinput from '../input/Fileinput';
-import Fileinput2 from '../input/FIleinput2';
+
 
 const options = [
     { value: true, label: 'Kurse' },

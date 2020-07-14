@@ -15,17 +15,16 @@ export default class Filepicker extends React.Component {
             isVisible: true,
             persons: [],
             course: [],
-            
+
         }
 
     }
     person = [];
     getPerson() {
-        var xhttp = new XMLHttpRequest();
         axios.get("http://192.168.0.94:8017/application/properties/person").then(res => {
             this.person = res.data
             this.person.forEach(option => {
-               
+
 
             })
             this.setState({
@@ -35,15 +34,14 @@ export default class Filepicker extends React.Component {
     }
     curosr = [];
     getCursor() {
-        var xhttp = new XMLHttpRequest();
         axios.get("http://192.168.0.94:8017/application/properties/course").then(res => {
             this.curosr = res.data
             this.curosr.forEach(option => {
-               
+
             })
-           this.setState({
+            this.setState({
                 course: this.curosr
-           })
+            })
         }).catch(err => console.log(err))
     }
 
@@ -56,39 +54,36 @@ export default class Filepicker extends React.Component {
         );
 
     }
-    onClickHandler = (config) => {
+    onClickHandler = (properties) => {
         if (!this.state.selectFile) {
             alert(" bitte geben die die file ein")
             return
         }
         const data = new FormData()
         data.append('file', this.state.selectFile);
-        data.append('config', JSON.stringify(config))
-        axios.post("http://localhost:8000/upload", data, {
+        data.append('properties', JSON.stringify(properties))
+        axios.post("http://192.168.0.94:8017/application/person", data, {
         })
             .then(res => {
             })
     }
     switchsite() {
         if (!this.state.isVisible) {
-            return <Fileinput2 />
+            if (this.state.course.length > 0)
+                return <Fileinput personFields={this.state.persons} upload={this.onClickHandler}/>
         } else {
             if (this.state.persons.length > 0) {
-                return <Fileinput personFields={this.state.persons} />
+                return <Fileinput2 courseFields={this.state.course} upload={this.onClickHandler}/>
             } else {
                 return null
             }
         }
     }
-
     toggleClass = (selection) => {
         this.setState({
             isVisible: selection
         })
-        
     }
-
-
     render() {
         return (
             <div className="file-container">
@@ -99,7 +94,7 @@ export default class Filepicker extends React.Component {
                 <Dropdown toggleClass={this.toggleClass} />
                 <div className="input-switch">
                     {this.switchsite()}
-                    {/* <Fileinput upload={this.onClickHandler} /> */}
+                    {/* <Fileinput upload={this.onClickHandler}/> */}
                 </div>
             </div>
         )
