@@ -90,11 +90,11 @@ export default class Fileinput extends React.Component {
                         {this.state.properties.map((newState) => {
                             var value = options.find(option => option.value === newState.columnValue)
 
-                           // const displayName = // check if newState.required === true ...
+                            var x = newState.required ? " *" : "";
 
                             return (
                                 <tr>
-                                    <td>{newState.displayName}</td>
+                                    <td>{newState.displayName + x}</td>
                                     <td> <Select
                                         value={value}
                                         onChange={(newValue) => this.handleChange(newState.propName, newValue)}
