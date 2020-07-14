@@ -29,24 +29,7 @@ export default class Fileinput extends React.Component {
         this.state = {
             properties: props.personFields
         }
-        // this.state = { 
-        //     name1: null,
-        //     name2: null,
-        //     title: null,
-        //     svNumber: null,
-        //     date: null,
-        //     Gender: null,
-        //     busy: null,
-        //     busy_by: null,
-        //     picture: null,
-        //     function: null,
-        //     email: null,
-        //     phoneNumber: null,
-        //     street: null,
-        //     place: null,
-        //     country: null,
-        //     zipCode: null
-        // }
+      
     }
 
     handleChange = (key, value) => {
@@ -69,20 +52,6 @@ export default class Fileinput extends React.Component {
                 properties: currentState
             })
         }
-
-
-        // console.log(value)
-        // this.setState(prev => {
-        //     prev.properties.map(x => (x.propName === key ? Object.assign(x, { columnValue: value.value }) : x))
-        //     var isDuplicate = false;
-        //     if(value.value !== null && options === value.newValue) {
-        //         alert("Spalte bereits ausgewählt!")
-        //         isDuplicate = true;
-
-        //     }
-        //     }
-        // )
-        // }
     }
 
     onUpload = () => {
@@ -121,7 +90,7 @@ export default class Fileinput extends React.Component {
                         {this.state.properties.map((newState) => {
                             var value = options.find(option => option.value === newState.columnValue)
 
-                            const displayName = // check if newState.required === true ...
+                           // const displayName = // check if newState.required === true ...
 
                             return (
                                 <tr>
@@ -136,136 +105,7 @@ export default class Fileinput extends React.Component {
                         }
                         )}
 
-                        {/*
-                        <tr>
-                            <td>Vorname</td>
-                            <td> <Select
-                                value={options.find(option => option.value === this.state.name1)} // this.state[person.propName]
-                                onChange={(newValue) => this.handleChange('name1', newValue)}
-                                options={options}
-                            /></td>
-                        </tr>
-                        <tr>
-                            <td>Nachname *</td>
-                            <td> <Select
-                                value={options.find(option => option.value === this.state.name2)}
-                                onChange={(newValue) => this.handleChange('name2', newValue)}
-                                options={options} 
-                            /></td>
-                        </tr>
-                        <tr>
-                            <td>Titel</td>
-                            <td> <Select
-                                value={options.find(option => option.value === this.state.title)}
-                                onChange={(newValue) => this.handleChange('title', newValue)}
-                                options={options}
-                            /></td>
-                        </tr>
-                        <tr>
-                            <td>SV-Nummer</td>
-                            <td> <Select
-                                value={options.find(option => option.value === this.state.svNumber)}
-                                onChange={(newValue) => this.handleChange('svNumber', newValue)}
-                                options={options}
-                            /></td>
-                        </tr>
-                        <tr>
-                            <td>Geburtsdatum</td>
-                            <td> <Select
-                                value={options.find(option => option.value === this.state.date)}
-                                onChange={(newValue) => this.handleChange('date', newValue)}
-                                options={options}
-                            /></td>
-                        </tr>
-                        <tr>
-                            <td>Geschlecht</td>
-                            <td> <Select
-                                value={options.find(option => option.value === this.state.Gender)}
-                                onChange={(newValue) => this.handleChange('Gender', newValue)}
-                                options={options}
-                            /></td>
-                        </tr>
-                        <tr>
-                            <td>Beschäftigt</td>
-                            <td> <Select
-                                value={options.find(option => option.value === this.state.busy)}
-                                onChange={(newValue) => this.handleChange('busy', newValue)}
-                                options={options}
-                            /></td>
-                        </tr>
-                        <tr>
-                            <td>Bäschftigtbei</td>
-                            <td> <Select
-                                value={options.find(option => option.value === this.state.busy_by)}
-                                onChange={(newValue) => this.handleChange('busy_by', newValue)}
-                                options={options}
-                            /></td>
-                        </tr>
-                        <tr>
-                            <td>Foto</td>
-                            <td> <Select
-                                value={options.find(option => option.value === this.state.picture)}
-                                onChange={(newValue) => this.handleChange('picture', newValue)}
-                                options={options}
-                            /></td>
-                        </tr>
-                        <tr>
-                            <td>Funktion</td>
-                            <td> <Select
-                                value={options.find(option => option.value === this.state.function)}
-                                onChange={(newValue) => this.handleChange('function', newValue)}
-                                options={options}
-                            /></td>
-                        </tr>
-                        <tr>
-                            <td>E-Mail</td>
-                            <td> <Select
-                                value={options.find(option => option.value === this.state.email)}
-                                onChange={(newValue) => this.handleChange('email', newValue)}
-                                options={options}
-                            /></td>
-                        </tr>
-                        <tr>
-                            <td>Telefonnummer</td>
-                            <td> <Select
-                                value={options.find(option => option.value === this.state.phoneNumber)}
-                                onChange={(newValue) => this.handleChange('phoneNumber', newValue)}
-                                options={options}
-                            /></td>
-                        </tr>
-                        <tr>
-                            <td>Straße</td>
-                            <td> <Select
-                                value={options.find(option => option.value === this.state.street)}
-                                onChange={(newValue) => this.handleChange('street', newValue)}
-                                options={options}
-                            /></td>
-                        </tr>
-                        <tr>
-                            <td>Ort</td>
-                            <td> <Select
-                                value={options.find(option => option.value === this.state.place)}
-                                onChange={(newValue) => this.handleChange('place', newValue)}
-                                options={options}
-                            /></td>
-                        </tr>
-                        <tr>
-                            <td>ZipCode</td>
-                            <td> <Select
-                                value={options.find(option => option.value === this.state.zipCode)}
-                                onChange={(newValue) => this.handleChange('zipCode', newValue)}
-                                options={options}
-                            /></td>
-                        </tr>
-                        <tr>
-                            <td>Bundesland</td>
-                            <td> <Select
-                                value={options.find(option => option.value === this.state.country)}
-                                onChange={(newValue) => this.handleChange('country', newValue)}
-                                options={options}
-                            /></td>
-                        </tr>
-                       */}
+                      
 
                     </tbody>
                 </table>
