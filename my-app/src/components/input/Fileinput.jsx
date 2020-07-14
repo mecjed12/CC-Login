@@ -51,19 +51,37 @@ export default class Fileinput extends React.Component {
 
     handleChange = (key, value) => {
         //checkt die Spalten ab ob nicht die gleichen genommen wurde
-        // const selectedValues = Object.values(this.state)
-        // var isDuplicate = false;
-        // selectedValues.forEach(selectedValue => {
-        //     if (value.value !== null && selectedValue === value.value) {
+        const selectedValues = Object.values(this.state.properties)
+        var isDuplicate = false;
+        selectedValues.forEach(selectedValue => {
+            if (value.value !== null && selectedValue.columnValue === value.value) {
+                alert("Spalte bereits ausgewählt!")
+                isDuplicate = true;
+            }
+        })
+
+        if (!isDuplicate) {
+            const currentState = this.state.properties;
+            const fieldToUpdate = currentState.find(field => field.propName === key)
+            fieldToUpdate.columnValue = value.value
+
+            this.setState({
+                properties: currentState
+            })
+        }
+
+
+        // console.log(value)
+        // this.setState(prev => {
+        //     prev.properties.map(x => (x.propName === key ? Object.assign(x, { columnValue: value.value }) : x))
+        //     var isDuplicate = false;
+        //     if(value.value !== null && options === value.newValue) {
         //         alert("Spalte bereits ausgewählt!")
         //         isDuplicate = true;
-        //     } 
-        // })
-        // if (!isDuplicate) {
-        console.log(value)
-        this.setState(prev => {
-            prev.properties.map(x => (x.propName === key ? Object.assign(x, { columnValue: value.value }) : x))
-        })
+
+        //     }
+        //     }
+        // )
         // }
     }
 
@@ -100,18 +118,23 @@ export default class Fileinput extends React.Component {
             <div className="input-container">
                 <table>
                     <tbody>
-                        {this.state.properties.map((newState) =>
-                            <tr>
-                                <td>{newState.displayName}</td>
-                                <td> <Select
-                                    value={options.find(option => option.value === this.state[newState.propName])}
-                                    onChange={(newValue) => this.handleChange(newState.propName, newValue)}
-                                    options={options}
-                                /></td>
-                            </tr>
+                        {this.state.properties.map((newState) => {
+                            var value = options.find(option => option.value === newState.columnValue)
+
+                            const displayName = // check if newState.required === true ...
+
+                            return (
+                                <tr>
+                                    <td>{newState.displayName}</td>
+                                    <td> <Select
+                                        value={value}
+                                        onChange={(newValue) => this.handleChange(newState.propName, newValue)}
+                                        options={options}
+                                    /></td>
+                                </tr>
+                            )
+                        }
                         )}
-
-
 
                         {/*
                         <tr>

@@ -31,7 +31,6 @@ export default class Filepicker extends React.Component {
             this.setState({
                 persons: this.person
             })
-            console.log(this.person)
         }).catch(err => console.log(err))
     }
     curosr = [];
@@ -45,7 +44,6 @@ export default class Filepicker extends React.Component {
            this.setState({
                 course: this.curosr
            })
-            console.log(this.curosr)
         }).catch(err => console.log(err))
     }
 

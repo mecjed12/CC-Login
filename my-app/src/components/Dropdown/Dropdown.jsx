@@ -19,9 +19,7 @@ export default class Dropdown extends React.Component {
     
     handelchange = selectionOption => {
         this.setState(
-            { selectionOption },
-            () => console.log('Option selected:', this.state.selectionOption)
-           
+            { selectionOption }
         );
         this.props.toggleClass(selectionOption.value)
     };
