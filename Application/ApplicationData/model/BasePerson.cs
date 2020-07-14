@@ -7,13 +7,13 @@ namespace ApplicationData.model
 	{
 		public int Id { get; set; }
 
-		[ApplicationProperty(DisplayName = "Vorname")]
+		[ApplicationProperty(DisplayName = "Vorname", Required = true)]
 		public string Name1 { get; set; }
 		
-		[ApplicationProperty(DisplayName = "Zuname")]
+		[ApplicationProperty(DisplayName = "Zuname", Required = true)]
 		public string Name2 { get; set; }
 
-		[ApplicationProperty(DisplayName = "Geburtsdatum")]
+		[ApplicationProperty(DisplayName = "Geburtsdatum", Required = true)]
 		public DateTime? Date { get; set; }
 
 	}

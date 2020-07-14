@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace ApplicationData.repo
@@ -13,9 +14,19 @@ namespace ApplicationData.repo
             Entities = entities;
         }
 
+        public Repository<T> GetRepository()
+		{
+            return this;
+        }
+
         public virtual List<T> GetAll()
         {
             return Entities.Set<T>().ToList();
         }
+
+        public virtual T Exists(T t)
+		{
+            return null;
+		}
     }
 }
