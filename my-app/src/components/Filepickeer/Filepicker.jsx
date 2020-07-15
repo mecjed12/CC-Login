@@ -58,8 +58,8 @@ export default class Filepicker extends React.Component {
         console.log(properties)
         axios.post("http://192.168.0.94:8017/application/" + this.state.name, data, {
         })
-            .then(res => {
-            }).catch(err => console.log(err.message))
+            .then(res => { console.log(res)
+            }).catch(err => console.log(err.response))
     }
     switchsite() {
         if (!this.state.isVisible) {
