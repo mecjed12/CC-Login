@@ -41,6 +41,7 @@ namespace ApplicationAPI.Controllers
 				catch (Exception e)
 				{
 					Console.WriteLine(e.Message);
+					Console.WriteLine(e.InnerException);
 					Response.StatusCode = 400;
 					Response.WriteAsync(e.Message);
 				}

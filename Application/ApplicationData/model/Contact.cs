@@ -32,6 +32,7 @@ namespace ApplicationData.model
 		[Column("main_contact")]
 		public bool MainContact { get; set; }
 
+		[Relation]
 		public Person Person { get; set; }
 
 		public List<PropertyInfo> GetProperties()

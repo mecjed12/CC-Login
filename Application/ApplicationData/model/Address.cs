@@ -11,17 +11,17 @@ namespace ApplicationData.model
 	{
 		public int Id { get; set; }
 
-		[ApplicationProperty(DisplayName = "Strasse", Required = true)]
+		[ApplicationProperty(DisplayName = "Strasse")]
 		public string Street { get; set; }
 
-		[ApplicationProperty(DisplayName = "Ort", Required = true)]
+		[ApplicationProperty(DisplayName = "Ort")]
 		public string Place { get; set; }
 
-		[ApplicationProperty(DisplayName = "Postleitzahl", Required = true)]
+		[ApplicationProperty(DisplayName = "Postleitzahl")]
 		[Column("zip")]
 		public int? ZipCode { get; set; }
 
-		[ApplicationProperty(DisplayName = "Land", Required = true)]
+		[ApplicationProperty(DisplayName = "Land")]
 		public string Country { get; set; }
 
 		[Relation]
