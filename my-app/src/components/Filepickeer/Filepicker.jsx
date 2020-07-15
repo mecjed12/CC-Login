@@ -15,17 +15,14 @@ export default class Filepicker extends React.Component {
             isVisible: true,
             persons: [],
             course: [],
-
+            name: null
         }
-
     }
     person = [];
     getPerson() {
         axios.get("http://192.168.0.94:8017/application/properties/person").then(res => {
             this.person = res.data
             this.person.forEach(option => {
-
-
             })
             this.setState({
                 persons: this.person
@@ -44,7 +41,6 @@ export default class Filepicker extends React.Component {
             })
         }).catch(err => console.log(err))
     }
-
     onChangeHandler = event => {
         this.setState({
             selectFile: event.target.files[0],
@@ -52,30 +48,33 @@ export default class Filepicker extends React.Component {
 
         }
         );
-
     }
-    onClickHandler = (properties) => {
+    onClickHandler = (property) => {
         if (!this.state.selectFile) {
             alert(" bitte geben die die file ein")
             return
         }
         const data = new FormData()
         data.append('file', this.state.selectFile);
-        data.append('properties', JSON.stringify(properties))
-        axios.post("http://192.168.0.94:8017/application/person", data, {
+        data.append('property', JSON.stringify(property))
+        axios.post("http://192.168.0.94:8017/application/" + this.state.name , data, {
         })
             .then(res => {
-            })
+            }).catch(err => console.log(err.message))
     }
+    
     switchsite() {
         if (!this.state.isVisible) {
-            if (this.state.course.length > 0)
-                return <Fileinput personFields={this.state.persons} upload={this.onClickHandler}/>
-        } else {
             if (this.state.persons.length > 0) {
+                if(this.state.name !== "person") 
+                    this.setState({ name: "person"})
+                return <Fileinput personFields={this.state.persons} upload={this.onClickHandler}/>
+            }
+        } else {
+            if (this.state.course.length > 0) {
+                if(this.state.name !== "course")
+                    this.setState({ name: "course"})
                 return <Fileinput2 courseFields={this.state.course} upload={this.onClickHandler}/>
-            } else {
-                return null
             }
         }
     }
@@ -94,7 +93,6 @@ export default class Filepicker extends React.Component {
                 <Dropdown toggleClass={this.toggleClass} />
                 <div className="input-switch">
                     {this.switchsite()}
-                    {/* <Fileinput upload={this.onClickHandler}/> */}
                 </div>
             </div>
         )
