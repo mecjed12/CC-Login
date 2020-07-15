@@ -37,18 +37,17 @@ namespace ApplicationAPI.Controllers
 					using var stream = file.File.OpenReadStream();
 					Program.controller.AddObjectsFromCSV(stream, file.GetProperties(), className);
 				}
-				catch (InvalidTypeException e)
+				catch (InvalidTypeException)
 				{
-					Console.WriteLine(e.Message);
-					Console.WriteLine(e.InnerException);
 					Response.StatusCode = 400;
 					await Response.WriteAsync($"{className} is not a valid type");
-				}catch(FormatException e)
+				}
+				catch(FormatException e)
 				{
-					Console.WriteLine(e.Message);
-					Response.StatusCode = 401;
-					await Response.WriteAsync("The file or properties are formated incorrectly");
-				}catch(Exception e)
+					Response.StatusCode = 400;
+					await Response.WriteAsync(e.Message);
+				}
+				catch(Exception e)
 				{
 					Console.WriteLine(e.Message);
 					Response.StatusCode = 402;
