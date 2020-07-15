@@ -43,9 +43,9 @@ namespace ApplicationLogic
 		{
 			var props = new List<MappableProperties>();
 
-			if(type != null)
+			if (type != null)
 			{
-				if(Activator.CreateInstance(type) is IApplicationClass appClass)
+				if (Activator.CreateInstance(type) is IApplicationClass appClass)
 				{
 					props = appClass.GetProperties().Select(x => CreateMappable(x)).ToList();
 				}
@@ -74,7 +74,7 @@ namespace ApplicationLogic
 		{
 			var u = typeof(T);
 			var type = AppDomain.CurrentDomain.GetAssemblies().SelectMany(x => x.GetTypes()).FirstOrDefault(y => y.IsSubclassOf(typeof(Repository<T>)));
-			if(Activator.CreateInstance(type, Entities) is Repository<T> repo)
+			if (Activator.CreateInstance(type, Entities) is Repository<T> repo)
 			{
 				return repo;
 			}
@@ -97,124 +97,118 @@ namespace ApplicationLogic
 			};
 		}
 
+
+		//TODO Add checks if appClass/subClass already exist
 		public void AddObjectsFromCSV(Stream stream, List<MappableProperties> properties, string className)
 		{
-			var type = GetApplicationTypes().FirstOrDefault(x => x.Name.Equals(className, StringComparison.InvariantCultureIgnoreCase));
-			
-			if(type == null)
+			Type type = GetApplicationTypes().FirstOrDefault(x => x.Name.Equals(className, StringComparison.InvariantCultureIgnoreCase));
+
+			if (type == null)
 				throw new InvalidTypeException();
 
-			using(var reader = new StreamReader(stream))
+			using (var reader = new StreamReader(stream))
 			{
-				while(reader.Peek() != -1)
+				while (reader.Peek() != -1)
 				{
 					var created = DateTime.Now;
 
 					var line = reader.ReadLine();
 					var args = line.Split(';');
 
-					try {
-
+					try
+					{
 						if (Activator.CreateInstance(type) is IApplicationClass appClass)
 						{
+							dynamic dynamicAppClass = Convert.ChangeType(appClass, type);
+							var typeRepository = GetRepository(dynamicAppClass);
+
+							var appClassRelations = appClass.GetType().GetProperties().Where(x => x.IsDefined(typeof(RelationAttribute))).ToList();
+
 							var subClasses = appClass.GetSubclasses();
 
-							//TODO change this 
-							dynamic o = Convert.ChangeType(appClass, type);
-
-							foreach (var prop in properties)
+							properties.ForEach(prop =>
 							{
 								var p = type.GetProperty(prop.PropName);
-								if (p == null)
-									continue;
-								p.SetValue(appClass, GetValue(p.PropertyType, args, prop.ColumnValue));
-							}
+								if(p != null)
+								{
+									p.SetValue(appClass, GetValue(p.PropertyType, args, prop.ColumnValue));
+								}
+							});
 
-							//TODO find bettername and change this
-							dynamic t = Convert.ChangeType(appClass, type);
-							var exitingAppClass = GetRepository(t);
-							var e = exitingAppClass.Exists(o);
-
-							if (exitingAppClass == null)
+							var createdP = type.GetProperty("CreatedAt");
+							if(createdP != null)
 							{
-								Entities.Add(appClass);
-								Entities.SaveChanges();
-							}
-							else
-							{
-								appClass = exitingAppClass;
+								createdP.SetValue(appClass, created);
 							}
 
-							//TODO make this look better
 							foreach (var sub in subClasses)
 							{
-								var subType = sub.GetType();
+								Type subType = sub.GetType();
+
 								if (Activator.CreateInstance(subType) is IApplicationSubclass subClass)
 								{
+									dynamic dynamicSubClass = Convert.ChangeType(subClass, subType);
+									var subTypeRepository = GetRepository(dynamicSubClass);
+
+									var subClassRelations = subClass.GetType().GetProperties().Where(x => x.IsDefined(typeof(RelationAttribute))).ToList();
+
 									bool changed = false;
-									foreach (var prop in properties)
+
+									properties.ForEach(prop =>
 									{
 										var p = subType.GetProperty(prop.PropName);
-										if (p == null)
-											continue;
-										p.SetValue(subClass, GetValue(p.PropertyType, args, prop.ColumnValue));
-										changed = true;
-									}
+										if (p != null)
+										{
+											p.SetValue(subClass, GetValue(p.PropertyType, args, prop.ColumnValue));
+											changed = changed ? changed : p.GetValue(subClass) != null;
+										}
+									});
 
 									if (changed)
 									{
-										var existingSubClass = GetRepository(subClass).Exists(subClass);
-										if (existingSubClass != null)
+
+										createdP = subType.GetProperty("CreatedAt");
+										if (createdP != null)
 										{
-											subClass = existingSubClass;
-										}
-										else
-										{
-											Entities.Add(subClass);
+											createdP.SetValue(subClass, created);
 										}
 
 										var keys = subType.GetProperties().Where(x => x.IsDefined(typeof(RelationAttribute))).ToList();
-										foreach (var key in keys)
+
+										keys.ForEach(key =>
 										{
-											if (key.GetCustomAttribute<RelationAttribute>()?.Relation == appClass.GetType())
+											//Create RelationClass when appClass and subClass are connected using a RelationClass
+											if (typeof(IList).IsAssignableFrom(key.PropertyType) && key.PropertyType.GenericTypeArguments[0].IsDefined(typeof(RelationAttribute)))
 											{
-												key.SetValue(subClass, type.GetProperty("Id").GetValue(appClass));
-											}
-
-											Entities.SaveChanges();
-
-											if (typeof(IList).IsAssignableFrom(key.PropertyType))
-											{
-												if (Activator.CreateInstance(key.PropertyType.GenericTypeArguments[0]) is object subSubClass)
+												if (Activator.CreateInstance(key.PropertyType.GenericTypeArguments[0]) is object relationClass)
 												{
-													var subKeys = subSubClass.GetType().GetProperties().Where(x => x.IsDefined(typeof(RelationAttribute))).ToList();
-
-													var existingSubSubClass = GetRepository(subSubClass).Exists(subSubClass);
-													if (existingSubSubClass != null)
+													createdP = relationClass.GetType().GetProperty("CreatedAt");
+													if (createdP != null)
 													{
-														continue;
+														createdP.SetValue(relationClass, created);
 													}
 
-													foreach (var subKey in subKeys)
-													{
-														//TODO make this better and better to look at
-														if (subKey.GetCustomAttribute<RelationAttribute>()?.Relation == appClass.GetType())
-														{
-															subKey.SetValue(subSubClass, type.GetProperty("Id").GetValue(appClass));
-														}
-														else if (subKey.GetCustomAttribute<RelationAttribute>()?.Relation == subClass.GetType())
-														{
-															subKey.SetValue(subSubClass, subType.GetProperty("Id").GetValue(subClass));
-														}
-													}
-													Entities.Add(subSubClass);
-													Entities.SaveChanges();
+													var relations = relationClass.GetType().GetProperties().Where(x => x.IsDefined(typeof(RelationAttribute))).ToList();
+													
+													//Add the appClass/subClass to the relationClass
+													AddRelation(relations, relationClass, appClass);
+													AddRelation(relations, relationClass, subClass);
+													//Add the relationClass to the appClass/subClass or add the relationClass to the list in appClass/subClass 
+													AddRelation(appClassRelations, appClass, relationClass);
+													AddRelation(subClassRelations, subClass, relationClass);
 												}
 											}
-										}
+											else //Make connection when appClass and subClass are connected directly
+											{
+												//Add the appClass/subClass to the appClass/subClass
+												AddRelation(appClassRelations, appClass, subClass);
+												AddRelation(subClassRelations, subClass, appClass);
+											}
+										});
 									}
 								}
 							}
+							Entities.Add(appClass);
 						}
 					}
 					catch (Exception e)
@@ -225,6 +219,31 @@ namespace ApplicationLogic
 				}
 			}
 			Entities.SaveChanges();
+		}
+
+		/// <summary>
+		/// Adds the value to the obj or adds the value to the list in obj
+		/// </summary>
+		/// <param name="properties"></param>
+		/// <param name="obj"></param>
+		/// <param name="value"></param>
+		private static void AddRelation(List<PropertyInfo> properties, object obj, object value)
+		{
+			properties.ForEach(rel =>
+			{
+				if (rel.PropertyType == value.GetType())
+				{
+					rel.SetValue(obj, value);
+				}
+				else if (typeof(IList).IsAssignableFrom(rel.PropertyType) && rel.PropertyType.GenericTypeArguments[0] == value.GetType())
+				{
+					var temp = rel.GetValue(obj) as IList;
+					if (temp == null)
+						temp = Activator.CreateInstance(rel.PropertyType) as IList;
+					temp.Add(value);
+					rel.SetValue(obj, temp);
+				}
+			});
 		}
 
 		//https://localhost:44375/registration/person
@@ -272,31 +291,37 @@ namespace ApplicationLogic
 		/// <returns>Returns the value of the position in args as type. Returns null when posistion null</returns>
 		private object GetValue(Type type, string[] args, int? position)
 		{
-			var codes = (TypeCode[]) Enum.GetValues(typeof(TypeCode));
+			var codes = (TypeCode[])Enum.GetValues(typeof(TypeCode));
 
 			//Get the base type when type is nullable
 			type = Nullable.GetUnderlyingType(type) ?? type;
 
-			if(position == null || position >= args.Length)
+			if (position == null || position >= args.Length)
 				return null;
 
-			var value = args[(int) position];
+			var value = args[(int)position];
 
-			if(string.IsNullOrWhiteSpace(value))
+			if (string.IsNullOrWhiteSpace(value))
 				return null;
 
-			if(type == typeof(string))
+			if (type == typeof(string))
 			{
 				return value;
 			}
 
-			foreach(var code in codes)
+			if(type.BaseType == typeof(Enum)) {
+				return Enum.Parse(type, value);
+			}
+
+			foreach (var code in codes)
 			{
 				if (Type.GetTypeCode(type) == code && code != TypeCode.Object)
 				{
-					try {
+					try
+					{
 						return Convert.ChangeType(value, type);
-					}catch (FormatException e)
+					}
+					catch (FormatException e)
 					{
 						throw e;
 					}
@@ -304,5 +329,11 @@ namespace ApplicationLogic
 			}
 			return null;
 		}
+	}
+
+	struct ApplicationType
+	{
+		public string Name { get; set; }
+		public string DisplayName { get; set; }
 	}
 }

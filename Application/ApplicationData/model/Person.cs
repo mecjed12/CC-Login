@@ -40,10 +40,11 @@ namespace ApplicationData.model
 		[Column("newsletter_flag")]
 		public bool NewsletterFlag { get; set; }
 
+		[Relation]
 		public List<RelPersonAddress> PAddress { get; set; }
 
+		[Relation]
 		public List<Contact> Contacts { get; set; }
-
 
 		public List<PropertyInfo> GetProperties()
 		{

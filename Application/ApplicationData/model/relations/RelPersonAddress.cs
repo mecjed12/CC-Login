@@ -6,15 +6,14 @@ using System.Reflection;
 
 namespace ApplicationData.model
 {
+	[Relation]
 	[Table("addressperson")]
 	public class RelPersonAddress
 	{
 		public int Id { get; set; }
 
-		[Relation(Relation = typeof(Address))]
 		public int AddressId { get; set; }
 
-		[Relation(Relation = typeof(Person))]
 		public int PersonId { get; set; }
 
 		[Column("contact_type")]
@@ -23,8 +22,10 @@ namespace ApplicationData.model
 		[Column("billing_address")]
 		public bool BillingAdress { get; set; }
 
+		[Relation]
 		public Address Address { get; set; }
 
+		[Relation]
 		public Person Person { get; set; }
 
 		public List<PropertyInfo> GetProperties()

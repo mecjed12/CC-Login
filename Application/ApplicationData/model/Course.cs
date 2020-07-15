@@ -41,6 +41,8 @@ namespace ApplicationData.model
         [Column("participant_max")]
         public int? MaxParticipants { get; set; }
 
+        //TODO remove
+        [Obsolete]
         [Column("classroom_id")]
         public int? ClassroomId { get; set; }
 
