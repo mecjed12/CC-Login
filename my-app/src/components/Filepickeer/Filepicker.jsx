@@ -57,24 +57,24 @@ export default class Filepicker extends React.Component {
         const data = new FormData()
         data.append('file', this.state.selectFile);
         data.append('property', JSON.stringify(property))
-        axios.post("http://192.168.0.94:8017/application/" + this.state.name , data, {
+        axios.post("http://192.168.0.94:8017/application/" + this.state.name, data, {
         })
             .then(res => {
             }).catch(err => console.log(err.message))
     }
-    
+
     switchsite() {
         if (!this.state.isVisible) {
             if (this.state.persons.length > 0) {
-                if(this.state.name !== "person") 
-                    this.setState({ name: "person"})
-                return <Fileinput personFields={this.state.persons} upload={this.onClickHandler}/>
+                if (this.state.name !== "person")
+                    this.setState({ name: "person" })
+                return <Fileinput personFields={this.state.persons} upload={this.onClickHandler} />
             }
         } else {
             if (this.state.course.length > 0) {
-                if(this.state.name !== "course")
-                    this.setState({ name: "course"})
-                return <Fileinput2 courseFields={this.state.course} upload={this.onClickHandler}/>
+                if (this.state.name !== "course")
+                    this.setState({ name: "course" })
+                return <Fileinput2 courseFields={this.state.course} upload={this.onClickHandler} />
             }
         }
     }

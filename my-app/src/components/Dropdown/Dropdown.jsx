@@ -28,7 +28,7 @@ export default class Dropdown extends React.Component {
                         <tr>
                             <td><Select
                                 value={this.state.selectionOption}
-                                onChange={ this.handelchange}
+                                onChange={this.handelchange}
                                 options={options}
                             /></td>
                         </tr>
