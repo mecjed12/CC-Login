@@ -18,6 +18,13 @@ const options = [
   { value: '10', label: 'Spalte 11' },
   { value: '11', label: 'Spalte 12' },
   { value: '12', label: 'Spalte 13' },
+  { value: '13', label: 'Spalte 14' },
+  { value: '14', label: 'Spalte 15' },
+  { value: '15', label: 'Spalte 16' },
+  { value: '16', label: 'Spalte 17' },
+  { value: '17', label: 'Spalte 18' },
+  { value: '18', label: 'Spalte 19' },
+  { value: '19', label: 'Spalte 20' },
 ];
 export default class Fileinput extends React.Component {
   constructor(props) {
@@ -47,8 +54,22 @@ export default class Fileinput extends React.Component {
     }
   }
   onUpload = () => {
-    this.props.upload(this.state.properties2);
-  }
+    // check for required fields
+    var popup = false;
+    this.state.properties2.forEach(prop => {
+        if(prop.required) {
+            if(prop.columnValue === null) {
+                popup = true       
+            }
+        }
+    })
+    if(popup) {
+        alert("Die mit * gekennzeichneten Felder sind Pflichtfelder!")
+        return
+    }
+    this.props.upload(this.state.properties2)
+}
+   
 
   render() {
     console.log(this.state)
