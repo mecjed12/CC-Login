@@ -157,7 +157,7 @@ namespace ApplicationLogic
 									properties.ForEach(prop =>
 									{
 										var p = subType.GetProperty(prop.PropName);
-										if (p != null)
+										if (p != null && prop.ColumnValue != null)
 										{
 											p.SetValue(subClass, GetValue(p.PropertyType, args, prop.ColumnValue));
 											changed = changed ? changed : p.GetValue(subClass) != null;
