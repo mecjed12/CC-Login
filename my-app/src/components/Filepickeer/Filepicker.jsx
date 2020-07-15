@@ -34,7 +34,6 @@ export default class Filepicker extends React.Component {
         axios.get("http://192.168.0.94:8017/application/properties/course").then(res => {
             this.curosr = res.data
             this.curosr.forEach(option => {
-
             })
             this.setState({
                 course: this.curosr
@@ -56,6 +55,7 @@ export default class Filepicker extends React.Component {
         const data = new FormData()
         data.append('file', this.state.selectFile);
         data.append('properties', JSON.stringify(properties))
+        console.log(properties)
         axios.post("http://192.168.0.94:8017/application/" + this.state.name, data, {
         })
             .then(res => {

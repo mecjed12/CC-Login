@@ -2,7 +2,6 @@ import React from 'react';
 import './Fileinput2.css';
 import Select from 'react-select';
 
-
 const options = [
   { value: null, label: 'Spalte auswählen...' },
   { value: '0', label: 'Spalte 1' },
@@ -50,7 +49,6 @@ export default class Fileinput extends React.Component {
       this.setState({
         properties2: currenState
       })
-
     }
   }
   onUpload = () => {
@@ -78,11 +76,11 @@ export default class Fileinput extends React.Component {
         <table className="table">
 
           <tbody>
-            {this.state.properties2.map((newState) => {
+            {this.state.properties2.map((newState, index) => {
               var value = options.find(option => option.value === newState.columnValue)
               var x = newState.required ? "*" : "";
               return (
-                <tr>
+                <tr key={index}>
                   <td>{newState.displayName + x}</td>
                   <td><Select
                     value={value}
