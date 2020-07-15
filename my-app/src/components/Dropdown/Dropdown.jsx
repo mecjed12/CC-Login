@@ -7,7 +7,6 @@ const options = [
     { value: true, label: 'Kurse' },
     { value: false, label: 'Personen' },
 ];
-
 export default class Dropdown extends React.Component {
     constructor(props) {
         super(props);
@@ -15,14 +14,12 @@ export default class Dropdown extends React.Component {
             selectionOption: null,
         }
     }
-    
     handelchange = selectionOption => {
         this.setState(
             { selectionOption }
         );
         this.props.toggleClass(selectionOption.value)
     };
-   
     render() {
         return (
             <div className="input-container">
@@ -31,7 +28,7 @@ export default class Dropdown extends React.Component {
                         <tr>
                             <td><Select
                                 value={this.state.selectionOption}
-                                onChange={ this.handelchange}
+                                onChange={this.handelchange}
                                 options={options}
                             /></td>
                         </tr>

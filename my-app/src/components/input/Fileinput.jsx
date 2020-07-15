@@ -20,6 +20,11 @@ const options = [
     { value: '13', label: 'Spalte 14' },
     { value: '14', label: 'Spalte 15' },
     { value: '15', label: 'Spalte 16' },
+    { value: '16', label: 'Spalte 17' },
+    { value: '17', label: 'Spalte 18' },
+    { value: '18', label: 'Spalte 19' },
+    { value: '19', label: 'Spalte 20' },
+
 ];
 export default class Fileinput extends React.Component {
     constructor(props) {
@@ -27,8 +32,6 @@ export default class Fileinput extends React.Component {
         this.state = {
             properties: props.personFields
         }
-        //this.onUpload = this.onUpload.bind(this);
-      
     }
     handleChange = (key, value) => {
         //checkt die Spalten ab ob nicht die gleichen genommen wurde
@@ -44,40 +47,29 @@ export default class Fileinput extends React.Component {
             const currentState = this.state.properties;
             const fieldToUpdate = currentState.find(field => field.propName === key)
             fieldToUpdate.columnValue = value.value
-
             this.setState({
                 properties: currentState
             })
         }
     }
     onUpload = () => {
-        // check for required fields
-        // if (!this.state.name2) {
-        //     alert("Bitte Feld ausfüllen")
-        //     return  
-        // }
-        // ... all fields are filled
-        // const stateToSend = {
-        //     //finishdata = newState.propName,
-        //     // name1: this.state.name1,
-        //     // name2: this.state.name2,
-        //     // title: this.state.title,
-        //     // svNumber: this.state.svNumber,
-        //     // date: this.state.date,
-        //     // Gender: this.state.Gender,
-        //     // busy: this.state.busy,
-        //     // busy_by: this.state.busy_by,
-        //     // picture: this.state.picture,
-        //     // function: this.state.function,
-        //     // email: this.state.email,
-        //     // phoneNumber: this.state.phoneNumber,
-        //     // street: this.state.street,
-        //     // place: this.state.place,
-        //     // country: this.state.country,
-        //     // zipCode: this.state.zipCode
-        // }
-        this.props.upload(this.state.properties)
-    }
+           // check for required fields
+           var popup = false;
+           this.state.properties.forEach(prop => {
+               if(prop.required) {
+                   if(prop.columnValue === null) {
+                       popup = true       
+                   }
+               }
+           })
+           if(popup) {
+               alert("Die mit * gekennzeichneten Felder sind Pflichtfelder!")
+               return
+           }
+           this.props.upload(this.state.properties)
+       }
+       
+    
     render() {
         console.log(this.state)
         return (
