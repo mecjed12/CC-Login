@@ -30,7 +30,12 @@ export default class Fileinput extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
-            properties: props.personFields
+            properties: props.properties
+        }
+    }
+    static getDerivedStateFromProps(nextProps, prevState) {
+        if(nextProps.properties !== prevState.properties) {
+            return {properties: nextProps.properties}
         }
     }
     handleChange = (key, value) => {

@@ -3,7 +3,6 @@ import './Filepicker.css';
 import axios from 'axios';
 import Fileinput from '../input/Fileinput';
 import Dropdown from '../Dropdown/Dropdown';
-import Fileinput2 from '../input/FIleinput2';
 
 export default class Filepicker extends React.Component {
     constructor(props) {
@@ -14,7 +13,7 @@ export default class Filepicker extends React.Component {
             selectFile: null,
             isVisible: true,
             persons: [],
-            course: [],
+            courses: [],
             name: null
         }
     }
@@ -29,14 +28,14 @@ export default class Filepicker extends React.Component {
             })
         }).catch(err => console.log(err))
     }
-    curosr = [];
+    course = [];
     getCursor() {
         axios.get("http://192.168.0.94:8017/application/properties/course").then(res => {
-            this.curosr = res.data
-            this.curosr.forEach(option => {
+            this.course = res.data
+            this.course.forEach(option => {
             })
             this.setState({
-                course: this.curosr
+                courses: this.course
             })
         }).catch(err => console.log(err))
     }
@@ -66,13 +65,13 @@ export default class Filepicker extends React.Component {
             if (this.state.persons.length > 0) {
                 if (this.state.name !== "person")
                     this.setState({ name: "person" })
-                return <Fileinput personFields={this.state.persons} upload={this.onClickHandler} />
+                return <Fileinput properties={this.state.persons} upload={this.onClickHandler} />
             }
         } else {
-            if (this.state.course.length > 0) {
-                if (this.state.name !== "course")
-                    this.setState({ name: "course" })
-                return <Fileinput2 courseFields={this.state.course} upload={this.onClickHandler} />
+            if (this.state.courses.length > 0) {
+                if (this.state.name !== "courses")
+                    this.setState({ name: "courses" })
+                return <Fileinput properties={this.state.courses} upload={this.onClickHandler} />
             }
         }
     }
