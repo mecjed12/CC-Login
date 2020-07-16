@@ -8,7 +8,7 @@ namespace ApplicationData
         [Column("created@")]
         public DateTime CreatedAt { get; set; }
 
-        [Column("modify@")]
+        [Column("modified@")]
         public DateTime? ModifiedAt { get; set; }
 
     }

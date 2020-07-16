@@ -1,14 +1,12 @@
 import React from 'react';
 import '../Dropdown/Dropdown.css';
 import Select from 'react-select';
-import Fileinput from '../input/Fileinput';
-import Fileinput2 from '../input/FIleinput2';
+
 
 const options = [
-    { value: 'Course', label: 'Kurse' },
-    { value: 'Person', label: 'Personen' },
+    { value: true, label: 'Kurse' },
+    { value: false, label: 'Personen' },
 ];
-
 export default class Dropdown extends React.Component {
     constructor(props) {
         super(props);
@@ -16,15 +14,12 @@ export default class Dropdown extends React.Component {
             selectionOption: null,
         }
     }
-    
     handelchange = selectionOption => {
         this.setState(
-            { selectionOption },
-            () => console.log('Option selected:', this.state.selectionOption)
+            { selectionOption }
         );
-        this.props.toggleClass()
+        this.props.toggleClass(selectionOption.value)
     };
-   
     render() {
         return (
             <div className="input-container">
@@ -33,7 +28,7 @@ export default class Dropdown extends React.Component {
                         <tr>
                             <td><Select
                                 value={this.state.selectionOption}
-                                onChange={ this.handelchange}
+                                onChange={this.handelchange}
                                 options={options}
                             /></td>
                         </tr>

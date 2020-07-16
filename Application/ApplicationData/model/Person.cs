@@ -1,4 +1,4 @@
-﻿using ApplicationData;
+﻿using ApplicationData.attribute;
 using ApplicationData.enums;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -11,14 +11,14 @@ namespace ApplicationData.model
 	[Table("person")]
 	public class Person : BasePerson, IApplicationClass
 	{
-		[ApplicationProperty("Titel")]
+		[ApplicationProperty(DisplayName = "Titel")]
 		public string Title { get; set; }
 
-		[ApplicationProperty("Sozialversicherungsnummer")]
+		[ApplicationProperty(DisplayName = "Sozialversicherungsnummer")]
 		[Column("sv_nr")]
 		public long? SVNumber { get; set; }
 
-		[ApplicationProperty("Geschlecht")]
+		[ApplicationProperty(DisplayName = "Geschlecht")]
 		public string Gender { get; set; }
 
 		public string Busy { get; set; }
@@ -40,18 +40,36 @@ namespace ApplicationData.model
 		[Column("newsletter_flag")]
 		public bool NewsletterFlag { get; set; }
 
-
+		[Relation]
 		public List<RelPersonAddress> PAddress { get; set; }
 
+		[Relation]
 		public List<Contact> Contacts { get; set; }
-
 
 		public List<PropertyInfo> GetProperties()
 		{
-			var PersonProps = GetType().GetProperties().Where(p => p.IsDefined(typeof(ApplicationProperty), true)).ToList();
-			PersonProps.AddRange(new Address().GetProperties());
-			PersonProps.AddRange(new Contact().GetProperties());
+			var PersonProps = GetType().GetProperties().Where(p => p.IsDefined(typeof(ApplicationPropertyAttribute), true)).ToList();
+			var SubProps = GetSubclasses();
+			SubProps.ForEach(subClass =>
+			{
+				PersonProps.AddRange(subClass.GetProperties());
+			});
 			return PersonProps;
 		}
+
+		public List<IApplicationSubclass> GetSubclasses()
+		{
+			return new List<IApplicationSubclass>
+			{
+				new Address(),
+				new Contact()
+			};
+		}
+
+		public List<PropertyInfo> GetSubclassProperties()
+		{
+			//return GetType().GetProperties().Where(p => p.IsDefined(typeof(SubclassPropertyAttribute), false)).ToList();
+			return new List<PropertyInfo> { };
+		} 
 	}
 }

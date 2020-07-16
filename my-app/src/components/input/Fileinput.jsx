@@ -20,218 +20,82 @@ const options = [
     { value: '13', label: 'Spalte 14' },
     { value: '14', label: 'Spalte 15' },
     { value: '15', label: 'Spalte 16' },
-   
-];
+    { value: '16', label: 'Spalte 17' },
+    { value: '17', label: 'Spalte 18' },
+    { value: '18', label: 'Spalte 19' },
+    { value: '19', label: 'Spalte 20' },
 
+];
 export default class Fileinput extends React.Component {
     constructor(props) {
-        super(props);
-        this.state = { 
-            name1: null,
-            name2: null,
-            title: null,
-            svNumber: null,
-            date: null,
-            Gender: null,
-            busy: null,
-            busy_by: null,
-            picture: null,
-            function: null,
-            email: null,
-            phoneNumber: null,
-            street: null,
-            place: null,
-            country: null,
-            zipCode: null
+        super(props)
+        this.state = {
+            properties: props.properties
         }
     }
-
+    static getDerivedStateFromProps(nextProps, prevState) {
+        if(nextProps.properties !== prevState.properties) {
+            return {properties: nextProps.properties}
+        }
+    }
     handleChange = (key, value) => {
         //checkt die Spalten ab ob nicht die gleichen genommen wurde
-        const selectedValues = Object.values(this.state)
+        const selectedValues = Object.values(this.state.properties)
         var isDuplicate = false;
         selectedValues.forEach(selectedValue => {
-            if (value.value !== null && selectedValue === value.value) {
+            if (value.value !== null && selectedValue.columnValue === value.value) {
                 alert("Spalte bereits ausgewählt!")
                 isDuplicate = true;
-            } 
+            }
         })
         if (!isDuplicate) {
-            console.log(value)
+            const currentState = this.state.properties;
+            const fieldToUpdate = currentState.find(field => field.propName === key)
+            fieldToUpdate.columnValue = value.value
             this.setState({
-                [key]: value.value
-                
+                properties: currentState
             })
         }
     }
-
     onUpload = () => {
-        // check for required fields
-        if (!this.state.name2) {
-            alert("Bitte Feld ausfüllen")
-            return
-        }
-        // ... all fields are filled
-        const stateToSend = {
-            name1: this.state.name1,
-            name2: this.state.name2,
-            title: this.state.title,
-            svNumber: this.state.svNumber,
-            date: this.state.date,
-            Gender: this.state.Gender,
-            busy: this.state.busy,
-            busy_by: this.state.busy_by,
-            picture: this.state.picture,
-            function: this.state.function,
-            email: this.state.email,
-            phoneNumber: this.state.phoneNumber,
-            street: this.state.street,
-            place: this.state.place,
-            country: this.state.country,
-            zipCode: this.state.zipCode
-
-        }
-      
-
-        this.props.upload(stateToSend)
-    }
-
+           // check for required fields
+           var popup = false;
+           this.state.properties.forEach(prop => {
+               if(prop.required) {
+                   if(prop.columnValue === null) {
+                       popup = true       
+                   }
+               }
+           })
+           if(popup) {
+               alert("Die mit * gekennzeichneten Felder sind Pflichtfelder!")
+               return
+           }
+           this.props.upload(this.state.properties)
+       }
+       
+    
     render() {
+        console.log(this.state)
         return (
             <div className="input-container">
                 <table>
                     <tbody>
-                   
-                        <tr>
-                            <td>Vorname</td>
-                            <td> <Select
-                                value={options.find(option => option.value === this.state.name1)}
-                                onChange={(newValue) => this.handleChange('name1', newValue)}
-                                options={options}
-                            /></td>
-                        </tr>
-                        <tr>
-                            <td>Nachname *</td>
-                            <td> <Select
-                                value={options.find(option => option.value === this.state.name2)}
-                                onChange={(newValue) => this.handleChange('name2', newValue)}
-                                options={options} 
-                            /></td>
-                        </tr>
-                        <tr>
-                            <td>Titel</td>
-                            <td> <Select
-                                value={options.find(option => option.value === this.state.title)}
-                                onChange={(newValue) => this.handleChange('title', newValue)}
-                                options={options}
-                            /></td>
-                        </tr>
-                        <tr>
-                            <td>SV-Nummer</td>
-                            <td> <Select
-                                value={options.find(option => option.value === this.state.svNumber)}
-                                onChange={(newValue) => this.handleChange('svNumber', newValue)}
-                                options={options}
-                            /></td>
-                        </tr>
-                        <tr>
-                            <td>Geburtsdatum</td>
-                            <td> <Select
-                                value={options.find(option => option.value === this.state.date)}
-                                onChange={(newValue) => this.handleChange('date', newValue)}
-                                options={options}
-                            /></td>
-                        </tr>
-                        <tr>
-                            <td>Geschlecht</td>
-                            <td> <Select
-                                value={options.find(option => option.value === this.state.Gender)}
-                                onChange={(newValue) => this.handleChange('Gender', newValue)}
-                                options={options}
-                            /></td>
-                        </tr>
-                        <tr>
-                            <td>Beschäftigt</td>
-                            <td> <Select
-                                value={options.find(option => option.value === this.state.busy)}
-                                onChange={(newValue) => this.handleChange('busy', newValue)}
-                                options={options}
-                            /></td>
-                        </tr>
-                        <tr>
-                            <td>Bäschftigtbei</td>
-                            <td> <Select
-                                value={options.find(option => option.value === this.state.busy_by)}
-                                onChange={(newValue) => this.handleChange('busy_by', newValue)}
-                                options={options}
-                            /></td>
-                        </tr>
-                        <tr>
-                            <td>Foto</td>
-                            <td> <Select
-                                value={options.find(option => option.value === this.state.picture)}
-                                onChange={(newValue) => this.handleChange('picture', newValue)}
-                                options={options}
-                            /></td>
-                        </tr>
-                        <tr>
-                            <td>Funktion</td>
-                            <td> <Select
-                                value={options.find(option => option.value === this.state.function)}
-                                onChange={(newValue) => this.handleChange('function', newValue)}
-                                options={options}
-                            /></td>
-                        </tr>
-                        <tr>
-                            <td>E-Mail</td>
-                            <td> <Select
-                                value={options.find(option => option.value === this.state.email)}
-                                onChange={(newValue) => this.handleChange('email', newValue)}
-                                options={options}
-                            /></td>
-                        </tr>
-                        <tr>
-                            <td>Telefonnummer</td>
-                            <td> <Select
-                                value={options.find(option => option.value === this.state.phoneNumber)}
-                                onChange={(newValue) => this.handleChange('phoneNumber', newValue)}
-                                options={options}
-                            /></td>
-                        </tr>
-                        <tr>
-                            <td>Straße</td>
-                            <td> <Select
-                                value={options.find(option => option.value === this.state.street)}
-                                onChange={(newValue) => this.handleChange('street', newValue)}
-                                options={options}
-                            /></td>
-                        </tr>
-                        <tr>
-                            <td>Ort</td>
-                            <td> <Select
-                                value={options.find(option => option.value === this.state.place)}
-                                onChange={(newValue) => this.handleChange('place', newValue)}
-                                options={options}
-                            /></td>
-                        </tr>
-                        <tr>
-                            <td>ZipCode</td>
-                            <td> <Select
-                                value={options.find(option => option.value === this.state.zipCode)}
-                                onChange={(newValue) => this.handleChange('zipCode', newValue)}
-                                options={options}
-                            /></td>
-                        </tr>
-                        <tr>
-                            <td>Bundesland</td>
-                            <td> <Select
-                                value={options.find(option => option.value === this.state.country)}
-                                onChange={(newValue) => this.handleChange('country', newValue)}
-                                options={options}
-                            /></td>
-                        </tr>
-                       
-                       
+                        {this.state.properties.map((newState) => {
+                            var value = options.find(option => option.value === newState.columnValue)
+                            var x = newState.required ? " *" : "";
+                            return (
+                                <tr>
+                                    <td>{newState.displayName + x}</td>
+                                    <td> <Select
+                                        value={value}
+                                        onChange={(newValue) => this.handleChange(newState.propName, newValue)}
+                                        options={options}
+                                    /></td>
+                                </tr>
+                            )
+                        }
+                        )}
                     </tbody>
                 </table>
                 <div type="button" className="button-click" onClick={() => this.onUpload()}>Upload</div>

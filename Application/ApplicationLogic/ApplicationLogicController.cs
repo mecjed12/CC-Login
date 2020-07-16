@@ -1,7 +1,9 @@
 ﻿using ApplicationData;
+using ApplicationData.attribute;
 using ApplicationData.model;
 using ApplicationData.repo;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -16,47 +18,34 @@ namespace ApplicationLogic
 
 		readonly DcvEntities Entities;
 
-		public PersonRepository PersonRepo;
-		public CourseRepository CourseRepo;
-
-
 		public ApplicationLogicController(DcvEntities entities)
 		{
 			Entities = entities;
-			PersonRepo = new PersonRepository(entities);
-			CourseRepo = new CourseRepository(entities);
 		}
-
-		public List<Person> GetPeople()
-		{
-			return PersonRepo.GetAll();
-		}
-
-		public Person GetPersonById(int id)
-		{
-			return null;
-		}
-
-		public List<Course> GetCourses()
-		{
-			return CourseRepo.GetAll();
-		}
-
-		public Course GetCourseById(int id)
-		{
-			return CourseRepo.GetAll().FirstOrDefault(x => x.Id == id);
-		}
-
+		/// <summary>
+		/// Gets a list of all the MappableProperties from className
+		/// </summary>
+		/// <param name="className"></param>
+		/// <returns>List of MappableProperties from className</returns>
 		public List<MappableProperties> GetProperties(string className)
+		{
+			var type = GetApplicationTypes().FirstOrDefault(x => x.Name.Equals(className, StringComparison.InvariantCultureIgnoreCase));
+
+			return GetProperties(type);
+		}
+
+		/// <summary>
+		/// Gets a list of all the MappableProperties from type
+		/// </summary>
+		/// <param name="type"></param>
+		/// <returns>List of MappableProperties from type</returns>
+		public List<MappableProperties> GetProperties(Type type)
 		{
 			var props = new List<MappableProperties>();
 
-			var types = GetApplicationTypes();
-			var type = types.FirstOrDefault(x => x.Name.Equals(className, StringComparison.InvariantCultureIgnoreCase));
-
-			if(type != null)
+			if (type != null)
 			{
-				if(Activator.CreateInstance(type) is IApplicationClass appClass)
+				if (Activator.CreateInstance(type) is IApplicationClass appClass)
 				{
 					props = appClass.GetProperties().Select(x => CreateMappable(x)).ToList();
 				}
@@ -65,182 +54,201 @@ namespace ApplicationLogic
 			return props;
 		}
 
+		/// <summary>
+		/// Gets a list of Types that inherent from IApplicationClass
+		/// </summary>
+		/// <returns>List of types that inherent from IApplicationClass</returns>
 		public List<Type> GetApplicationTypes()
 		{
 			var type = typeof(IApplicationClass);
 			return AppDomain.CurrentDomain.GetAssemblies().SelectMany(x => x.GetTypes()).Where(x => type.IsAssignableFrom(x) && x != type).ToList();
 		}
 
-		//TODO
-		public List<string> GetTypeNames()
+		/// <summary>
+		/// Gets the Repository of T
+		/// </summary>
+		/// <typeparam name="T"></typeparam>
+		/// <param name="t"></param>
+		/// <returns>Repository of T</returns>
+		public Repository<T> GetRepository<T>(T t) where T : class
 		{
-			return GetApplicationTypes().Select(x => x.Name).ToList();
+			var u = typeof(T);
+			var type = AppDomain.CurrentDomain.GetAssemblies().SelectMany(x => x.GetTypes()).FirstOrDefault(y => y.IsSubclassOf(typeof(Repository<T>)));
+			if (Activator.CreateInstance(type, Entities) is Repository<T> repo)
+			{
+				return repo;
+			}
+			return null;
 		}
 
+
+		/// <summary>
+		/// Creates the MappableProperties from the PropertyInfo
+		/// </summary>
+		/// <param name="info"></param>
+		/// <returns>MappableProperties</returns>
 		public MappableProperties CreateMappable(PropertyInfo info)
 		{
 			return new MappableProperties()
 			{
 				PropName = info.Name,
-				DisplayName = info.GetCustomAttribute<ApplicationProperty>()?.DisplayName == null ? info.Name : info.GetCustomAttribute<ApplicationProperty>().DisplayName
+				DisplayName = info.GetCustomAttribute<ApplicationPropertyAttribute>()?.DisplayName == null ? info.Name : info.GetCustomAttribute<ApplicationPropertyAttribute>().DisplayName,
+				Required = info.GetCustomAttribute<ApplicationPropertyAttribute>().Required
 			};
 		}
 
 
-		/// <summary>
-		/// Adds a person to the database if the person isn't on the database
-		/// </summary>
-		/// <param name="person"></param>
-		/// <returns>returns id of added person.</returns>
-		public int AddPerson(Person person)
+		//TODO Add checks if appClass/subClass already exist
+		public void AddObjectsFromCSV(Stream stream, List<MappableProperties> properties, string className)
 		{
-			//TODO Wait for more than one non nullable value that i can use
-			//var p = Entities.People.FirstOrDefault(x => x.Name1.Equals(person.Name1) && x.Name2.Equals(person.Name2));
+			Type type = GetApplicationTypes().FirstOrDefault(x => x.Name.Equals(className, StringComparison.InvariantCultureIgnoreCase));
 
-			//if(p != null)
-			//{
-			//    return p.Id;
-			//}
+			if (type == null)
+				throw new InvalidTypeException();
 
-			Entities.People.Add(person);
-			Entities.SaveChanges();
-
-			return person.Id;
-		}
-
-
-		/// <summary>
-		/// Adds a course to the database if the course isn't on the database
-		/// </summary>
-		/// <param name="course"></param>
-		/// <returns>0 when course was added. 1 when course is already in the database</returns>
-		public int AddCourse(Course course)
-		{
-			var c = Entities.Courses.FirstOrDefault(x => x.Title == course.Title && x.Category == x.Category);
-
-			if(c != null)
+			using (var reader = new StreamReader(stream))
 			{
-				return 1;
+				int index = 0;
+				while (reader.Peek() != -1)
+				{
+					var created = DateTime.Now;
+
+					var line = reader.ReadLine();
+					index++;
+					var args = line.Split(';');
+
+					try
+					{
+						if (Activator.CreateInstance(type) is IApplicationClass appClass)
+						{
+							dynamic dynamicAppClass = Convert.ChangeType(appClass, type);
+							var typeRepository = GetRepository(dynamicAppClass);
+
+							var appClassRelations = appClass.GetType().GetProperties().Where(x => x.IsDefined(typeof(RelationAttribute))).ToList();
+
+							var subClasses = appClass.GetSubclasses();
+
+							properties.ForEach(prop =>
+							{
+								var p = type.GetProperty(prop.PropName);
+								if(p != null)
+								{
+									p.SetValue(appClass, GetValue(p.PropertyType, args, prop.ColumnValue));
+								}
+							});
+
+							var createdP = type.GetProperty("CreatedAt");
+							if(createdP != null)
+							{
+								createdP.SetValue(appClass, created);
+							}
+
+							foreach (var sub in subClasses)
+							{
+								Type subType = sub.GetType();
+
+								if (Activator.CreateInstance(subType) is IApplicationSubclass subClass)
+								{
+									dynamic dynamicSubClass = Convert.ChangeType(subClass, subType);
+									var subTypeRepository = GetRepository(dynamicSubClass);
+
+									var subClassRelations = subClass.GetType().GetProperties().Where(x => x.IsDefined(typeof(RelationAttribute))).ToList();
+
+									bool changed = false;
+
+									properties.ForEach(prop =>
+									{
+										var p = subType.GetProperty(prop.PropName);
+										if (p != null && prop.ColumnValue != null)
+										{
+											p.SetValue(subClass, GetValue(p.PropertyType, args, prop.ColumnValue));
+											changed = changed ? changed : p.GetValue(subClass) != null;
+										}
+									});
+
+									if (changed)
+									{
+
+										createdP = subType.GetProperty("CreatedAt");
+										if (createdP != null)
+										{
+											createdP.SetValue(subClass, created);
+										}
+
+										var keys = subType.GetProperties().Where(x => x.IsDefined(typeof(RelationAttribute))).ToList();
+
+										keys.ForEach(key =>
+										{
+											//Create RelationClass when appClass and subClass are connected using a RelationClass
+											if (typeof(IList).IsAssignableFrom(key.PropertyType) && key.PropertyType.GenericTypeArguments[0].IsDefined(typeof(RelationAttribute)))
+											{
+												if (Activator.CreateInstance(key.PropertyType.GenericTypeArguments[0]) is object relationClass)
+												{
+													createdP = relationClass.GetType().GetProperty("CreatedAt");
+													if (createdP != null)
+													{
+														createdP.SetValue(relationClass, created);
+													}
+
+													var relations = relationClass.GetType().GetProperties().Where(x => x.IsDefined(typeof(RelationAttribute))).ToList();
+													
+													//Add the appClass/subClass to the relationClass
+													AddRelation(relations, relationClass, appClass);
+													AddRelation(relations, relationClass, subClass);
+													//Add the relationClass to the appClass/subClass or add the relationClass to the list in appClass/subClass 
+													AddRelation(appClassRelations, appClass, relationClass);
+													AddRelation(subClassRelations, subClass, relationClass);
+												}
+											}
+											else //Make connection when appClass and subClass are connected directly
+											{
+												//Add the appClass/subClass to the appClass/subClass
+												AddRelation(appClassRelations, appClass, subClass);
+												AddRelation(subClassRelations, subClass, appClass);
+											}
+										});
+									}
+								}
+							}
+							Entities.Add(appClass);
+						}
+					}
+					catch (FormatException e)
+					{
+						throw new FormatException($"An error occured on line {index}, {e.Message} is wrongly fromated", e);
+					}
+					catch(Exception e)
+					{
+						throw e;
+					}  
+				}
 			}
-
-			Entities.Courses.Add(course);
 			Entities.SaveChanges();
-
-			return 0;
 		}
 
-		public void AddPeopleFromCSV(Stream stream, List<MappableProperties> config)
+		/// <summary>
+		/// Adds the value to the obj or adds the value to the list in obj
+		/// </summary>
+		/// <param name="properties"></param>
+		/// <param name="obj"></param>
+		/// <param name="value"></param>
+		private static void AddRelation(List<PropertyInfo> properties, object obj, object value)
 		{
-			var x = config;
-			//TODO
-			//Debug.WriteLine(base64File);
-			//byte[] data = Convert.FromBase64String(base64File);
-			//string s = Encoding.UTF8.GetString(data);
-
-			//Encoding.GetEncoding(1250)
-			//using(var reader = new StreamReader(stream))
-			//{
-			//	while(reader.Peek() != -1)
-			//	{
-			//		var created = DateTime.Now;
-
-			//		var line = reader.ReadLine();
-			//		var args = line.Split(';');
-
-			//		var person = new Person()
-			//		{
-			//			Name1 = GetValue(args, config.Name1),
-			//			Name2 = GetValue(args, config.Name2),
-			//			Title = GetValue(args, config.Title),
-			//			Gender = GetValue(args, config.Gender),
-			//			SVNumber = GetValueDouble(args, config.SVNumber),
-			//			Date = GetValueDate(args, config.Date),
-			//			Active = true,
-			//			DeletedInactive = false,
-			//			NewsletterFlag = false,
-			//			Function = null,
-			//			CreatedAt = created
-			//		};
-
-			//		var p = Entities.People.FirstOrDefault(x => x.Name1.Equals(person.Name1) && x.Name2.Equals(person.Name2));
-
-			//		if(p != null)
-			//		{
-			//			continue;
-			//		}
-
-			//		Entities.People.Add(person);
-			//		Entities.SaveChanges();
-
-			//		if(config.Email != null)
-			//		{
-			//			var email = GetValue(args, config.Email);
-			//			if(email != null)
-			//			{
-
-			//				var contact = new Contact()
-			//				{
-			//					ArtOfCommunication = EKindOfCommunication.Email,
-			//					ContactValue = email,
-			//					ContactType = EContactType.Privat,
-			//					PersonId = person.Id,
-			//					CreatedAt = created
-			//				};
-
-			//				Entities.Add(contact);
-			//			}
-			//		}
-
-			//		if(config.PhoneNumber != null)
-			//		{
-			//			var number = GetValue(args, config.PhoneNumber);
-			//			if(number != null)
-			//			{
-			//				var contact = new Contact()
-			//				{
-			//					ArtOfCommunication = EKindOfCommunication.Telefon,
-			//					ContactValue = number,
-			//					ContactType = EContactType.Privat,
-			//					PersonId = person.Id,
-			//					CreatedAt = created
-			//				};
-
-			//				Entities.Add(contact);
-			//			}
-			//		}
-
-			//		if(config.Country != null || config.Place != null || config.Street != null || config.ZipCode != null)
-			//		{
-			//			var country = GetValue(args, config.Country);
-			//			var place = GetValue(args, config.Place);
-			//			var street = GetValue(args, config.Street);
-			//			var zipCode = GetValueInt(args, config.ZipCode);
-
-			//			if(country != null || place != null || street != null || zipCode != null)
-			//			{
-			//				var address = new Address()
-			//				{
-			//					Country = country,
-			//					Street = street,
-			//					Place = place,
-			//					ZipCode = zipCode,
-			//					CreatedAt = created
-			//				};
-
-			//				Entities.Add(address);
-			//				Entities.SaveChanges();
-
-			//				var pAddress = new RelPersonAddress()
-			//				{
-			//					AddressId = address.Id,
-			//					PersonId = person.Id
-			//				};
-			//				Entities.Add(pAddress);
-			//			}
-			//		}
-			//	}
-			//	Entities.SaveChanges();
-			//}
+			properties.ForEach(rel =>
+			{
+				if (rel.PropertyType == value.GetType())
+				{
+					rel.SetValue(obj, value);
+				}
+				else if (typeof(IList).IsAssignableFrom(rel.PropertyType) && rel.PropertyType.GenericTypeArguments[0] == value.GetType())
+				{
+					var temp = rel.GetValue(obj) as IList;
+					if (temp == null)
+						temp = Activator.CreateInstance(rel.PropertyType) as IList;
+					temp.Add(value);
+					rel.SetValue(obj, temp);
+				}
+			});
 		}
 
 		//https://localhost:44375/registration/person
@@ -279,61 +287,58 @@ namespace ApplicationLogic
 			//Entities.SaveChanges();
 		}
 
-		private string GetValue(string[] args, int? position)
+		/// <summary>
+		/// Gets the value from the array 
+		/// </summary>
+		/// <param name="type"></param>
+		/// <param name="args"></param>
+		/// <param name="position"></param>
+		/// <returns>Returns the value of the position in args as type. Returns null when posistion null</returns>
+		private object GetValue(Type type, string[] args, int? position)
 		{
-			if(position == null)
+			var codes = (TypeCode[])Enum.GetValues(typeof(TypeCode));
+
+			//Get the base type when type is nullable
+			type = Nullable.GetUnderlyingType(type) ?? type;
+
+			if (position == null || position >= args.Length)
 				return null;
 
-			string x = args[(int) position];
+			var value = args[(int)position];
 
-			if(string.IsNullOrWhiteSpace(x))
+			if (string.IsNullOrWhiteSpace(value))
 				return null;
 
-			return x;
+			if (type == typeof(string))
+			{
+				return value;
+			}
+
+			if(type.BaseType == typeof(Enum)) {
+				return Enum.Parse(type, value);
+			}
+
+			foreach (var code in codes)
+			{
+				if (Type.GetTypeCode(type) == code && code != TypeCode.Object)
+				{
+					try
+					{
+						return Convert.ChangeType(value, type);
+					}
+					catch (FormatException)
+					{
+						throw new FormatException($"{value}");
+					}
+				}
+			}
+			return null;
 		}
+	}
 
-		private int? GetValueInt(string[] args, int? position)
-		{
-			var x = GetValue(args, position);
-
-			if(x == null)
-				return null;
-
-			return int.Parse(x);
-		}
-
-		private long? GetValueLong(string[] args, int? position)
-		{
-			var x = GetValue(args, position);
-
-			if(x == null)
-				return null;
-
-			return long.Parse(x);
-		}
-
-		//TODO
-		[Obsolete]
-		private bool GetValueBool(string[] args, int? position)
-		{
-			var x = GetValue(args, position);
-
-			if(x == null)
-				return false;
-
-			return bool.Parse(x);
-		}
-
-		private DateTime? GetValueDate(string[] args, int? position)
-		{
-			var x = GetValue(args, position);
-
-			if(x == null)
-				return null;
-
-			var date = DateTime.Parse(x);
-
-			return date;
-		}
+	struct ApplicationType
+	{
+		public string Name { get; set; }
+		public string DisplayName { get; set; }
 	}
 }
