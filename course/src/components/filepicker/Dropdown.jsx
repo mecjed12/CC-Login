@@ -1,27 +1,25 @@
 import React from 'react';
 import Select from 'react-select';
-import Persontable from '../table/Persontable';
-import Coursetable from '../table/Coursetable';
+
 
 const options = [
-    { value: 'Course', label: 'KURSE' },
-    { value: 'Person', label: 'PERSONEN' },
+    { value: true, label: 'KURSE' },
+    { value: false, label: 'PERSONEN' },
 ];
 
 export default class Dropdown extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            selectedOption: null,
+            selectedOption: null
         }
     }
     
     handelchange = selectedOption => {
         this.setState(
             {selectedOption},
-            () => console.log('Option selected:', this.state.selectedOption)
         );
-        this.props.toggleClass()
+        this.props.toggleClass(selectedOption.value)
     };
    
     render() {
