@@ -9,7 +9,6 @@ using Microsoft.AspNetCore.Http;
 
 namespace ApplicationAPI.Controllers
 {
-	[EnableCors]
 	[Route("[controller]")]
 	[ApiController]
 	public class ApplicationController : ControllerBase
@@ -29,7 +28,7 @@ namespace ApplicationAPI.Controllers
 		}
 
 		[HttpPost("{className}")]
-		public void AddObjectsFromFile(string className, [FromForm] ApplicationFile file)
+		public async void AddObjectsFromFile(string className, [FromForm] ApplicationFile file)
 		{
 			if (file.File != null && file.GetProperties() != null)
 			{
@@ -38,18 +37,27 @@ namespace ApplicationAPI.Controllers
 					using var stream = file.File.OpenReadStream();
 					Program.controller.AddObjectsFromCSV(stream, file.GetProperties(), className);
 				}
-				catch (Exception e)
+				catch (InvalidTypeException)
+				{
+					Response.StatusCode = 400;
+					await Response.WriteAsync($"{className} is not a valid type");
+				}
+				catch(FormatException e)
+				{
+					Response.StatusCode = 400;
+					await Response.WriteAsync(e.Message);
+				}
+				catch(Exception e)
 				{
 					Console.WriteLine(e.Message);
-					Console.WriteLine(e.InnerException);
-					Response.StatusCode = 400;
-					Response.WriteAsync(e.Message);
+					Response.StatusCode = 402;
+					await Response.WriteAsync($"Something went wrong {e}");
 				}
 			}
 			else
 			{
 				Response.StatusCode = 415;
-				Response.WriteAsync("File or Properties is null");
+				await Response.WriteAsync( "File or Properties is null");
 			}
 		}
 

@@ -108,11 +108,13 @@ namespace ApplicationLogic
 
 			using (var reader = new StreamReader(stream))
 			{
+				int index = 0;
 				while (reader.Peek() != -1)
 				{
 					var created = DateTime.Now;
 
 					var line = reader.ReadLine();
+					index++;
 					var args = line.Split(';');
 
 					try
@@ -157,7 +159,7 @@ namespace ApplicationLogic
 									properties.ForEach(prop =>
 									{
 										var p = subType.GetProperty(prop.PropName);
-										if (p != null)
+										if (p != null && prop.ColumnValue != null)
 										{
 											p.SetValue(subClass, GetValue(p.PropertyType, args, prop.ColumnValue));
 											changed = changed ? changed : p.GetValue(subClass) != null;
@@ -211,11 +213,14 @@ namespace ApplicationLogic
 							Entities.Add(appClass);
 						}
 					}
-					catch (Exception e)
+					catch (FormatException e)
 					{
-						Console.WriteLine(e);
-						throw e;
+						throw new FormatException($"An error occured on line {index}, {e.Message} is wrongly fromated", e);
 					}
+					catch(Exception e)
+					{
+						throw e;
+					}  
 				}
 			}
 			Entities.SaveChanges();
@@ -321,9 +326,9 @@ namespace ApplicationLogic
 					{
 						return Convert.ChangeType(value, type);
 					}
-					catch (FormatException e)
+					catch (FormatException)
 					{
-						throw e;
+						throw new FormatException($"{value}");
 					}
 				}
 			}
