@@ -24,9 +24,9 @@ namespace ApplicationData.repo
             return Entities.Set<T>().ToList();
         }
 
-        public virtual T Exists(T t)
+        public virtual T GetOne(T t)
 		{
-            return null;
+            return Entities.Set<T>().FirstOrDefault(x => x == t);
 		}
-    }
+	}
 }

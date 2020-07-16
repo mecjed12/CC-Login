@@ -1,6 +1,7 @@
 ﻿using ApplicationData.model;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace ApplicationData.repo
@@ -12,9 +13,9 @@ namespace ApplicationData.repo
 		}
 
 		//TODO create check
-		public override Contact Exists(Contact t)
+		public override Contact GetOne(Contact contact)
 		{
-			return base.Exists(t);
+			return Entities.Contacts.FirstOrDefault(x => x.ContactValue == contact.ContactValue);
 		}
 	}
 }

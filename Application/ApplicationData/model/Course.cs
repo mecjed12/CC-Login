@@ -57,11 +57,5 @@ namespace ApplicationData.model
         {
             return new List<IApplicationSubclass> { };
         }
-
-		public List<PropertyInfo> GetSubclassProperties()
-		{
-            return new List<PropertyInfo> { };
-
-		}
 	}
 }

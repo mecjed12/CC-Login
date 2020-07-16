@@ -12,8 +12,10 @@ namespace ApplicationData.model
 	{
 		public int Id { get; set; }
 
+		[Relation(Relation = typeof(Address))]
 		public int AddressId { get; set; }
 
+		[Relation(Relation = typeof(Person))]
 		public int PersonId { get; set; }
 
 		[Column("contact_type")]
