@@ -1,26 +1,48 @@
 import React from 'react';
 import './Fileinput.css';
 import Select from 'react-select';
+import axios from 'axios';
+
 
 let options = [];
 export default class Fileinput extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
-            properties: props.properties
-        }         
-    }
-    static getDerivedStateFromProps(nextProps, prevState) {
-        if (nextProps.properties !== prevState.properties) {
-            return { properties: nextProps.properties }
+            properties: [],
+            name: null
         }
+        
+        this.componentDidUpdate (this.state)
+    }
+
+    componentDidUpdate(prevProps) {
+        if(this.props.name !== prevProps.name) {
+            this.getProperties(this.props.name)
+        }
+    }
+
+    static getDerivedStateFromProps(nextProps, prevState) {
+        
+        if (nextProps.name !== prevState.name) {
+            
+            return { name: nextProps.name }        
+        }
+    }
+
+    getProperties(name) {
+        axios.get("http://192.168.0.94:8017/application/properties/" + name).then(res => {
+            this.setState({
+                properties: res.data
+            })
+        }).catch(err => console.log(err))
     }
 
     createOptions() {
         options = [{ value: null, label: 'Spalte auswählen ...' }]
-        for(var i = 0; i < this.state.properties.length; i++) {
-            options.push({value: i, label: 'Spalte '+ (+i + 1)})
-            console.log(options);    
+        for (var i = 0; i < this.state.properties.length; i++) {
+            options.push({ value: i, label: 'Spalte ' + (+i + 1) })
+
         }
     }
 
@@ -58,17 +80,19 @@ export default class Fileinput extends React.Component {
             return
         }
         this.props.upload(this.state.properties)
-        
-        
-        
+        window.alert("Sucess")
+        this.getProperties(this.state.name)
     }
     render() {
         console.log(this.state)
         return (
             <div className="input-container">
-            {this.createOptions()}
+                {this.createOptions()}
                 <table>
                     <tbody>
+                        {console.log(this.state.properties)}
+                        {console.log(this.state.name)}
+                        {/*this.getProperties()*/}
                         {this.state.properties.map((newState) => {
                             var value = options.find(option => option.value === newState.columnValue)
                             var x = newState.required ? "*" : "";

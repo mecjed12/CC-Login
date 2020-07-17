@@ -4,8 +4,8 @@ import Select from 'react-select';
 
 
 const options = [
-    { value: true, label: 'Kurse' },
-    { value: false, label: 'Personen' },
+    { value: 'course', label: 'Kurse' },
+    { value: 'person', label: 'Personen' },
 ];
 export default class Dropdown extends React.Component {
     constructor(props) {
@@ -20,6 +20,15 @@ export default class Dropdown extends React.Component {
         );
         this.props.toggleClass(selectionOption.value)
     };
+
+    
+    createOptions() {
+        options = [{ value: null, label: 'Spalte auswählen ...' }]
+        for (var i = 0; i < this.state.properties.length; i++) {
+            options.push({ value: i, label: 'Spalte ' + (+i + 1) })
+
+        }
+    }
     render() {
         return (
             <div className="input-container">

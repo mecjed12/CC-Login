@@ -18,6 +18,7 @@
     "react-multi-select-component": "^2.0.12",
     "react-scripts": "3.4.1",
     "react-select": "^3.1.0"
+  
   },
   "scripts": {
     "start": "react-scripts start",
