@@ -50,14 +50,14 @@ namespace ApplicationAPI.Controllers
 				catch(Exception e)
 				{
 					Console.WriteLine(e.Message);
-					Response.StatusCode = 402;
-					await Response.WriteAsync($"Something went wrong {e}");
+					Response.StatusCode = 400;
+					await Response.WriteAsync(e.Message);
 				}
 			}
 			else
 			{
 				Response.StatusCode = 415;
-				await Response.WriteAsync( "File or Properties is null");
+				await Response.WriteAsync("File or Properties is null");
 			}
 		}
 

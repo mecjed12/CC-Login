@@ -10,19 +10,17 @@ using System.Text;
 
 namespace ApplicationData.model
 {
+	[Table("contact")]
 	public class Contact : CreatedModify, IApplicationSubclass
 	{
 		public int Id { get; set; }
 
-		[Relation(Relation = typeof(Person))]
 		[Column("person_id")]
 		public int PersonId { get; set; }
 
-		[ApplicationProperty]
 		[Column("art_of_communication")]
 		public EKindOfCommunication ArtOfCommunication { get; set; }
 
-		[ApplicationProperty]
 		[Column("contact_value")]
 		public string ContactValue { get; set; }
 
@@ -30,9 +28,8 @@ namespace ApplicationData.model
 		public EContactType ContactType { get; set; }
 
 		[Column("main_contact")]
-		public bool MainContact { get; set; }
+		public bool MainContact { get; set; } = false; // Set Default
 
-		[Relation]
 		public Person Person { get; set; }
 
 		public List<PropertyInfo> GetProperties()

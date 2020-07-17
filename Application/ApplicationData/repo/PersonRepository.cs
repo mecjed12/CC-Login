@@ -16,9 +16,14 @@ namespace ApplicationData.repo
 			return Entities.People.Include(x => x.PAddress).ThenInclude(x => x.Address).Include(x => x.Contacts).ToList();
 		}
 
-		public override Person Exists(Person person)
+		public override Person GetOne(Person person)
 		{
-			return Entities.People.FirstOrDefault(x => x.Name1 == person.Name1 && x.Name2 == person.Name2 && x.Date == person.Date);
+			if(person.SVNumber != null)
+			{
+				return Entities.People.Include(x => x.PAddress).ThenInclude(x => x.Address).Include(x => x.Contacts).FirstOrDefault(x => x.SVNumber == person.SVNumber);
+			}
+
+			return Entities.People.Include(x => x.PAddress).ThenInclude(x => x.Address).Include(x => x.Contacts).FirstOrDefault(x => x.Name1 == person.Name1 && x.Name2 == person.Name2 && x.Date == person.Date);
 		}
 	}
 }

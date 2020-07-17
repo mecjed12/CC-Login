@@ -7,6 +7,7 @@ using System.Reflection;
 
 namespace ApplicationData.model
 {
+	[Table("address")]//Needed otherwise the name of the DBset is used to find the table
 	public class Address : CreatedModify, IApplicationSubclass
 	{
 		public int Id { get; set; }

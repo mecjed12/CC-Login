@@ -8,7 +8,7 @@ using System.Reflection;
 namespace ApplicationData.model
 {
 
-	[Table("person")]
+	[Table("person")]//Needed otherwise the name of the DBset is used to find the table
 	public class Person : BasePerson, IApplicationClass
 	{
 		[ApplicationProperty(DisplayName = "Titel")]
@@ -43,8 +43,42 @@ namespace ApplicationData.model
 		[Relation]
 		public List<RelPersonAddress> PAddress { get; set; }
 
-		[Relation]
 		public List<Contact> Contacts { get; set; }
+
+		[Column("user_id")]
+		public int? UserId { get; set; }
+
+		#region Things application needs
+		[NotMapped]
+		[ApplicationProperty(DisplayName = "E-Mail")]
+		public string Email
+		{
+			get => _email;
+			set
+			{
+				if (Contacts == null) Contacts = new List<Contact>();
+				if (Contacts.FirstOrDefault(x => x.ContactValue == value) == null) Contacts.Add(new Contact() { ArtOfCommunication = EKindOfCommunication.Email, ContactValue = value, Person = this });
+				_email = value;
+			}
+		}
+		[NotMapped]
+		private string _email { get; set; }
+
+		[NotMapped]
+		[ApplicationProperty(DisplayName = "Telefonnummer")]
+		public string Phone
+		{
+			get => _phone;
+			set
+			{
+				if (Contacts == null) Contacts = new List<Contact>();
+				if (Contacts.FirstOrDefault(x => x.ContactValue == value) == null) Contacts.Add(new Contact() { ArtOfCommunication = EKindOfCommunication.Telefon, ContactValue = value, Person = this });
+				_phone = value;
+			}
+		}
+		[NotMapped]
+		private string _phone { get; set; }
+
 
 		public List<PropertyInfo> GetProperties()
 		{
@@ -62,14 +96,8 @@ namespace ApplicationData.model
 			return new List<IApplicationSubclass>
 			{
 				new Address(),
-				new Contact()
 			};
 		}
-
-		public List<PropertyInfo> GetSubclassProperties()
-		{
-			//return GetType().GetProperties().Where(p => p.IsDefined(typeof(SubclassPropertyAttribute), false)).ToList();
-			return new List<PropertyInfo> { };
-		} 
+		#endregion
 	}
 }
