@@ -90,9 +90,6 @@ export default class Fileinput extends React.Component {
                 {this.createOptions()}
                 <table>
                     <tbody>
-                        {console.log(this.state.properties)}
-                        {console.log(this.state.name)}
-                        {/*this.getProperties()*/}
                         {this.state.properties.map((newState) => {
                             var value = options.find(option => option.value === newState.columnValue)
                             var x = newState.required ? "*" : "";
