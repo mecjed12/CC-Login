@@ -12,40 +12,33 @@ export default class Fileinput extends React.Component {
             properties: [],
             name: null
         }
-        
-        this.componentDidUpdate (this.state)
+        this.componentDidUpdate(this.state)
     }
-
     componentDidUpdate(prevProps) {
-        if(this.props.name !== prevProps.name) {
+        if (this.props.name !== prevProps.name) {
             this.getProperties(this.props.name)
         }
     }
-
     static getDerivedStateFromProps(nextProps, prevState) {
-        
         if (nextProps.name !== prevState.name) {
-            
-            return { name: nextProps.name }        
+            return { name: nextProps.name }
         }
     }
-
+    //die values vom server für die spalten holen
     getProperties(name) {
-        axios.get("http://192.168.0.94:8017/application/properties/" + name).then(res => {
+        axios.get("http://192.168.0.94:8017/application/" + name + "/properties/").then(res => {
             this.setState({
                 properties: res.data
             })
         }).catch(err => console.log(err))
     }
-
+    // spalten generieren
     createOptions() {
         options = [{ value: null, label: 'Spalte auswählen ...' }]
         for (var i = 0; i < this.state.properties.length; i++) {
             options.push({ value: i, label: 'Spalte ' + (+i + 1) })
-
         }
     }
-
     handleChange = (key, value) => {
         //checkt die Spalten ab ob nicht die gleichen genommen wurde
         const selectedValues = Object.values(this.state.properties)
@@ -65,8 +58,8 @@ export default class Fileinput extends React.Component {
             })
         }
     }
+    //überprüfen ob die pflichfelder, und spalten zurükgesetzt werden
     onUpload = () => {
-        // check for required fields
         var popup = false;
         this.state.properties.forEach(prop => {
             if (prop.required) {

@@ -12,7 +12,7 @@ export default class Filepicker extends React.Component {
             name: null
         }
     }
-
+    // file function
     onChangeHandler = event => {
         this.setState({
             selectFile: event.target.files[0],
@@ -20,11 +20,8 @@ export default class Filepicker extends React.Component {
         }
         );
     }
+    // upload function
     onClickHandler = (properties) => {
-        // if (!this.state.selectFile) {
-        //     alert(" bitte geben die die file ein")
-        //     return
-        // }
         const data = new FormData()
         data.append('file', this.state.selectFile);
         data.append('properties', JSON.stringify(properties))
@@ -36,6 +33,7 @@ export default class Filepicker extends React.Component {
                 console.log(res)
             }).catch(err => console.log(err.response))
     }
+    // wechseln der seiten
     switchsite() {
         if (this.state.name != null) {
             return <Fileinput name={this.state.name} upload={this.onClickHandler} />
