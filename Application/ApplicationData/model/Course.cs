@@ -66,7 +66,7 @@ namespace ApplicationData.model
 		}
 
 		[Column("category")]
-		public string _category { get; set; }
+		public string _category;
 
 		public List<PropertyInfo> GetProperties()
 		{

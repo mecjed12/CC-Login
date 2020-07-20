@@ -132,7 +132,7 @@ namespace ApplicationLogic
 			Type type = GetTypesFromApplications().FirstOrDefault(x => x.Name.Equals(className, StringComparison.InvariantCultureIgnoreCase));
 
 			if (type == null)
-				throw new InvalidTypeException();
+				throw new Exception($"{type} is not a valid Type");
 
 			using (var reader = new StreamReader(stream))
 			{
