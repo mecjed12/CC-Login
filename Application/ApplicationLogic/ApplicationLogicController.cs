@@ -1,15 +1,13 @@
 ﻿using ApplicationData;
 using ApplicationData.attribute;
-using ApplicationData.model;
 using ApplicationData.repo;
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Diagnostics;
+using System.ComponentModel.DataAnnotations;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Text;
 
 namespace ApplicationLogic
 {
@@ -22,6 +20,7 @@ namespace ApplicationLogic
 		{
 			Entities = entities;
 		}
+
 		/// <summary>
 		/// Gets a list of all the MappableProperties from className
 		/// </summary>
@@ -29,7 +28,7 @@ namespace ApplicationLogic
 		/// <returns>List of MappableProperties from className</returns>
 		public List<MappableProperties> GetProperties(string className)
 		{
-			var type = GetApplicationTypes().FirstOrDefault(x => x.Name.Equals(className, StringComparison.InvariantCultureIgnoreCase));
+			var type = GetTypesFromApplications().FirstOrDefault(x => x.Name.Equals(className, StringComparison.InvariantCultureIgnoreCase));
 
 			return GetProperties(type);
 		}
@@ -47,7 +46,7 @@ namespace ApplicationLogic
 			{
 				if (Activator.CreateInstance(type) is IApplicationClass appClass)
 				{
-					props = appClass.GetProperties().Select(x => CreateMappable(x)).ToList();
+					props = appClass.GetProperties().OrderBy(x => x.GetCustomAttribute<ApplicationPropertyAttribute>().Index).Select(x => CreateMappable(x)).ToList();
 				}
 			}
 
@@ -55,10 +54,28 @@ namespace ApplicationLogic
 		}
 
 		/// <summary>
+		/// Get a list of all the application types 
+		/// </summary>
+		/// <returns>A List of ApplicationType</returns>
+		public List<ApplicationType> GetApplicationTypes()
+		{
+			var output = new List<ApplicationType>();
+			var types = GetTypesFromApplications();
+			types.ForEach(type =>
+			{
+				output.Add(new ApplicationType() {
+					Name = type.Name,
+					DisplayName = type.GetCustomAttribute<DisplayAttribute>().Name != null ? type.GetCustomAttribute<DisplayAttribute>()?.Name : type.Name
+				});
+			});
+			return output;
+		}
+
+		/// <summary>
 		/// Gets a list of Types that inherent from IApplicationClass
 		/// </summary>
 		/// <returns>List of types that inherent from IApplicationClass</returns>
-		public List<Type> GetApplicationTypes()
+		public List<Type> GetTypesFromApplications()
 		{
 			var type = typeof(IApplicationClass);
 			return AppDomain.CurrentDomain.GetAssemblies().SelectMany(x => x.GetTypes()).Where(x => type.IsAssignableFrom(x) && x != type).ToList();
@@ -96,16 +113,23 @@ namespace ApplicationLogic
 			return null;
 		}
 
-		//TODO Add checks if appClass/subClass already exist
 		/// <summary>
-		/// Read Objects from stream and add them to the database
+		/// Add object from the stream to the Database
 		/// </summary>
 		/// <param name="stream"></param>
 		/// <param name="properties"></param>
 		/// <param name="className"></param>
-		public void AddObjectsFromCSV(Stream stream, List<MappableProperties> properties, string className)
+		/// <returns>The amount of lines in the stream,
+		/// the amount of objects added,
+		/// a dictonary of Exception with the line the happend</returns>
+		public (int Lines, int AddedCount, Dictionary<int, Exception> Errors) AddObjectsFromCSV(Stream stream, List<MappableProperties> properties, string className)
 		{
-			Type type = GetApplicationTypes().FirstOrDefault(x => x.Name.Equals(className, StringComparison.InvariantCultureIgnoreCase));
+			//Initalize returns
+			int lines = 0;
+			int added = 0;
+			Dictionary<int, Exception> wrongLines = new Dictionary<int, Exception>();
+
+			Type type = GetTypesFromApplications().FirstOrDefault(x => x.Name.Equals(className, StringComparison.InvariantCultureIgnoreCase));
 
 			if (type == null)
 				throw new InvalidTypeException();
@@ -115,9 +139,19 @@ namespace ApplicationLogic
 				int index = 0;
 				while (reader.Peek() != -1)
 				{
+					lines++;
 					var line = reader.ReadLine();
 					index++;
-					var args = line.Split(';');
+
+					//Get Separator
+					List<char> delimiters = new List<char>{';', ',', '|'};
+					Dictionary<char, int> counts = delimiters.ToDictionary(key => key, value => 0);
+					delimiters.ForEach(d =>
+					{
+						counts[d] = line.Count(t => t == d);
+					});
+
+					var args = line.Split(counts.Aggregate((l, r) => l.Value > r.Value ? l : r).Key);
 
 					try
 					{
@@ -128,7 +162,7 @@ namespace ApplicationLogic
 							var subClasses = appClass.GetSubclasses();
 
 							AddProperties(properties, args, appClass);
-							
+
 							if (GetExisting(type, appClass) != null) continue;
 
 							foreach (var sub in subClasses)
@@ -156,6 +190,8 @@ namespace ApplicationLogic
 												{
 													var relations = relationClass.GetType().GetProperties().Where(x => x.IsDefined(typeof(RelationAttribute))).ToList();
 
+													//Add the appClass/subClass to the relationClass
+													//Add the relationClass to the appClass/subClass or add the relationClass to the list in appClass/subClass 
 													if (existingSub != null)
 													{
 														AddRelation(relations, relationClass, existingSub);
@@ -165,8 +201,6 @@ namespace ApplicationLogic
 														AddRelation(relations, relationClass, subClass);
 													}
 
-													//Add the appClass/subClass to the relationClass
-													//Add the relationClass to the appClass/subClass or add the relationClass to the list in appClass/subClass 
 													AddRelation(relations, relationClass, appClass);
 
 													AddRelation(appClassRelations, appClass, relationClass);
@@ -184,19 +218,17 @@ namespace ApplicationLogic
 								}
 							}
 							Entities.Add(appClass);
+							added++;
 						}
-					}
-					catch (FormatException e)
-					{
-						throw new FormatException($"An error occured on line {index}, {e.Message} is wrongly fromated", e);
 					}
 					catch (Exception e)
 					{
-						throw e;
+						wrongLines.Add(index, e);
 					}
 				}
 			}
 			Entities.SaveChanges();
+			return (lines, added, wrongLines);
 		}
 
 		/// <summary>
@@ -235,7 +267,7 @@ namespace ApplicationLogic
 			});
 			return changed;
 		}
-		
+
 		/// <summary>
 		/// Adds the value to the obj, adds the value to the list in obj or adds the id of the value to the obj
 		/// </summary>
@@ -275,66 +307,61 @@ namespace ApplicationLogic
 				}
 			});
 			return added == 0 ? -1 : added;
-		}	
-
-	//https://localhost:44375/registration/person
-
-	/// <summary>
-	/// Gets the value from the array 
-	/// </summary>
-	/// <param name="type"></param>
-	/// <param name="args"></param>
-	/// <param name="position"></param>
-	/// <returns>The value of the position in args as type, or null when position is null</returns>
-	private object GetValue(Type type, string[] args, int? position)
-	{
-		var codes = (TypeCode[])Enum.GetValues(typeof(TypeCode));
-
-		//Get the base type when type is nullable
-		type = Nullable.GetUnderlyingType(type) ?? type;
-
-		if (position == null || position >= args.Length)
-			return null;
-
-		var value = args[(int)position];
-
-		if (string.IsNullOrWhiteSpace(value))
-			return null;
-
-		if (type == typeof(string))
-		{
-			return value;
 		}
 
-		if (type.BaseType == typeof(Enum))
+		/// <summary>
+		/// Gets the value from the array 
+		/// </summary>
+		/// <param name="type"></param>
+		/// <param name="args"></param>
+		/// <param name="position"></param>
+		/// <returns>The value of the position in args as type, or null when position is null</returns>
+		private object GetValue(Type type, string[] args, int? position)
 		{
-			return Enum.Parse(type, value);
-		}
+			var codes = (TypeCode[])Enum.GetValues(typeof(TypeCode));
 
-		foreach (var code in codes)
-		{
-			if (Type.GetTypeCode(type) == code && code != TypeCode.Object)
+			//Get the base type when type is nullable
+			type = Nullable.GetUnderlyingType(type) ?? type;
+
+			if (position == null || position >= args.Length)
+				return null;
+
+			var value = args[(int)position];
+
+			if (string.IsNullOrWhiteSpace(value))
+				return null;
+
+			if (type == typeof(string))
 			{
-				try
+				return value;
+			}
+
+			if (type.BaseType == typeof(Enum))
+			{
+				return Enum.Parse(type, value);
+			}
+
+			foreach (var code in codes)
+			{
+				if (Type.GetTypeCode(type) == code && code != TypeCode.Object)
 				{
-					return Convert.ChangeType(value, type);
-				}
-				catch (FormatException)
-				{
-					throw new FormatException($"{value}");
+					try
+					{
+						return Convert.ChangeType(value, type);
+					}
+					catch (FormatException)
+					{
+						throw new FormatException($"{value}");
+					}
 				}
 			}
+			return null;
 		}
-		return null;
 	}
-}
 
-/// <summary>
-/// Unused
-/// </summary>
-struct ApplicationType
-{
-	public string Name { get; set; }
-	public string DisplayName { get; set; }
-}
+	public struct ApplicationType
+	{
+		public string Name { get; set; }
+		public string DisplayName { get; set; }
+	}
 }

@@ -1,10 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 
 namespace ApplicationData.repo
 {
-    public abstract class Repository<T> where T : class
+	public abstract class Repository<T> where T : class
     {
 
         protected readonly DcvEntities Entities;
@@ -18,6 +17,12 @@ namespace ApplicationData.repo
 		{
             return this;
         }
+
+        public virtual void Add(T t)
+		{
+            Entities.Add(t);
+            Entities.SaveChanges();
+		}
 
         public virtual List<T> GetAll()
         {

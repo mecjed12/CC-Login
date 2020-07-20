@@ -1,8 +1,5 @@
 ﻿using ApplicationData.model;
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace ApplicationData.repo
 {
@@ -10,7 +7,6 @@ namespace ApplicationData.repo
 	{
 		public AddressRepository(DcvEntities entities) : base(entities)
 		{
-
 		}
 
 		public override Address GetOne(Address address)

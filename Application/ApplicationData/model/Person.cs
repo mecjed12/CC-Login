@@ -1,24 +1,25 @@
 ﻿using ApplicationData.attribute;
 using ApplicationData.enums;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Reflection;
 
 namespace ApplicationData.model
 {
-
+	[Display(Name = "Personen")]
 	[Table("person")]//Needed otherwise the name of the DBset is used to find the table
 	public class Person : BasePerson, IApplicationClass
 	{
-		[ApplicationProperty(DisplayName = "Titel")]
+		[ApplicationProperty(DisplayName = "Titel", Index = 3)]
 		public string Title { get; set; }
 
-		[ApplicationProperty(DisplayName = "Sozialversicherungsnummer")]
+		[ApplicationProperty(DisplayName = "Sozialversicherungsnummer", Index = 5)]
 		[Column("sv_nr")]
 		public long? SVNumber { get; set; }
 
-		[ApplicationProperty(DisplayName = "Geschlecht")]
+		[ApplicationProperty(DisplayName = "Geschlecht", Index = 4)]
 		public string Gender { get; set; }
 
 		public string Busy { get; set; }
@@ -50,7 +51,7 @@ namespace ApplicationData.model
 
 		#region Things application needs
 		[NotMapped]
-		[ApplicationProperty(DisplayName = "E-Mail")]
+		[ApplicationProperty(DisplayName = "E-Mail", Index = 6)]
 		public string Email
 		{
 			get => _email;
@@ -62,10 +63,10 @@ namespace ApplicationData.model
 			}
 		}
 		[NotMapped]
-		private string _email { get; set; }
+		private string _email;
 
 		[NotMapped]
-		[ApplicationProperty(DisplayName = "Telefonnummer")]
+		[ApplicationProperty(DisplayName = "Telefonnummer", Index = 7)]
 		public string Phone
 		{
 			get => _phone;
@@ -77,8 +78,7 @@ namespace ApplicationData.model
 			}
 		}
 		[NotMapped]
-		private string _phone { get; set; }
-
+		private string _phone;
 
 		public List<PropertyInfo> GetProperties()
 		{

@@ -3,17 +3,15 @@ using System;
 
 namespace ApplicationData.model
 {
-	public class BasePerson : CreatedModify
+	public class BasePerson : CreatedModified
 	{
-		public int Id { get; set; }
-
-		[ApplicationProperty(DisplayName = "Vorname", Required = true)]
+		[ApplicationProperty(DisplayName = "Vorname", Required = true, Index = 0)]
 		public string Name1 { get; set; }
 		
-		[ApplicationProperty(DisplayName = "Zuname", Required = true)]
+		[ApplicationProperty(DisplayName = "Zuname", Required = true, Index = 1)]
 		public string Name2 { get; set; }
 
-		[ApplicationProperty(DisplayName = "Geburtsdatum", Required = true)]
+		[ApplicationProperty(DisplayName = "Geburtsdatum", Required = true, Index = 2)]
 		public DateTime? Date { get; set; }
 
 	}

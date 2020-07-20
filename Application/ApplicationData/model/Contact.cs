@@ -11,10 +11,8 @@ using System.Text;
 namespace ApplicationData.model
 {
 	[Table("contact")]
-	public class Contact : CreatedModify, IApplicationSubclass
+	public class Contact : CreatedModified
 	{
-		public int Id { get; set; }
-
 		[Column("person_id")]
 		public int PersonId { get; set; }
 
@@ -31,10 +29,5 @@ namespace ApplicationData.model
 		public bool MainContact { get; set; } = false; // Set Default
 
 		public Person Person { get; set; }
-
-		public List<PropertyInfo> GetProperties()
-		{
-			return GetType().GetProperties().Where(x => x.IsDefined(typeof(ApplicationPropertyAttribute), false)).ToList();
-		}
 	}
 }

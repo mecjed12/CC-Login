@@ -29,10 +29,5 @@ namespace ApplicationData.model
 
 		[Relation]
 		public Person Person { get; set; }
-
-		public List<PropertyInfo> GetProperties()
-		{
-			return Address.GetProperties();
-		}
 	}
 }

@@ -8,21 +8,20 @@ using System.Reflection;
 namespace ApplicationData.model
 {
 	[Table("address")]//Needed otherwise the name of the DBset is used to find the table
-	public class Address : CreatedModify, IApplicationSubclass
+	public class Address : CreatedModified, IApplicationSubclass
 	{
-		public int Id { get; set; }
-
-		[ApplicationProperty(DisplayName = "Strasse")]
+		//TODO ask how i should order them
+		[ApplicationProperty(DisplayName = "Strasse", Index = 8)]
 		public string Street { get; set; }
 
-		[ApplicationProperty(DisplayName = "Ort")]
+		[ApplicationProperty(DisplayName = "Ort", Index = 10)]
 		public string Place { get; set; }
 
-		[ApplicationProperty(DisplayName = "Postleitzahl")]
+		[ApplicationProperty(DisplayName = "Postleitzahl", Index = 9)]
 		[Column("zip")]
 		public int? ZipCode { get; set; }
 
-		[ApplicationProperty(DisplayName = "Land")]
+		[ApplicationProperty(DisplayName = "Land", Index = 11)]
 		public string Country { get; set; }
 
 		[Relation]

@@ -1,10 +1,8 @@
 ﻿using System.Collections.Generic;
 using ApplicationData;
 using Microsoft.AspNetCore.Mvc;
-using ApplicationData.model;
 using System;
 using ApplicationLogic;
-using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 
 namespace ApplicationAPI.Controllers
@@ -13,79 +11,54 @@ namespace ApplicationAPI.Controllers
 	[ApiController]
 	public class ApplicationController : ControllerBase
 	{
-
-		//TODO change this 
 		[HttpGet]
-		public List<Type> GetApplicationTypes()
+		public List<ApplicationType> GetApplicationTypes()
 		{
 			return Program.controller.GetApplicationTypes();
 		}
 
-		[HttpGet("properties/{className}")]
+		[HttpGet("{className}/properties")]
 		public List<MappableProperties> GetProperties(string className)
 		{
 			return Program.controller.GetProperties(className);
 		}
 
-		[HttpPost("{className}")]
-		public async void AddObjectsFromFile(string className, [FromForm] ApplicationFile file)
+		[HttpPost("{className}")] // Item1 = Lines, Item2 = AddedCount, Item3 = Errors
+		public (int, int, Dictionary<int, Exception>) AddObjectsFromFile(string className, [FromForm] ApplicationFile file)
 		{
 			if (file.File != null && file.GetProperties() != null)
 			{
 				try
 				{
 					using var stream = file.File.OpenReadStream();
-					Program.controller.AddObjectsFromCSV(stream, file.GetProperties(), className);
+					var output = Program.controller.AddObjectsFromCSV(stream, file.GetProperties(), className);
+					if(output.Lines == 0)
+					{
+						Response.StatusCode = 400;
+						return output;
+					}
+					if(output.AddedCount == 0)
+					{
+						Response.StatusCode = 400;
+						return output;
+					}
+
+					Response.StatusCode = 201;
+					return output;
 				}
-				catch (InvalidTypeException)
+				catch (Exception e)
 				{
-					Response.StatusCode = 400;
-					await Response.WriteAsync($"{className} is not a valid type");
-				}
-				catch(FormatException e)
-				{
-					Response.StatusCode = 400;
-					await Response.WriteAsync(e.Message);
-				}
-				catch(Exception e)
-				{
-					Console.WriteLine(e.Message);
-					Response.StatusCode = 400;
-					await Response.WriteAsync(e.Message);
+					Response.StatusCode = 500;
+					Response.WriteAsync($"This shouldn't have happened.\n{e.Message}");
+					return (0, 0, null);
 				}
 			}
 			else
 			{
-				Response.StatusCode = 415;
-				await Response.WriteAsync("File or Properties is null");
+				Response.StatusCode = 400;
+				Response.WriteAsync("File or Properties is null");
+				return (0, 0, null);
 			}
 		}
-
-		//     [HttpPost("person")]
-		//     public void AddPeopleFromFile([FromForm] PersonRegistrationFile file)
-		//     {
-		//         if(file.File != null && file.GetProperties() != null)
-		//         {
-		//	using var stream = file.File.OpenReadStream();
-		//	Program.controller.AddPeopleFromCSV(stream, file.GetProperties());
-		//}
-		//else
-		//{
-		//             Response.StatusCode = 204;
-		//}
-		//     }
-
-		//     [HttpPost("course")]
-		//     public void AddCoursesFromFile([FromForm] CourseRegistrationFile file)
-		//     {
-		//         if(file.File != null && file.Config != null)
-		//         {
-		//             using var stream = file.File.OpenReadStream();
-		//             Program.controller.AddCoursesFromCSV(stream, file.GetConfig());
-		//         }else
-		//{
-		//             Response.StatusCode = 204;
-		//}
-		//     }
 	}
 }

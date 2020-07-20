@@ -11,16 +11,17 @@ namespace ApplicationData
 
 
         public DbSet<Course> Courses { get; set; }
+        public DbSet<CourseCategory> CourseCategories { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder.UseMySQL("server=192.168.0.94;database=dcv;user=root;convert zero datetime=true");
-            //optionsBuilder.UseMySQL("server=localhost;database=dcv;user=root;convert zero datetime=true");
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Course>().HasKey(x => x.Id);
+            modelBuilder.Entity<CourseCategory>().HasKey(x => x.Id);
 
             modelBuilder.Entity<Person>().HasKey(x => x.Id);
             modelBuilder.Entity<Address>().HasKey(x => x.Id);

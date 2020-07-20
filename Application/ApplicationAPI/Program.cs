@@ -2,7 +2,6 @@ using ApplicationLogic;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
 using ApplicationData;
-using ApplicationData.repo;
 
 namespace ApplicationAPI
 {
