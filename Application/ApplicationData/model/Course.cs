@@ -15,7 +15,7 @@ namespace ApplicationData.model
 	{
 		[ApplicationProperty(DisplayName = "Titel", Required = true, Index = 0)]
 		public string Title { get; set; }
-		
+
 		[ApplicationProperty(DisplayName = "Kurse Nummer", Index = 3)]
 		[Column("course_number")]
 		public string CourseNumber { get; set; }
@@ -29,7 +29,7 @@ namespace ApplicationData.model
 		[ApplicationProperty(DisplayName = "Endet am", Index = 7)]
 		public DateTime? End { get; set; }
 
-		[ApplicationProperty(DisplayName = "Einheiten", Index = 5)]
+		[ApplicationProperty(DisplayName = "Einheiten", Index = 7)]
 		public int? Unit { get; set; }
 
 		[ApplicationProperty(DisplayName = "Preis", Index = 4)]

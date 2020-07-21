@@ -7,7 +7,7 @@ namespace ApplicationData.model
 	{
 		[ApplicationProperty(DisplayName = "Vorname", Required = true, Index = 0)]
 		public string Name1 { get; set; }
-		
+
 		[ApplicationProperty(DisplayName = "Zuname", Required = true, Index = 1)]
 		public string Name2 { get; set; }
 

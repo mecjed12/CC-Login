@@ -1,8 +1,6 @@
 ﻿using ApplicationData.attribute;
 using ApplicationData.enums;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Reflection;
 
 namespace ApplicationData.model
 {

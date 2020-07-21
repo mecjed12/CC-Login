@@ -1,12 +1,5 @@
-﻿using ApplicationData.attribute;
-using ApplicationData.enums;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
+﻿using ApplicationData.enums;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Reflection;
-using System.Text;
 
 namespace ApplicationData.model
 {

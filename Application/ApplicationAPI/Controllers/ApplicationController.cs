@@ -1,9 +1,9 @@
-﻿using System.Collections.Generic;
-using ApplicationData;
-using Microsoft.AspNetCore.Mvc;
-using System;
+﻿using ApplicationData;
 using ApplicationLogic;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using System;
+using System.Collections.Generic;
 
 namespace ApplicationAPI.Controllers
 {
@@ -31,13 +31,13 @@ namespace ApplicationAPI.Controllers
 				try
 				{
 					using var stream = file.File.OpenReadStream();
-					var output = Program.controller.AddObjectsFromCSV(stream, file.GetProperties(), className);
-					if(output.Lines == 0)
+					var output = Program.controller.AddObjectsFromStream(stream, file.GetProperties(), className);
+					if (output.Lines == 0)
 					{
 						Response.StatusCode = 400;
 						return output;
 					}
-					if(output.AddedCount == 0)
+					if (output.AddedCount == 0)
 					{
 						Response.StatusCode = 400;
 						return output;
@@ -48,8 +48,8 @@ namespace ApplicationAPI.Controllers
 				}
 				catch (Exception e)
 				{
-					Response.StatusCode = 500;
-					Response.WriteAsync($"This shouldn't have happened.\n{e.Message}");
+					Response.StatusCode = 400;
+					Response.WriteAsync(e.Message);
 					return (0, 0, null);
 				}
 			}

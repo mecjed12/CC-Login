@@ -4,34 +4,34 @@ using System.Linq;
 namespace ApplicationData.repo
 {
 	public abstract class Repository<T> where T : class
-    {
+	{
 
-        protected readonly DcvEntities Entities;
+		protected readonly DcvEntities Entities;
 
-        public Repository(DcvEntities entities)
-        {
-            Entities = entities;
-        }
-
-        public Repository<T> GetRepository()
+		public Repository(DcvEntities entities)
 		{
-            return this;
-        }
-
-        public virtual void Add(T t)
-		{
-            Entities.Add(t);
-            Entities.SaveChanges();
+			Entities = entities;
 		}
 
-        public virtual List<T> GetAll()
-        {
-            return Entities.Set<T>().ToList();
-        }
-
-        public virtual T GetOne(T t)
+		public Repository<T> GetRepository()
 		{
-            return Entities.Set<T>().FirstOrDefault(x => x == t);
+			return this;
+		}
+
+		public virtual void Add(T t)
+		{
+			Entities.Add(t);
+			Entities.SaveChanges();
+		}
+
+		public virtual List<T> GetAll()
+		{
+			return Entities.Set<T>().ToList();
+		}
+
+		public virtual T GetOne(T t)
+		{
+			return Entities.Set<T>().FirstOrDefault(x => x == t);
 		}
 	}
 }

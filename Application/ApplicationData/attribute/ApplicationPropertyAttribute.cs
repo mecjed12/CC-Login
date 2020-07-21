@@ -10,7 +10,7 @@ namespace ApplicationData.attribute
 
 		/// <summary>
 		/// Used to sort the properties
-		/// default value = 32,767(Max short)
+		/// default value = 32,767(Max Signed 16-bit integer)
 		/// </summary>
 		public short Index { get; set; } = short.MaxValue;
 	}

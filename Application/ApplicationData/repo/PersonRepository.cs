@@ -1,5 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
-using ApplicationData.model;
+﻿using ApplicationData.model;
+using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -18,7 +18,7 @@ namespace ApplicationData.repo
 
 		public override Person GetOne(Person person)
 		{
-			if(person.SVNumber != null)
+			if (person.SVNumber != null)
 			{
 				return Entities.People.Include(x => x.PAddress).ThenInclude(x => x.Address).Include(x => x.Contacts).FirstOrDefault(x => x.SVNumber == person.SVNumber);
 			}

@@ -9,13 +9,10 @@ namespace ApplicationData.repo
 		public CourseCategoryRepository(DcvEntities entities) : base(entities)
 		{
 		}
-
+		//TODO Add more checks maybe
 		public override CourseCategory GetOne(CourseCategory category)
 		{
-			var name = category.Name;
-			var arrName = name.Contains(" ") ? name.Split(' ') : null;
-
-			return Entities.CourseCategories.FirstOrDefault(x => x.Name.Replace(" ", "").Equals(name.Replace(" ", ""), StringComparison.OrdinalIgnoreCase));
+			return Entities.CourseCategories.FirstOrDefault(x => x.Name.Replace(" ", "").Equals(category.Name.Replace(" ", ""), StringComparison.OrdinalIgnoreCase));
 		}
 	}
 }

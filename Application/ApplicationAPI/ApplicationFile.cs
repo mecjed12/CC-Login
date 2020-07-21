@@ -6,7 +6,7 @@ using System.Collections.Generic;
 namespace ApplicationAPI
 {
 	public class ApplicationFile
-    {
+	{
 		/// <summary>
 		/// Use GetProperties() not Properties
 		/// </summary>
@@ -16,7 +16,7 @@ namespace ApplicationAPI
 
 		public List<MappableProperties> GetProperties()
 		{
-			if(string.IsNullOrWhiteSpace(Properties))
+			if (string.IsNullOrWhiteSpace(Properties))
 				return null;
 
 			return JsonConvert.DeserializeObject<List<MappableProperties>>(Properties);

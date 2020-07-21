@@ -13,7 +13,6 @@ namespace ApplicationLogic
 {
 	public class ApplicationLogicController
 	{
-
 		readonly DcvEntities Entities;
 
 		public ApplicationLogicController(DcvEntities entities)
@@ -63,7 +62,8 @@ namespace ApplicationLogic
 			var types = GetTypesFromApplications();
 			types.ForEach(type =>
 			{
-				output.Add(new ApplicationType() {
+				output.Add(new ApplicationType()
+				{
 					Name = type.Name,
 					DisplayName = type.GetCustomAttribute<DisplayAttribute>().Name != null ? type.GetCustomAttribute<DisplayAttribute>()?.Name : type.Name
 				});
@@ -121,11 +121,11 @@ namespace ApplicationLogic
 		/// <param name="className"></param>
 		/// <returns>The amount of lines in the stream,
 		/// the amount of objects added,
-		/// a dictonary of Exception with the line the happend</returns>
-		public (int Lines, int AddedCount, Dictionary<int, Exception> Errors) AddObjectsFromCSV(Stream stream, List<MappableProperties> properties, string className)
+		/// a dictonary of Exception with the line where they happened</returns>
+		public (int Lines, int AddedCount, Dictionary<int, Exception> Errors) AddObjectsFromStream(Stream stream, List<MappableProperties> properties, string className)
 		{
 			//Initalize returns
-			int lines = 0;
+			int index = 0;
 			int added = 0;
 			Dictionary<int, Exception> wrongLines = new Dictionary<int, Exception>();
 
@@ -136,15 +136,13 @@ namespace ApplicationLogic
 
 			using (var reader = new StreamReader(stream))
 			{
-				int index = 0;
 				while (reader.Peek() != -1)
 				{
-					lines++;
 					var line = reader.ReadLine();
 					index++;
 
 					//Get Separator
-					List<char> delimiters = new List<char>{';', ',', '|'};
+					List<char> delimiters = new List<char> { ';', ',', '|' };
 					Dictionary<char, int> counts = delimiters.ToDictionary(key => key, value => 0);
 					delimiters.ForEach(d =>
 					{
@@ -228,7 +226,7 @@ namespace ApplicationLogic
 				}
 			}
 			Entities.SaveChanges();
-			return (lines, added, wrongLines);
+			return (index, added, wrongLines);
 		}
 
 		/// <summary>
@@ -239,11 +237,10 @@ namespace ApplicationLogic
 		/// <returns>obj from database, or null when obj doesn't exist on database</returns>
 		private object GetExisting(Type type, object obj)
 		{
-			dynamic dynamicAppClass = Convert.ChangeType(obj, type);
-			var typeRepository = GetRepository(dynamicAppClass);
+			dynamic dynamicObj = Convert.ChangeType(obj, type);
+			var typeRepository = GetRepository(dynamicObj);
 
-			var existing = typeRepository.GetOne(dynamicAppClass);
-			return existing;
+			return typeRepository.GetOne(dynamicObj);
 		}
 
 		/// <summary>
@@ -297,8 +294,7 @@ namespace ApplicationLogic
 					}
 					else if (typeof(IList).IsAssignableFrom(rel.PropertyType) && rel.PropertyType.GenericTypeArguments[0] == value.GetType())
 					{
-						var temp = rel.GetValue(obj) as IList;
-						if (temp == null)
+						if (!(rel.GetValue(obj) is IList temp))
 							temp = Activator.CreateInstance(rel.PropertyType) as IList;//Create List of rel.PropertyType when rel is null
 						temp.Add(value);
 						rel.SetValue(obj, temp);
