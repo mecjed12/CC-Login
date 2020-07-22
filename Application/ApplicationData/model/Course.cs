@@ -43,7 +43,7 @@ namespace ApplicationData.model
 		[Column("participant_max")]
 		public int? MaxParticipants { get; set; }
 
-		//TODO do this different
+		//TODO do this different maybe
 		[ApplicationProperty(DisplayName = "Kategorie", Required = true, Index = 1)]
 		[NotMapped]
 		public string Category

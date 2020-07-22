@@ -5,6 +5,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -27,7 +28,7 @@ namespace ApplicationLogic
 		/// <returns>List of MappableProperties from className</returns>
 		public List<MappableProperties> GetProperties(string className)
 		{
-			var type = GetTypesFromApplications().FirstOrDefault(x => x.Name.Equals(className, StringComparison.InvariantCultureIgnoreCase));
+			var type = GetTypesFromApplications().FirstOrDefault(x => x.Name.Equals(className, StringComparison.OrdinalIgnoreCase));
 
 			return GetProperties(type);
 		}
@@ -122,19 +123,19 @@ namespace ApplicationLogic
 		/// <returns>The amount of lines in the stream,
 		/// the amount of objects added,
 		/// a dictonary of Exception with the line where they happened</returns>
-		public (int Lines, int AddedCount, Dictionary<int, Exception> Errors) AddObjectsFromStream(Stream stream, List<MappableProperties> properties, string className)
+		public (int Lines, int AddedCount, List<Error> Errors) AddObjectsFromStream(Stream stream, List<MappableProperties> properties, string className)
 		{
 			//Initalize returns
 			int index = 0;
 			int added = 0;
-			Dictionary<int, Exception> wrongLines = new Dictionary<int, Exception>();
+			List<Error> wrongLines = new List<Error>();
 
 			Type type = GetTypesFromApplications().FirstOrDefault(x => x.Name.Equals(className, StringComparison.InvariantCultureIgnoreCase));
 
 			if (type == null)
 				throw new Exception($"{type} is not a valid Type");
 
-			using (var reader = new StreamReader(stream))
+			using (var reader = new StreamReader(stream, true))
 			{
 				while (reader.Peek() != -1)
 				{
@@ -142,7 +143,7 @@ namespace ApplicationLogic
 					index++;
 
 					//Get Separator
-					List<char> delimiters = new List<char> { ';', ',', '|' };
+					List<char> delimiters = new List<char> { ';', ',', '|', '\t' };
 					Dictionary<char, int> counts = delimiters.ToDictionary(key => key, value => 0);
 					delimiters.ForEach(d =>
 					{
@@ -161,8 +162,8 @@ namespace ApplicationLogic
 
 							AddProperties(properties, args, appClass);
 
-							if (GetExisting(type, appClass) != null) continue;
-
+							if (GetExisting(type, appClass) != null) throw new ArgumentException($"{className} already exists");
+							
 							foreach (var sub in subClasses)
 							{
 								Type subType = sub.GetType();
@@ -221,9 +222,10 @@ namespace ApplicationLogic
 					}
 					catch (Exception e)
 					{
-						wrongLines.Add(index, e);
+						wrongLines.Add(new Error() { Line = index, Exception = e});
 					}
 				}
+				reader.Close();
 			}
 			Entities.SaveChanges();
 			return (index, added, wrongLines);
@@ -311,7 +313,7 @@ namespace ApplicationLogic
 		/// <param name="type"></param>
 		/// <param name="args"></param>
 		/// <param name="position"></param>
-		/// <returns>The value of the position in args as type, or null when position is null</returns>
+		/// <returns>The value of args at position as type, or null when position is null</returns>
 		private object GetValue(Type type, string[] args, int? position)
 		{
 			var codes = (TypeCode[])Enum.GetValues(typeof(TypeCode));
@@ -359,5 +361,11 @@ namespace ApplicationLogic
 	{
 		public string Name { get; set; }
 		public string DisplayName { get; set; }
+	}
+
+	public struct Error
+	{
+		public int Line { get; set; }
+		public Exception Exception { get; set; }
 	}
 }

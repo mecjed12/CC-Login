@@ -9,7 +9,6 @@ namespace ApplicationData.model
 	[Table("address")]//Needed otherwise the name of the DBset is used to find the table
 	public class Address : CreatedModified, IApplicationSubclass
 	{
-		//TODO ask how i should order them
 		[ApplicationProperty(DisplayName = "Strasse", Index = 8)]
 		public string Street { get; set; }
 

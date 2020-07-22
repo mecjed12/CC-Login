@@ -24,7 +24,7 @@ namespace ApplicationAPI.Controllers
 		}
 
 		[HttpPost("{className}")] // Item1 = Lines, Item2 = AddedCount, Item3 = Errors
-		public (int, int, Dictionary<int, Exception>) AddObjectsFromFile(string className, [FromForm] ApplicationFile file)
+		public (int, int, List<Error>) AddObjectsFromFile(string className, [FromForm] ApplicationFile file)
 		{
 			if (file.File != null && file.GetProperties() != null)
 			{
@@ -35,11 +35,12 @@ namespace ApplicationAPI.Controllers
 					if (output.Lines == 0)
 					{
 						Response.StatusCode = 400;
-						return output;
+						Response.WriteAsync("File has no lines");
+						return (0, 0, null);
 					}
 					if (output.AddedCount == 0)
 					{
-						Response.StatusCode = 400;
+						Response.StatusCode = 200;
 						return output;
 					}
 
@@ -49,7 +50,7 @@ namespace ApplicationAPI.Controllers
 				catch (Exception e)
 				{
 					Response.StatusCode = 400;
-					Response.WriteAsync(e.Message);
+					Response.WriteAsync(e.InnerException == null ? e.Message : e.InnerException.Message);
 					return (0, 0, null);
 				}
 			}
