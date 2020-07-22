@@ -217,6 +217,7 @@ namespace ApplicationLogic
 								}
 							}
 							Entities.Add(appClass);
+							Entities.SaveChanges();
 							added++;
 						}
 					}
@@ -227,7 +228,6 @@ namespace ApplicationLogic
 				}
 				reader.Close();
 			}
-			Entities.SaveChanges();
 			return (index, added, wrongLines);
 		}
 
