@@ -12,9 +12,9 @@ namespace ImporterAPI.Controllers
 	public class ImporterController : ControllerBase
 	{
 		[HttpGet]
-		public List<ApplicationType> GetApplicationTypes()
+		public List<ImportType> GetApplicationTypes()
 		{
-			return Program.controller.GetApplicationTypes();
+			return Program.controller.GetImportTypes();
 		}
 
 		[HttpGet("{className}/properties")]

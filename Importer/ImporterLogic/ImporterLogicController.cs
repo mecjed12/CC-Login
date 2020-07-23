@@ -28,7 +28,7 @@ namespace ImporterLogic
 		/// <returns>List of MappableProperties from className</returns>
 		public List<MappableProperties> GetProperties(string className)
 		{
-			var type = GetTypesFromApplications().FirstOrDefault(x => x.Name.Equals(className, StringComparison.OrdinalIgnoreCase));
+			var type = GetTypesFromImports().FirstOrDefault(x => x.Name.Equals(className, StringComparison.OrdinalIgnoreCase));
 
 			return GetProperties(type);
 		}
@@ -44,9 +44,9 @@ namespace ImporterLogic
 
 			if (type != null)
 			{
-				if (Activator.CreateInstance(type) is IImportClass appClass)
+				if (Activator.CreateInstance(type) is IImportClass importClass)
 				{
-					props = appClass.GetProperties().OrderBy(x => x.GetCustomAttribute<ImportPropertyAttribute>().Index).Select(x => CreateMappable(x)).ToList();
+					props = importClass.GetProperties().OrderBy(x => x.GetCustomAttribute<ImportPropertyAttribute>().Index).Select(x => CreateMappable(x)).ToList();
 				}
 			}
 
@@ -54,16 +54,16 @@ namespace ImporterLogic
 		}
 
 		/// <summary>
-		/// Get a list of all the application types 
+		/// Get a list of all the import types 
 		/// </summary>
-		/// <returns>A List of ApplicationType</returns>
-		public List<ApplicationType> GetApplicationTypes()
+		/// <returns>A List of ImportType</returns>
+		public List<ImportType> GetImportTypes()
 		{
-			var output = new List<ApplicationType>();
-			var types = GetTypesFromApplications();
+			var output = new List<ImportType>();
+			var types = GetTypesFromImports();
 			types.ForEach(type =>
 			{
-				output.Add(new ApplicationType()
+				output.Add(new ImportType()
 				{
 					Name = type.Name,
 					DisplayName = type.GetCustomAttribute<DisplayAttribute>().Name != null ? type.GetCustomAttribute<DisplayAttribute>()?.Name : type.Name
@@ -73,10 +73,10 @@ namespace ImporterLogic
 		}
 
 		/// <summary>
-		/// Gets a list of Types that inherent from IApplicationClass
+		/// Gets a list of Types that inherent from IImportClass
 		/// </summary>
-		/// <returns>List of types that inherent from IApplicationClass</returns>
-		public List<Type> GetTypesFromApplications()
+		/// <returns>List of types that inherent from IImportClass</returns>
+		public List<Type> GetTypesFromImports()
 		{
 			var type = typeof(IImportClass);
 			return AppDomain.CurrentDomain.GetAssemblies().SelectMany(x => x.GetTypes()).Where(x => type.IsAssignableFrom(x) && x != type).ToList();
@@ -128,9 +128,9 @@ namespace ImporterLogic
 			//Initalize returns
 			int index = 0;
 			int added = 0;
-			List<Error> wrongLines = new List<Error>();
+			List<Error> errors = new List<Error>();
 
-			Type type = GetTypesFromApplications().FirstOrDefault(x => x.Name.Equals(className, StringComparison.InvariantCultureIgnoreCase));
+			Type type = GetTypesFromImports().FirstOrDefault(x => x.Name.Equals(className, StringComparison.InvariantCultureIgnoreCase));
 
 			if (type == null)
 				throw new Exception($"{type} is not a valid Type");
@@ -154,15 +154,15 @@ namespace ImporterLogic
 
 					try
 					{
-						if (Activator.CreateInstance(type) is IImportClass appClass)
+						if (Activator.CreateInstance(type) is IImportClass importClass)
 						{
-							var appClassRelations = appClass.GetType().GetProperties().Where(x => x.IsDefined(typeof(RelationAttribute))).ToList();
+							var importClassRelations = importClass.GetType().GetProperties().Where(x => x.IsDefined(typeof(RelationAttribute))).ToList();
 
-							var subClasses = appClass.GetSubclasses();
+							var subClasses = importClass.GetSubclasses();
 
-							AddProperties(properties, args, appClass);
+							AddProperties(properties, args, importClass);
 
-							if (GetExisting(type, appClass) != null) throw new ArgumentException($"{className} already exists");
+							if (GetExisting(type, importClass) != null) throw new ArgumentException($"{className} already exists");
 
 							foreach (var sub in subClasses)
 							{
@@ -182,15 +182,15 @@ namespace ImporterLogic
 										var keys = subType.GetProperties().Where(x => x.IsDefined(typeof(RelationAttribute))).ToList();
 										keys.ForEach(key =>
 										{
-											//Create RelationClass when appClass and subClass are connected using a RelationClass
+											//Create RelationClass when importClass and subClass are connected using a RelationClass
 											if (typeof(IList).IsAssignableFrom(key.PropertyType) && key.PropertyType.GenericTypeArguments[0].IsDefined(typeof(RelationAttribute)))
 											{
 												if (Activator.CreateInstance(key.PropertyType.GenericTypeArguments[0]) is object relationClass)
 												{
 													var relations = relationClass.GetType().GetProperties().Where(x => x.IsDefined(typeof(RelationAttribute))).ToList();
 
-													//Add the appClass/subClass to the relationClass
-													//Add the relationClass to the appClass/subClass or add the relationClass to the list in appClass/subClass 
+													//Add the importClass/subClass to the relationClass
+													//Add the relationClass to the importClass/subClass or add the relationClass to the list in importClass/subClass 
 													if (existingSub != null)
 													{
 														AddRelation(relations, relationClass, existingSub);
@@ -200,35 +200,35 @@ namespace ImporterLogic
 														AddRelation(relations, relationClass, subClass);
 													}
 
-													AddRelation(relations, relationClass, appClass);
+													AddRelation(relations, relationClass, importClass);
 
-													AddRelation(appClassRelations, appClass, relationClass);
+													AddRelation(importClassRelations, importClass, relationClass);
 													AddRelation(subClassRelations, subClass, relationClass);
 												}
 											}
-											else //Make connection when appClass and subClass are connected directly
+											else //Make connection when importClass and subClass are connected directly
 											{
-												//Add the appClass/subClass to the appClass/subClass
-												AddRelation(appClassRelations, appClass, subClass);
-												AddRelation(subClassRelations, subClass, appClass);
+												//Add the importClass/subClass to the importClass/subClass
+												AddRelation(importClassRelations, importClass, subClass);
+												AddRelation(subClassRelations, subClass, importClass);
 											}
 										});
 									}
 								}
 							}
-							Entities.Add(appClass);
+							Entities.Add(importClass);
 							Entities.SaveChanges();
 							added++;
 						}
 					}
 					catch (Exception e)
 					{
-						wrongLines.Add(new Error() { Line = index, Exception = e });
+						errors.Add(new Error() { Line = index, Exception = e });
 					}
 				}
 				reader.Close();
 			}
-			return (index, added, wrongLines);
+			return (index, added, errors);
 		}
 
 		/// <summary>
@@ -357,7 +357,7 @@ namespace ImporterLogic
 		}
 	}
 
-	public struct ApplicationType
+	public struct ImportType
 	{
 		public string Name { get; set; }
 		public string DisplayName { get; set; }
