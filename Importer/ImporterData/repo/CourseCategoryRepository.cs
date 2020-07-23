@@ -10,7 +10,7 @@ namespace ImporterData.repo
 		{
 		}
 		//TODO Add more checks maybe
-		public override CourseCategory GetOne(CourseCategory category)
+		public override CourseCategory Get(CourseCategory category)
 		{
 			return Entities.CourseCategories.FirstOrDefault(x => x.Name.Replace(" ", "").Equals(category.Name.Replace(" ", ""), StringComparison.OrdinalIgnoreCase));
 		}

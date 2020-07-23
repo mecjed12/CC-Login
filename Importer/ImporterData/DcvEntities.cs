@@ -10,7 +10,6 @@ namespace ImporterData
 		public DbSet<Address> Addresses { get; set; }
 		public DbSet<Contact> Contacts { get; set; }
 
-
 		public DbSet<Course> Courses { get; set; }
 		public DbSet<CourseCategory> CourseCategories { get; set; }
 

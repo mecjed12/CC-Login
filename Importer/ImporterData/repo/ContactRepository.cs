@@ -9,7 +9,7 @@ namespace ImporterData.repo
 		{
 		}
 
-		public override Contact GetOne(Contact contact)
+		public override Contact Get(Contact contact)
 		{
 			return Entities.Contacts.FirstOrDefault(x => x.ContactValue == contact.ContactValue);
 		}

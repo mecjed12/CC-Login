@@ -29,7 +29,7 @@ namespace ImporterData.repo
 			return Entities.Set<T>().ToList();
 		}
 
-		public virtual T GetOne(T t)
+		public virtual T Get(T t)
 		{
 			return Entities.Set<T>().FirstOrDefault(x => x == t);
 		}

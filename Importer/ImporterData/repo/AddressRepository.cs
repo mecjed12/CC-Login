@@ -11,7 +11,7 @@ namespace ImporterData.repo
 		{
 		}
 
-		public override Address GetOne(Address address)
+		public override Address Get(Address address)
 		{
 			return Entities.Addresses.FirstOrDefault(x => x.Street == address.Street && x.Place == address.Place && x.ZipCode == address.ZipCode && x.Country == address.Country);
 		}

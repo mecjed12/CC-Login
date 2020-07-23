@@ -30,7 +30,7 @@ namespace ImporterData.model
 		[ImportProperty(DisplayName = "Endet am", Index = 7)]
 		public DateTime? End { get; set; }
 
-		[ImportProperty(DisplayName = "Einheiten", Index = 7)]
+		[ImportProperty(DisplayName = "Einheiten", Index = 5)]
 		public int? Unit { get; set; }
 
 		[ImportProperty(DisplayName = "Preis", Index = 4)]
@@ -44,7 +44,6 @@ namespace ImporterData.model
 		[Column("participant_max")]
 		public int? MaxParticipants { get; set; }
 
-		//TODO do this different maybe
 		[ImportProperty(DisplayName = "Kategorie", Required = true, Index = 1)]
 		[NotMapped]
 		public string Category
@@ -54,20 +53,20 @@ namespace ImporterData.model
 			{
 				CourseCategoryRepository repo = new CourseCategoryRepository(new DcvEntities());
 				CourseCategory category = new CourseCategory() { Name = value };
-				if (repo.GetOne(category) is CourseCategory c)
+				if (repo.Get(category) is CourseCategory c)
 				{
 					_category = c.Name;
 				}
 				else
 				{
-					repo.Add(category);
 					_category = category.Name;
+					repo.Add(category);
 				}
 			}
 		}
 
 		[Column("category")]
-		public string _category;
+		public string _category { get; set; }
 
 		public List<PropertyInfo> GetProperties()
 		{

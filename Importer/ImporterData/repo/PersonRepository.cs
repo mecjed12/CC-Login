@@ -16,7 +16,7 @@ namespace ImporterData.repo
 			return Entities.People.Include(x => x.PAddress).ThenInclude(x => x.Address).Include(x => x.Contacts).ToList();
 		}
 
-		public override Person GetOne(Person person)
+		public override Person Get(Person person)
 		{
 			if (person.SVNumber != null)
 			{

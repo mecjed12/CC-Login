@@ -164,55 +164,58 @@ namespace ImporterLogic
 
 							if (GetExisting(type, importClass) != null) throw new ArgumentException($"{className} already exists");
 
-							foreach (var sub in subClasses)
+							if (subClasses != null)
 							{
-								Type subType = sub.GetType();
-
-								if (Activator.CreateInstance(subType) is IImportSubclass subClass)
+								foreach (var sub in subClasses)
 								{
-									var subClassRelations = subClass.GetType().GetProperties().Where(x => x.IsDefined(typeof(RelationAttribute))).ToList();
+									Type subType = sub.GetType();
 
-									bool changed = AddProperties(properties, args, subClass);
-
-									//Only create Relations when subClass isn't empty
-									if (changed)
+									if (Activator.CreateInstance(subType) is IImportSubclass subClass)
 									{
-										object existingSub = GetExisting(subType, subClass);
+										var subClassRelations = subClass.GetType().GetProperties().Where(x => x.IsDefined(typeof(RelationAttribute))).ToList();
 
-										var keys = subType.GetProperties().Where(x => x.IsDefined(typeof(RelationAttribute))).ToList();
-										keys.ForEach(key =>
+										bool changed = AddProperties(properties, args, subClass);
+
+										//Only create Relations when subClass isn't empty
+										if (changed)
 										{
+											object existingSub = GetExisting(subType, subClass);
+
+											var keys = subType.GetProperties().Where(x => x.IsDefined(typeof(RelationAttribute))).ToList();
+											keys.ForEach(key =>
+											{
 											//Create RelationClass when importClass and subClass are connected using a RelationClass
 											if (typeof(IList).IsAssignableFrom(key.PropertyType) && key.PropertyType.GenericTypeArguments[0].IsDefined(typeof(RelationAttribute)))
-											{
-												if (Activator.CreateInstance(key.PropertyType.GenericTypeArguments[0]) is object relationClass)
 												{
-													var relations = relationClass.GetType().GetProperties().Where(x => x.IsDefined(typeof(RelationAttribute))).ToList();
+													if (Activator.CreateInstance(key.PropertyType.GenericTypeArguments[0]) is object relationClass)
+													{
+														var relations = relationClass.GetType().GetProperties().Where(x => x.IsDefined(typeof(RelationAttribute))).ToList();
 
 													//Add the importClass/subClass to the relationClass
 													//Add the relationClass to the importClass/subClass or add the relationClass to the list in importClass/subClass 
 													if (existingSub != null)
-													{
-														AddRelation(relations, relationClass, existingSub);
-													}
-													else
-													{
-														AddRelation(relations, relationClass, subClass);
-													}
+														{
+															AddRelation(relations, relationClass, existingSub);
+														}
+														else
+														{
+															AddRelation(relations, relationClass, subClass);
+														}
 
-													AddRelation(relations, relationClass, importClass);
+														AddRelation(relations, relationClass, importClass);
 
-													AddRelation(importClassRelations, importClass, relationClass);
-													AddRelation(subClassRelations, subClass, relationClass);
+														AddRelation(importClassRelations, importClass, relationClass);
+														AddRelation(subClassRelations, subClass, relationClass);
+													}
 												}
-											}
-											else //Make connection when importClass and subClass are connected directly
+												else //Make connection when importClass and subClass are connected directly
 											{
 												//Add the importClass/subClass to the importClass/subClass
 												AddRelation(importClassRelations, importClass, subClass);
-												AddRelation(subClassRelations, subClass, importClass);
-											}
-										});
+													AddRelation(subClassRelations, subClass, importClass);
+												}
+											});
+										}
 									}
 								}
 							}
@@ -242,7 +245,7 @@ namespace ImporterLogic
 			dynamic dynamicObj = Convert.ChangeType(obj, type);
 			var typeRepository = GetRepository(dynamicObj);
 
-			return typeRepository.GetOne(dynamicObj);
+			return typeRepository.Get(dynamicObj);
 		}
 
 		/// <summary>
